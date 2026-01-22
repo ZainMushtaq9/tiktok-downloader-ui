@@ -32,8 +32,8 @@ def extract_video_id(url):
     m = re.search(r"/video/(\d+)", url)
     return m.group(1) if m else None
 
-# 🔴 CHANGE THIS AFTER BACKEND DEPLOY
-BACKEND_URL = "https://YOUR-BACKEND-NAME.onrender.com/resolve"
+# ✅ RAILWAY BACKEND (FINAL)
+BACKEND_URL = "https://tiktok-downloader-backend-production-ce2b.up.railway.app/resolve"
 
 if process_btn:
     links = normalize_links(links_text)
@@ -60,7 +60,7 @@ if process_btn:
             st.write(f"**Video ID:** `{video_id}`")
             st.caption(final_url)
 
-            with st.spinner("Fetching video…"):
+            with st.spinner("Fetching video… (first request may be slow)"):
                 res = requests.post(
                     BACKEND_URL,
                     json={"url": final_url},
@@ -68,10 +68,14 @@ if process_btn:
                 )
 
             if res.status_code != 200:
-                st.error("Backend error")
+                st.error("Backend error (video may be blocked or private)")
                 continue
 
             data = res.json()
+
+            if "file_bytes" not in data:
+                st.error("Invalid response from backend")
+                continue
 
             st.download_button(
                 label=f"Download Video {idx}",
@@ -80,5 +84,7 @@ if process_btn:
                 mime="video/mp4"
             )
 
+        except requests.exceptions.Timeout:
+            st.error("Backend timeout (Railway waking up)")
         except Exception as e:
             st.error(str(e))
