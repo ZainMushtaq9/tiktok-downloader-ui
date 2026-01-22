@@ -1,123 +1,129 @@
 import streamlit as st
 import requests
 
+BACKEND = "https://tiktok-downloader-backend-production-ce2b.up.railway.app"
+
 st.set_page_config(page_title="TikTok Downloader", layout="centered")
-
 st.title("TikTok Video Downloader")
-st.caption("Select, preview, and download like VidMate")
 
-BACKEND_URL = "https://tiktok-downloader-backend-production-ce2b.up.railway.app/resolve"
-
-links_text = st.text_area(
-    "Paste TikTok video links (one per line)",
-    height=200,
-    placeholder="https://www.tiktok.com/@username/video/1234567890"
+mode = st.radio(
+    "Input type",
+    ["Multiple Video Links", "Profile Link"],
+    horizontal=True
 )
 
-if "links" not in st.session_state:
-    st.session_state.links = []
+input_text = st.text_area(
+    "Paste links",
+    height=200,
+    placeholder="https://www.tiktok.com/@user/video/...\nOR\nhttps://www.tiktok.com/@username"
+)
+
+if "videos" not in st.session_state:
+    st.session_state.videos = []
 
 if "selected" not in st.session_state:
     st.session_state.selected = set()
 
-# ------------------ LOAD LINKS ------------------
+# ---------- LOAD ----------
 
-if st.button("Load Links"):
-    st.session_state.links = [
-        l.strip() for l in links_text.splitlines()
-        if l.strip().startswith("http")
-    ]
+if st.button("Load"):
+    st.session_state.videos.clear()
     st.session_state.selected.clear()
 
-if not st.session_state.links:
-    st.stop()
+    lines = [l.strip() for l in input_text.splitlines() if l.startswith("http")]
 
-# ------------------ SELECT CONTROLS ------------------
+    if not lines:
+        st.warning("No valid links")
+        st.stop()
 
-col1, col2 = st.columns(2)
+    if mode == "Profile Link":
+        with st.spinner("Scraping profile (limited)…"):
+            r = requests.post(
+                f"{BACKEND}/profile",
+                json={"profile_url": lines[0], "limit": 5},
+                timeout=120
+            )
 
-with col1:
-    if st.button("Select All"):
-        st.session_state.selected = set(range(len(st.session_state.links)))
+        if r.status_code != 200:
+            st.error("Profile scrape failed")
+            st.stop()
 
-with col2:
-    if st.button("Unselect All"):
-        st.session_state.selected.clear()
+        st.session_state.videos = r.json()["videos"]
 
-# ------------------ LIST VIDEOS ------------------
+    else:
+        st.session_state.videos = lines
 
-for idx, link in enumerate(st.session_state.links):
+# ---------- CONTROLS ----------
+
+if st.session_state.videos:
+    c1, c2 = st.columns(2)
+    with c1:
+        if st.button("Select All"):
+            st.session_state.selected = set(range(len(st.session_state.videos)))
+    with c2:
+        if st.button("Unselect All"):
+            st.session_state.selected.clear()
+
+# ---------- VIDEO LIST ----------
+
+for i, url in enumerate(st.session_state.videos):
     st.divider()
 
-    checked = idx in st.session_state.selected
-    check = st.checkbox(
-        f"Video {idx+1}",
-        value=checked,
-        key=f"chk_{idx}"
-    )
-
-    if check:
-        st.session_state.selected.add(idx)
+    checked = i in st.session_state.selected
+    if st.checkbox(f"Video {i+1}", checked, key=f"chk_{i}"):
+        st.session_state.selected.add(i)
     else:
-        st.session_state.selected.discard(idx)
+        st.session_state.selected.discard(i)
 
-    st.caption(link)
+    st.caption(url)
 
-    # ▶️ PREVIEW BUTTON
-    if st.button(f"Play Preview {idx+1}", key=f"play_{idx}"):
+    # PREVIEW
+    if st.button("Play", key=f"play_{i}"):
         with st.spinner("Loading preview…"):
-            res = requests.post(
-                BACKEND_URL,
-                json={"url": link},
+            r = requests.post(
+                f"{BACKEND}/resolve",
+                json={"url": url},
                 timeout=300
             )
-            if res.status_code == 200:
-                st.video(res.content)
+            if r.status_code == 200:
+                st.video(r.content)
             else:
                 st.error("Preview failed")
 
-    # ⬇️ SINGLE DOWNLOAD
-    if st.button(f"Download Video {idx+1}", key=f"dl_{idx}"):
+    # SINGLE DOWNLOAD
+    if st.button("Download", key=f"dl_{i}"):
         with st.spinner("Downloading…"):
-            res = requests.post(
-                BACKEND_URL,
-                json={"url": link},
+            r = requests.post(
+                f"{BACKEND}/resolve",
+                json={"url": url},
                 timeout=300
             )
-            if res.status_code == 200:
+            if r.status_code == 200:
                 st.download_button(
-                    "Save File",
-                    data=res.content,
-                    file_name=f"video_{idx+1}.mp4",
+                    "Save file",
+                    r.content,
+                    file_name=f"video_{i+1}.mp4",
                     mime="video/mp4",
-                    key=f"save_{idx}"
+                    key=f"save_{i}"
                 )
-            else:
-                st.error("Download failed")
 
-# ------------------ DOWNLOAD SELECTED ------------------
+# ---------- DOWNLOAD SELECTED ----------
 
 if st.session_state.selected:
-    st.divider()
-    st.subheader("Download Selected Videos")
-
-    for idx in sorted(st.session_state.selected):
-        link = st.session_state.links[idx]
-
-        if st.button(f"Download Selected {idx+1}", key=f"bulk_{idx}"):
-            with st.spinner("Downloading…"):
-                res = requests.post(
-                    BACKEND_URL,
-                    json={"url": link},
-                    timeout=300
+    st.subheader("Download Selected")
+    for i in sorted(st.session_state.selected):
+        url = st.session_state.videos[i]
+        if st.button(f"Download Selected {i+1}", key=f"bulk_{i}"):
+            r = requests.post(
+                f"{BACKEND}/resolve",
+                json={"url": url},
+                timeout=300
+            )
+            if r.status_code == 200:
+                st.download_button(
+                    f"Save Selected {i+1}",
+                    r.content,
+                    file_name=f"selected_{i+1}.mp4",
+                    mime="video/mp4",
+                    key=f"save_bulk_{i}"
                 )
-                if res.status_code == 200:
-                    st.download_button(
-                        f"Save Selected {idx+1}",
-                        data=res.content,
-                        file_name=f"selected_{idx+1}.mp4",
-                        mime="video/mp4",
-                        key=f"save_bulk_{idx}"
-                    )
-                else:
-                    st.error("Failed")
