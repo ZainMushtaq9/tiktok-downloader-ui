@@ -2,38 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>TikTok Downloader</title>
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css" />
+  <meta name="description" content="Download TikTok videos without watermark. Profile and single video downloader." />
 
-  <!-- Basic meta for sharing -->
-  <meta name="description" content="Download TikTok videos without watermark. Profile & single video downloader." />
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-  <!-- THEME TOGGLE -->
-  <button id="themeToggle" class="theme-toggle" title="Toggle theme">
-    🌙
-  </button>
+  <!-- TOP AD SLOT -->
+  <div class="ad-slot ad-top">
+    Advertisement
+  </div>
 
   <div class="container">
 
     <!-- HEADER -->
     <h1 class="logo">TikTok Downloader</h1>
-    <p class="subtitle">
-      Download TikTok videos without watermark
-    </p>
+    <p class="subtitle">Download TikTok videos without watermark</p>
+
+    <!-- MODE SELECTOR -->
+    <div class="mode-select">
+      <label>
+        <input type="radio" name="mode" value="profile" checked />
+        Profile Downloader
+      </label>
+
+      <label>
+        <input type="radio" name="mode" value="single" />
+        Single Video
+      </label>
+    </div>
 
     <!-- SINGLE VIDEO MODE -->
-    <div class="card">
-      <h3>Single Video</h3>
+    <div id="singleMode" class="card hidden">
       <input
         type="text"
         id="singleVideoUrl"
-        placeholder="Paste single TikTok video link"
+        placeholder="Paste TikTok video link"
       />
       <button id="singleDownloadBtn">
         Download Video
@@ -41,14 +50,21 @@
     </div>
 
     <!-- PROFILE MODE -->
-    <div class="card">
-      <h3>Profile Downloader</h3>
+    <div id="profileMode" class="card">
 
       <input
         type="text"
         id="profileUrl"
         placeholder="Paste TikTok profile link (https://www.tiktok.com/@username)"
       />
+
+      <!-- LIMIT SELECT -->
+      <select id="limitSelect">
+        <option value="all">All videos</option>
+        <option value="5">First 5 videos</option>
+        <option value="10">First 10 videos</option>
+        <option value="20">First 20 videos</option>
+      </select>
 
       <button id="fetchBtn">
         Fetch Profile Videos
@@ -65,26 +81,27 @@
       </div>
 
       <!-- DOWNLOAD ALL -->
-      <button
-        id="downloadAllBtn"
-        class="download-all"
-        title="Sequential download (Desktop Chrome recommended)"
-      >
-        ⬇ Download ALL Videos
+      <button id="downloadAllBtn" class="download-all">
+        ⬇ Download Selected
       </button>
+
+    </div>
+
+    <!-- INLINE AD SLOT -->
+    <div class="ad-slot ad-inline">
+      Advertisement
     </div>
 
     <!-- VIDEO LIST -->
     <div id="videoList"></div>
 
-    <!-- FOOTER NOTE -->
+    <!-- FOOTER -->
     <p class="footer-note">
-      ⚠ For bulk downloads, use Desktop Chrome and allow multiple downloads when prompted.
+      For bulk downloads, use Desktop Chrome and allow multiple downloads when prompted.
     </p>
 
   </div>
 
-  <!-- SCRIPT -->
   <script src="app.js"></script>
 
 </body>
