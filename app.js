@@ -189,3 +189,14 @@ downloadAllBtn.onclick = async () => {
 
   statusDiv.innerText = "All downloads triggered";
 };
+const banner = document.getElementById("cookieBanner");
+const acceptBtn = document.getElementById("acceptCookies");
+
+if (localStorage.getItem("cookiesAccepted")) {
+  banner.style.display = "none";
+}
+
+acceptBtn.onclick = () => {
+  localStorage.setItem("cookiesAccepted", "yes");
+  banner.style.display = "none";
+};
