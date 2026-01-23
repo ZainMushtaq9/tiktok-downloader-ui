@@ -1,0 +1,77 @@
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+body {
+  background: #0b0f19;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 520px;
+  margin: auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.logo {
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #9aa4bf;
+  margin-bottom: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  background: #ff2c55;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:active {
+  opacity: 0.9;
+}
+
+#status {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #00e0a4;
+}
+
+.video-card {
+  background: #141a2e;
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.video-card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.video-card button {
+  margin-top: 10px;
+  background: #1d9bf0;
+}
