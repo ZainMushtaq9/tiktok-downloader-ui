@@ -7,11 +7,8 @@ st.set_page_config(page_title="TikTok Profile Downloader", layout="centered")
 st.title("TikTok Profile Downloader")
 
 # =========================
-# SESSION STATE
+# SESSION STATE INIT
 # =========================
-
-if "profile_url" not in st.session_state:
-    st.session_state.profile_url = ""
 
 if "videos" not in st.session_state:
     st.session_state.videos = []
@@ -19,8 +16,11 @@ if "videos" not in st.session_state:
 if "selected" not in st.session_state:
     st.session_state.selected = set()
 
-if "scraping" not in st.session_state:
-    st.session_state.scraping = False
+if "checkboxes" not in st.session_state:
+    st.session_state.checkboxes = {}
+
+if "ready_to_download" not in st.session_state:
+    st.session_state.ready_to_download = False
 
 # =========================
 # INPUT
@@ -31,106 +31,112 @@ profile_url = st.text_input(
     placeholder="https://www.tiktok.com/@username"
 )
 
-quality = st.selectbox(
-    "Video Quality",
-    ["best", "720p", "480p"]
-)
+quality = st.selectbox("Video Quality", ["best", "720p", "480p"])
 
 # =========================
-# RESET IF PROFILE CHANGES
-# =========================
-
-if profile_url != st.session_state.profile_url:
-    st.session_state.profile_url = profile_url
-    st.session_state.videos.clear()
-    st.session_state.selected.clear()
-
-# =========================
-# SCRAPE ALL VIDEOS
+# FETCH PROFILE VIDEOS
 # =========================
 
 if st.button("Fetch all videos from profile"):
     if not profile_url:
-        st.warning("Please enter a profile URL")
+        st.warning("Enter profile URL")
     else:
-        st.session_state.scraping = True
-        st.session_state.videos.clear()
-        st.session_state.selected.clear()
-
-        with st.spinner("Fetching videos… this may take time"):
+        with st.spinner("Fetching videos…"):
             r = requests.post(
                 f"{BACKEND}/profile/all",
                 json={"profile_url": profile_url},
-                timeout=900
+                timeout=600
             )
 
         if r.status_code == 200:
             st.session_state.videos = r.json()["videos"]
+            st.session_state.selected.clear()
+            st.session_state.checkboxes = {
+                i: False for i in range(len(st.session_state.videos))
+            }
             st.success(f"Fetched {len(st.session_state.videos)} videos")
         else:
             st.error("Failed to fetch profile videos")
 
-        st.session_state.scraping = False
+# =========================
+# SELECT CONTROLS
+# =========================
+
+if st.session_state.videos:
+    c1, c2 = st.columns(2)
+
+    with c1:
+        if st.button("Select All"):
+            for i in range(len(st.session_state.videos)):
+                st.session_state.checkboxes[i] = True
+            st.session_state.selected = set(range(len(st.session_state.videos)))
+
+    with c2:
+        if st.button("Unselect All"):
+            for i in range(len(st.session_state.videos)):
+                st.session_state.checkboxes[i] = False
+            st.session_state.selected.clear()
 
 # =========================
 # VIDEO LIST
 # =========================
 
-if st.session_state.videos:
+for idx, url in enumerate(st.session_state.videos):
     st.divider()
-    st.subheader(f"Videos found: {len(st.session_state.videos)}")
 
-    c1, c2 = st.columns(2)
-    with c1:
-        if st.button("Select All"):
-            st.session_state.selected = set(range(len(st.session_state.videos)))
-    with c2:
-        if st.button("Unselect All"):
-            st.session_state.selected.clear()
+    checked = st.checkbox(
+        f"Video {idx + 1}",
+        key=f"cb_{idx}",
+        value=st.session_state.checkboxes.get(idx, False)
+    )
 
-    for idx, url in enumerate(st.session_state.videos):
-        st.divider()
+    st.session_state.checkboxes[idx] = checked
 
-        checked = idx in st.session_state.selected
-        if st.checkbox(f"Video {idx + 1}", value=checked, key=f"chk_{idx}"):
-            st.session_state.selected.add(idx)
-        else:
-            st.session_state.selected.discard(idx)
+    if checked:
+        st.session_state.selected.add(idx)
+    else:
+        st.session_state.selected.discard(idx)
 
-        st.caption(url)
+    st.caption(url)
 
 # =========================
-# DOWNLOAD SELECTED
+# PREPARE DOWNLOAD
 # =========================
 
 if st.session_state.selected:
     st.divider()
-    st.subheader(f"Download {len(st.session_state.selected)} selected videos")
+    st.subheader(f"{len(st.session_state.selected)} videos selected")
 
-    if st.button("Download Selected Videos"):
-        st.info("Your browser will download videos one-by-one")
+    if st.button("Prepare Download"):
+        st.session_state.ready_to_download = True
 
-        for count, i in enumerate(sorted(st.session_state.selected), start=1):
-            url = st.session_state.videos[i]
+# =========================
+# DOWNLOAD (EXPLICIT USER ACTION)
+# =========================
 
-            with st.spinner(f"Downloading video {count}…"):
-                r = requests.post(
-                    f"{BACKEND}/download",
-                    json={
-                        "url": url,
-                        "index": count,
-                        "quality": quality
-                    },
-                    timeout=300
-                )
+if st.session_state.ready_to_download:
+    st.info("Click each button to download. Browser security requires this.")
 
-            if r.status_code == 200:
-                st.download_button(
-                    label=f"Save {count}.mp4",
-                    data=r.content,
-                    file_name=f"{count}.mp4",
-                    mime="video/mp4",
-                    key=f"save_{count}"
-                )
-            else:
-                st.error(f"Failed to download video {count}")
+    for count, i in enumerate(sorted(st.session_state.selected), start=1):
+        url = st.session_state.videos[i]
+
+        r = requests.post(
+            f"{BACKEND}/download",
+            json={
+                "url": url,
+                "index": count,
+                "quality": quality
+            },
+            timeout=300
+        )
+
+        if r.status_code == 200:
+            st.download_button(
+                label=f"Download {count}.mp4",
+                data=r.content,
+                file_name=f"{count}.mp4",
+                mime="video/mp4",
+                key=f"dl_{count}"
+            )
+        else:
+            st.error(f"Failed to prepare video {count}")
