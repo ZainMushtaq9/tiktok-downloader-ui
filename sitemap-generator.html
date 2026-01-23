@@ -1,0 +1,15 @@
+<script>
+const pages = [
+  "/", "/about.html", "/privacy.html",
+  "/terms.html", "/disclaimer.html", "/contact.html"
+];
+
+let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+
+pages.forEach(p => {
+  xml += `<url><loc>https://YOURDOMAIN${p}</loc></url>\n`;
+});
+
+xml += "</urlset>";
+console.log(xml);
+</script>
