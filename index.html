@@ -4,31 +4,88 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TikTok Downloader</title>
-  <link rel="stylesheet" href="style.css"/>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Basic meta for sharing -->
+  <meta name="description" content="Download TikTok videos without watermark. Profile & single video downloader." />
 </head>
+
 <body>
 
+  <!-- THEME TOGGLE -->
+  <button id="themeToggle" class="theme-toggle" title="Toggle theme">
+    🌙
+  </button>
+
   <div class="container">
+
+    <!-- HEADER -->
     <h1 class="logo">TikTok Downloader</h1>
-    <p class="subtitle">Download TikTok videos without watermark</p>
+    <p class="subtitle">
+      Download TikTok videos without watermark
+    </p>
 
-    <input
-      type="text"
-      id="profileUrl"
-      placeholder="Paste TikTok profile link here"
-    />
+    <!-- SINGLE VIDEO MODE -->
+    <div class="card">
+      <h3>Single Video</h3>
+      <input
+        type="text"
+        id="singleVideoUrl"
+        placeholder="Paste single TikTok video link"
+      />
+      <button id="singleDownloadBtn">
+        Download Video
+      </button>
+    </div>
 
-    <button id="fetchBtn">Download</button>
+    <!-- PROFILE MODE -->
+    <div class="card">
+      <h3>Profile Downloader</h3>
 
-    <div id="status"></div>
-<div class="progress-wrapper" id="progressWrapper" style="display:none;">
-  <div class="progress-bar">
-    <div class="progress-fill" id="progressFill">0%</div>
-  </div>
-</div>
+      <input
+        type="text"
+        id="profileUrl"
+        placeholder="Paste TikTok profile link (https://www.tiktok.com/@username)"
+      />
+
+      <button id="fetchBtn">
+        Fetch Profile Videos
+      </button>
+
+      <!-- STATUS -->
+      <div id="status"></div>
+
+      <!-- PROGRESS BAR -->
+      <div id="progressWrapper" style="display:none;">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill">0%</div>
+        </div>
+      </div>
+
+      <!-- DOWNLOAD ALL -->
+      <button
+        id="downloadAllBtn"
+        class="download-all"
+        title="Sequential download (Desktop Chrome recommended)"
+      >
+        ⬇ Download ALL Videos
+      </button>
+    </div>
+
+    <!-- VIDEO LIST -->
     <div id="videoList"></div>
+
+    <!-- FOOTER NOTE -->
+    <p class="footer-note">
+      ⚠ For bulk downloads, use Desktop Chrome and allow multiple downloads when prompted.
+    </p>
+
   </div>
 
+  <!-- SCRIPT -->
   <script src="app.js"></script>
+
 </body>
 </html>
