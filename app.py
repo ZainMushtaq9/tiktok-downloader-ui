@@ -1,7 +1,6 @@
 import streamlit as st
 import requests
 import urllib.parse
-import time
 
 # =========================
 # CONFIG
@@ -15,7 +14,7 @@ st.set_page_config(
 )
 
 st.title("📥 TikTok Profile Downloader")
-st.caption("Mobile-friendly • Sequential downloads • Auto-named files")
+st.caption("Mobile-friendly • Select & download • Auto-named files")
 
 # =========================
 # SESSION STATE
@@ -23,6 +22,9 @@ st.caption("Mobile-friendly • Sequential downloads • Auto-named files")
 
 if "profile_data" not in st.session_state:
     st.session_state.profile_data = None
+
+if "selected" not in st.session_state:
+    st.session_state.selected = set()
 
 # =========================
 # INPUTS
@@ -39,50 +41,32 @@ quality = st.selectbox(
 )
 
 # =========================
-# FETCH PROFILE (WITH PROGRESS)
+# FETCH PROFILE
 # =========================
 
 if st.button("Fetch profile"):
     if not profile_url:
         st.warning("Please enter a TikTok profile URL")
     else:
-        progress = st.progress(0)
-        status = st.empty()
-
-        status.info("Connecting to TikTok profile…")
-        time.sleep(0.3)
-        progress.progress(10)
-
-        try:
-            status.info("Scraping video list…")
+        with st.spinner("Fetching profile…"):
             r = requests.get(
                 f"{BACKEND}/profile",
                 params={"profile_url": profile_url},
                 timeout=300
             )
-            progress.progress(70)
-        except Exception:
-            progress.empty()
-            status.empty()
-            st.error("Backend not reachable")
-            r = None
 
-        if r and r.status_code == 200:
-            status.info("Finalizing results…")
-            time.sleep(0.3)
-            progress.progress(100)
+        if r.status_code == 200:
+            data = r.json()
+            st.session_state.profile_data = data
 
-            st.session_state.profile_data = r.json()
-            total = r.json()["total"]
+            # AUTO-SELECT ALL VIDEOS
+            st.session_state.selected = {
+                v["index"] for v in data["videos"]
+            }
 
-            progress.empty()
-            status.empty()
-
-            st.success(f"{total} videos found")
+            st.success(f"{data['total']} videos found")
         else:
-            progress.empty()
-            status.empty()
-            st.error("Failed to fetch profile (invalid URL or TikTok rate limit)")
+            st.error("Failed to fetch profile (TikTok rate limit or invalid URL)")
 
 # =========================
 # DISPLAY RESULTS
@@ -98,32 +82,47 @@ if st.session_state.profile_data:
     st.caption("Files will download as: profile_001.mp4, profile_002.mp4, …")
 
     # =========================
-    # DOWNLOAD ALL (ONE CLICK)
+    # SELECT + DOWNLOAD CONTROLS
     # =========================
 
+    c1, c2 = st.columns([1, 2])
+
+    with c1:
+        select_all = st.checkbox(
+            "Select all videos",
+            value=len(st.session_state.selected) == len(videos)
+        )
+
+    with c2:
+        if st.button("⬇ Download selected videos"):
+            for v in videos:
+                if v["index"] in st.session_state.selected:
+                    download_url = (
+                        f"{BACKEND}/download?"
+                        f"url={urllib.parse.quote(v['url'])}"
+                        f"&index={v['index']}"
+                        f"&profile={profile}"
+                        f"&quality={quality}"
+                    )
+
+                    st.markdown(
+                        f'<a href="{download_url}" download></a>',
+                        unsafe_allow_html=True
+                    )
+
+    # Handle Select All / Unselect All
+    if select_all:
+        st.session_state.selected = {v["index"] for v in videos}
+    else:
+        st.session_state.selected.clear()
+
     st.info(
-        "Tap **Download all videos**.\n"
+        "All videos are selected by default.\n"
         "Your browser may ask permission once for multiple downloads."
     )
 
-    if st.button("⬇ Download all videos at once"):
-        for v in videos:
-            url = (
-                f"{BACKEND}/download?"
-                f"url={urllib.parse.quote(v['url'])}"
-                f"&index={v['index']}"
-                f"&profile={profile}"
-                f"&quality={quality}"
-            )
-
-            # Browser-handled download (lightweight)
-            st.markdown(
-                f'<a href="{url}" download></a>',
-                unsafe_allow_html=True
-            )
-
     # =========================
-    # VIDEO LIST (VIDMATE STYLE)
+    # VIDEO LIST
     # =========================
 
     st.divider()
@@ -133,11 +132,20 @@ if st.session_state.profile_data:
         col1, col2 = st.columns([1, 3], vertical_alignment="top")
 
         with col1:
+            checked = v["index"] in st.session_state.selected
+            if st.checkbox(
+                f"Video {v['index']}",
+                value=checked,
+                key=f"chk_{v['index']}"
+            ):
+                st.session_state.selected.add(v["index"])
+            else:
+                st.session_state.selected.discard(v["index"])
+
             if v.get("thumbnail"):
                 st.image(v["thumbnail"], use_column_width=True)
 
         with col2:
-            st.markdown(f"**Video {v['index']}**")
             st.caption(v["url"])
 
             download_url = (
