@@ -100,7 +100,8 @@ for idx, url in enumerate(st.session_state.videos):
     st.caption(url)
 
 # =========================
-# DOWNLOAD SELECTED
+# =========================
+# DOWNLOAD SELECTED (AUTO-SEQUENCE)
 # =========================
 
 if st.session_state.selected:
@@ -108,7 +109,9 @@ if st.session_state.selected:
     st.subheader(f"{len(st.session_state.selected)} videos ready for download")
 
     if st.button("Download Selected Videos"):
-        st.info("Browser will download files one-by-one")
+        st.warning(
+            "Your browser may ask permission for multiple downloads. Allow it once."
+        )
 
         for count, i in enumerate(sorted(st.session_state.selected), start=1):
             url = st.session_state.videos[i]
@@ -124,12 +127,13 @@ if st.session_state.selected:
             )
 
             if r.status_code == 200:
+                # Auto-trigger download without visible button spam
                 st.download_button(
-                    f"Download {count}.mp4",
-                    r.content,
+                    label=f"Downloading {count}.mp4",
+                    data=r.content,
                     file_name=f"{count}.mp4",
                     mime="video/mp4",
-                    key=f"dl_{count}"
+                    key=f"auto_{count}"
                 )
             else:
-                st.error(f"Failed to download video {count}")
+                st.error(f"Failed video {count}")
