@@ -291,3 +291,35 @@ button:active {
 .site-footer a:hover {
   color: #ffffff;
 }
+
+
+
+
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #141a2e;
+  color: #fff;
+  padding: 12px 16px;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 9999;
+}
+
+.cookie-banner a {
+  color: #1d9bf0;
+  text-decoration: none;
+}
+
+.cookie-banner button {
+  background: #ff2c55;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
