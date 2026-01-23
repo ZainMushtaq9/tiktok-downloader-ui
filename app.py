@@ -1,85 +1,93 @@
 import streamlit as st
 import requests
 
+# =========================
+# CONFIG
+# =========================
+
 BACKEND = "https://tiktok-downloader-backend-production-ce2b.up.railway.app"
 
-st.set_page_config(page_title="TikTok Profile Downloader", layout="centered")
+st.set_page_config(page_title="TikTok Profile Downloader", layout="wide")
 st.title("TikTok Profile Downloader")
+
+# =========================
+# SESSION STATE
+# =========================
+
+if "videos" not in st.session_state:
+    st.session_state.videos = []
+
+# =========================
+# INPUT
+# =========================
 
 profile_url = st.text_input(
     "TikTok Profile URL",
     placeholder="https://www.tiktok.com/@username"
 )
 
-quality = st.selectbox("Video Quality", ["best", "720p", "480p"])
+quality = st.selectbox(
+    "Video Quality",
+    ["best", "720p", "480p"]
+)
 
-# ======================
-# SESSION STATE
-# ======================
-
-if "videos" not in st.session_state:
-    st.session_state.videos = []
-
-if "start_download" not in st.session_state:
-    st.session_state.start_download = False
-
-
-# ======================
-# FETCH VIDEOS
-# ======================
+# =========================
+# FETCH PROFILE
+# =========================
 
 if st.button("Fetch all videos from profile"):
-    with st.spinner("Fetching videos…"):
-        r = requests.post(
-            f"{BACKEND}/profile/all",
-            json={"profile_url": profile_url},
-            timeout=300
-        )
-
-    if r.status_code == 200:
-        data = r.json()
-        st.session_state.videos = data["videos"]
-        st.success(f"{data['count']} videos ready")
+    if not profile_url:
+        st.warning("Enter a profile URL")
     else:
-        st.error("Failed to fetch videos")
-
-
-# ======================
-# DOWNLOAD SECTION
-# ======================
-
-if st.session_state.videos:
-    st.warning(
-        "⚠️ Your browser will ask permission to download multiple files.\n\n"
-        "Please tap **Allow** once. All videos will then download automatically."
-    )
-
-    if st.button("Download all videos"):
-        st.session_state.start_download = True
-
-# ======================
-# AUTO DOWNLOAD (ONE BY ONE)
-# ======================
-
-if st.session_state.start_download:
-    for i, url in enumerate(st.session_state.videos, start=1):
-        with st.spinner(f"Downloading {i}.mp4"):
+        with st.spinner("Scraping profile…"):
             r = requests.post(
-                f"{BACKEND}/download",
-                json={"url": url, "quality": quality},
+                f"{BACKEND}/profile/all",
+                json={"profile_url": profile_url},
                 timeout=300
             )
 
         if r.status_code == 200:
+            data = r.json()
+            st.session_state.videos = data["videos"]
+            st.success(f"Found {data['total']} videos")
+        else:
+            st.error("Failed to fetch profile videos")
+
+# =========================
+# VIDEO LIST
+# =========================
+
+if st.session_state.videos:
+    st.divider()
+    st.subheader(f"All videos ({len(st.session_state.videos)})")
+
+    for idx, url in enumerate(st.session_state.videos, start=1):
+        st.divider()
+
+        st.markdown(f"### Video {idx}")
+        st.caption(url)
+
+        # Preview
+        try:
+            st.video(url)
+        except:
+            st.info("Preview not available")
+
+        # Download button
+        r = requests.post(
+            f"{BACKEND}/download",
+            json={"url": url, "quality": quality},
+            stream=True,
+            timeout=300
+        )
+
+        if r.status_code == 200:
             st.download_button(
-                label=f"Downloading {i}.mp4",
+                label=f"Download {idx}.mp4",
                 data=r.content,
-                file_name=f"{i}.mp4",
+                file_name=f"{idx}.mp4",
                 mime="video/mp4",
-                key=f"dl_{i}"
+                key=f"dl_{idx}"
             )
         else:
-            st.error(f"Failed video {i}")
-
-    st.success("All downloads triggered")
-    st.session_state.start_download = False
+            st.error("Download unavailable")
