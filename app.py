@@ -6,7 +6,7 @@ import requests
 # =========================
 
 BACKEND = "https://tiktok-downloader-backend-production-ce2b.up.railway.app"
-VIDEOS_PER_PAGE = 5
+VIDEOS_PER_PAGE = {st.session_state.total_videos}
 
 st.set_page_config(page_title="TikTok Downloader", layout="centered")
 st.title("TikTok Profile & Video Downloader")
