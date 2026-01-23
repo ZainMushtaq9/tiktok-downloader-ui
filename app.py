@@ -6,13 +6,13 @@ import requests
 # =========================
 
 BACKEND = "https://tiktok-downloader-backend-production-ce2b.up.railway.app"
-VIDEOS_PER_PAGE = {st.session_state.total_videos}
+DEFAULT_PER_PAGE = 5  # safe UI pagination size
 
 st.set_page_config(page_title="TikTok Downloader", layout="centered")
 st.title("TikTok Profile & Video Downloader")
 
 # =========================
-# SESSION STATE
+# SESSION STATE (SAFE INIT)
 # =========================
 
 if "videos" not in st.session_state:
@@ -62,7 +62,9 @@ if profile_url and st.button("Check total videos on profile"):
     if r.status_code == 200:
         st.session_state.total_videos = r.json()["total_videos"]
         st.session_state.profile_url = profile_url
-        st.success(f"Total videos on this profile: {st.session_state.total_videos}")
+        st.success(
+            f"Total videos on this profile: {st.session_state.total_videos}"
+        )
     else:
         st.error("Failed to fetch profile video count")
 
@@ -104,7 +106,8 @@ if st.session_state.total_videos:
     )
     st.progress(progress)
     st.caption(
-        f"Scraped {len(st.session_state.videos)} / {st.session_state.total_videos} videos"
+        f"Scraped {len(st.session_state.videos)} "
+        f"/ {st.session_state.total_videos} videos"
     )
 else:
     st.caption(f"Scraped videos: {len(st.session_state.videos)}")
@@ -117,26 +120,39 @@ if st.session_state.videos:
     c1, c2 = st.columns(2)
     with c1:
         if st.button("Select All"):
-            st.session_state.selected = set(range(len(st.session_state.videos)))
+            st.session_state.selected = set(
+                range(len(st.session_state.videos))
+            )
     with c2:
         if st.button("Unselect All"):
             st.session_state.selected.clear()
 
 # =========================
-# PAGINATION VIEW (5 ONLY)
+# PAGINATION (DYNAMIC INFO)
 # =========================
+
+VIDEOS_PER_PAGE = DEFAULT_PER_PAGE
 
 start = st.session_state.page * VIDEOS_PER_PAGE
 end = start + VIDEOS_PER_PAGE
 visible = st.session_state.videos[start:end]
 
 st.divider()
-st.subheader(
-    f"Showing videos {start + 1} – {min(end, len(st.session_state.videos))}"
-)
+
+if st.session_state.total_videos:
+    st.subheader(
+        f"Showing videos {start + 1} – "
+        f"{min(end, st.session_state.total_videos)} "
+        f"of {st.session_state.total_videos} on profile"
+    )
+else:
+    st.subheader(
+        f"Showing videos {start + 1} – "
+        f"{min(end, len(st.session_state.videos))}"
+    )
 
 # =========================
-# VIDEO LIST
+# VIDEO LIST (ONLY 5 SHOWN)
 # =========================
 
 for idx, url in enumerate(visible, start=start):
@@ -200,10 +216,15 @@ with p2:
 
 if st.session_state.selected:
     st.divider()
-    st.subheader(f"Download {len(st.session_state.selected)} selected videos")
+    st.subheader(
+        f"Download {len(st.session_state.selected)} selected videos"
+    )
 
     if st.button("Download Selected as ZIP"):
-        urls = [st.session_state.videos[i] for i in sorted(st.session_state.selected)]
+        urls = [
+            st.session_state.videos[i]
+            for i in sorted(st.session_state.selected)
+        ]
 
         r = requests.post(
             f"{BACKEND}/zip",
