@@ -1,22 +1,64 @@
 const BACKEND_URL =
   "https://tiktok-downloader-backend-production-ce2b.up.railway.app";
 
+// =======================
+// ELEMENTS
+// =======================
+
 const fetchBtn = document.getElementById("fetchBtn");
+const downloadAllBtn = document.getElementById("downloadAllBtn");
+const singleBtn = document.getElementById("singleDownloadBtn");
+const themeToggle = document.getElementById("themeToggle");
+
 const statusDiv = document.getElementById("status");
 const videoList = document.getElementById("videoList");
 
 const progressWrapper = document.getElementById("progressWrapper");
 const progressFill = document.getElementById("progressFill");
 
+// =======================
+// THEME TOGGLE (DARK / LIGHT)
+// =======================
+
+const setTheme = (mode) => {
+  document.body.classList.toggle("light", mode === "light");
+  localStorage.setItem("theme", mode);
+  themeToggle.innerText = mode === "light" ? "🌙" : "☀️";
+};
+
+themeToggle.onclick = () => {
+  const isLight = document.body.classList.contains("light");
+  setTheme(isLight ? "dark" : "light");
+};
+
+setTheme(localStorage.getItem("theme") || "dark");
+
+// =======================
+// SINGLE VIDEO MODE
+// =======================
+
+singleBtn.onclick = () => {
+  const url = document.getElementById("singleVideoUrl").value.trim();
+  if (!url) return alert("Paste a TikTok video link");
+
+  const a = document.createElement("a");
+  a.href =
+    `${BACKEND_URL}/download` +
+    `?url=${encodeURIComponent(url)}` +
+    `&index=1&profile=single&quality=best`;
+  a.click();
+};
+
+// =======================
+// FETCH PROFILE
+// =======================
+
+let currentProfileData = null;
+
 fetchBtn.onclick = async () => {
   const profileUrl = document.getElementById("profileUrl").value.trim();
+  if (!profileUrl) return;
 
-  if (!profileUrl) {
-    statusDiv.innerText = "Please enter a TikTok profile URL";
-    return;
-  }
-
-  // Reset UI
   statusDiv.innerText = "Fetching profile…";
   videoList.innerHTML = "";
   progressWrapper.style.display = "block";
@@ -24,81 +66,85 @@ fetchBtn.onclick = async () => {
   progressFill.innerText = "0%";
 
   try {
-    const response = await fetch(
+    const res = await fetch(
       `${BACKEND_URL}/profile?profile_url=${encodeURIComponent(profileUrl)}`
     );
+    if (!res.ok) throw new Error();
 
-    if (!response.ok) throw new Error("Request failed");
+    const data = await res.json();
+    currentProfileData = data;
 
-    const data = await response.json();
-
-    const videos = data.videos || [];
-    const total = videos.length;
-
-    if (total === 0) {
-      statusDiv.innerText = "No videos found";
-      progressWrapper.style.display = "none";
-      return;
-    }
-
-    statusDiv.innerText = `${total} videos found`;
+    statusDiv.innerText = `${data.total} videos found`;
 
     let loaded = 0;
 
-    for (const video of videos) {
+    for (const v of data.videos) {
       const card = document.createElement("div");
       card.className = "video-card";
 
       card.innerHTML = `
-        ${video.thumbnail ? `<img src="${video.thumbnail}" />` : ""}
-        <p><strong>Video ${video.index}</strong></p>
-        <button onclick="downloadVideo(
-          '${encodeURIComponent(video.url)}',
-          ${video.index},
-          '${data.profile}'
-        )">
-          Download ${video.index}.mp4
+        ${v.thumbnail ? `<img src="${v.thumbnail}" />` : ""}
+        <p>Video ${v.index}</p>
+        <button onclick="downloadOne('${encodeURIComponent(v.url)}', ${v.index}, '${data.profile}')">
+          Download ${v.index}.mp4
         </button>
       `;
 
       videoList.appendChild(card);
 
-      // Update progress bar
       loaded++;
-      const percent = Math.round((loaded / total) * 100);
+      const percent = Math.round((loaded / data.total) * 100);
       progressFill.style.width = percent + "%";
       progressFill.innerText = percent + "%";
 
-      // Tiny delay for smooth UI (NOT backend delay)
-      await new Promise((r) => setTimeout(r, 12));
+      await new Promise(r => setTimeout(r, 10));
     }
 
-    statusDiv.innerText = "All videos loaded";
-  } catch (err) {
-    console.error(err);
+    statusDiv.innerText = "Videos ready";
+  } catch {
     statusDiv.innerText = "Failed to fetch profile";
     progressWrapper.style.display = "none";
   }
 };
 
-// =========================
-// DOWNLOAD FUNCTION
-// =========================
+// =======================
+// DOWNLOAD ONE
+// =======================
 
-function downloadVideo(url, index, profile) {
-  const quality = "best";
-
-  const downloadUrl =
-    `${BACKEND_URL}/download` +
-    `?url=${url}` +
-    `&index=${index}` +
-    `&profile=${profile}` +
-    `&quality=${quality}`;
-
+function downloadOne(url, index, profile) {
   const a = document.createElement("a");
-  a.href = downloadUrl;
-  a.download = "";
-  document.body.appendChild(a);
+  a.href =
+    `${BACKEND_URL}/download` +
+    `?url=${url}&index=${index}&profile=${profile}&quality=best`;
   a.click();
-  document.body.removeChild(a);
 }
+
+// =======================
+// DOWNLOAD ALL (SEQUENTIAL QUEUE)
+// =======================
+
+downloadAllBtn.onclick = async () => {
+  if (!currentProfileData) return alert("Fetch profile first");
+
+  const { videos, profile } = currentProfileData;
+
+  statusDiv.innerText = "Starting download queue…";
+
+  for (let i = 0; i < videos.length; i++) {
+    const v = videos[i];
+
+    statusDiv.innerText = `Downloading ${i + 1} / ${videos.length}`;
+
+    const a = document.createElement("a");
+    a.href =
+      `${BACKEND_URL}/download` +
+      `?url=${encodeURIComponent(v.url)}` +
+      `&index=${v.index}&profile=${profile}&quality=best`;
+    a.click();
+
+    // 1 SECOND DELAY (ANTI-BLOCK)
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  statusDiv.innerText = "All downloads triggered";
+};
