@@ -1,22 +1,19 @@
 import streamlit as st
 import requests
 
+# =========================
+# CONFIG
+# =========================
+
 BACKEND = "https://tiktok-downloader-backend-production-ce2b.up.railway.app"
+VIDEOS_PER_PAGE = 5
 
 st.set_page_config(page_title="TikTok Downloader", layout="centered")
-st.title("TikTok Video Downloader")
+st.title("TikTok Profile & Video Downloader")
 
-mode = st.radio(
-    "Input type",
-    ["Multiple Video Links", "Profile Link"],
-    horizontal=True
-)
-
-input_text = st.text_area(
-    "Paste links",
-    height=200,
-    placeholder="https://www.tiktok.com/@user/video/...\nOR\nhttps://www.tiktok.com/@username"
-)
+# =========================
+# SESSION STATE
+# =========================
 
 if "videos" not in st.session_state:
     st.session_state.videos = []
@@ -24,36 +21,97 @@ if "videos" not in st.session_state:
 if "selected" not in st.session_state:
     st.session_state.selected = set()
 
-# ---------- LOAD ----------
+if "offset" not in st.session_state:
+    st.session_state.offset = 0
 
-if st.button("Load"):
-    st.session_state.videos.clear()
-    st.session_state.selected.clear()
+if "page" not in st.session_state:
+    st.session_state.page = 0
 
-    lines = [l.strip() for l in input_text.splitlines() if l.startswith("http")]
+if "total_videos" not in st.session_state:
+    st.session_state.total_videos = None
 
-    if not lines:
-        st.warning("No valid links")
-        st.stop()
+if "profile_url" not in st.session_state:
+    st.session_state.profile_url = ""
 
-    if mode == "Profile Link":
-        with st.spinner("Scraping profile (limited)…"):
+# =========================
+# INPUT
+# =========================
+
+profile_url = st.text_input(
+    "TikTok Profile URL",
+    placeholder="https://www.tiktok.com/@username"
+)
+
+quality = st.selectbox(
+    "Video Quality",
+    ["best", "720p", "480p"]
+)
+
+# =========================
+# PROFILE COUNT
+# =========================
+
+if profile_url and st.button("Check total videos on profile"):
+    with st.spinner("Checking profile…"):
+        r = requests.post(
+            f"{BACKEND}/profile_count",
+            json={"profile_url": profile_url},
+            timeout=120
+        )
+
+    if r.status_code == 200:
+        st.session_state.total_videos = r.json()["total_videos"]
+        st.session_state.profile_url = profile_url
+        st.success(f"Total videos on this profile: {st.session_state.total_videos}")
+    else:
+        st.error("Failed to fetch profile video count")
+
+# =========================
+# SCRAPE / RESUME
+# =========================
+
+if st.button("Load / Resume Scraping"):
+    if not profile_url:
+        st.warning("Please enter a profile URL")
+    else:
+        with st.spinner("Scraping videos…"):
             r = requests.post(
                 f"{BACKEND}/profile",
-                json={"profile_url": lines[0], "limit": 5},
+                json={
+                    "profile_url": profile_url,
+                    "offset": st.session_state.offset,
+                    "limit": 10,
+                    "sleep_seconds": 3
+                },
                 timeout=120
             )
 
-        if r.status_code != 200:
-            st.error("Profile scrape failed")
-            st.stop()
+        if r.status_code == 200:
+            data = r.json()
+            st.session_state.videos.extend(data["videos"])
+            st.session_state.offset = data["offset"]
+        else:
+            st.error("Profile scraping failed")
 
-        st.session_state.videos = r.json()["videos"]
+# =========================
+# PROGRESS
+# =========================
 
-    else:
-        st.session_state.videos = lines
+if st.session_state.total_videos:
+    progress = min(
+        len(st.session_state.videos) / st.session_state.total_videos,
+        1.0
+    )
+    st.progress(progress)
+    st.caption(
+        f"Scraped {len(st.session_state.videos)} / {st.session_state.total_videos} videos"
+    )
+else:
+    st.caption(f"Scraped videos: {len(st.session_state.videos)}")
 
-# ---------- CONTROLS ----------
+# =========================
+# SELECT CONTROLS
+# =========================
 
 if st.session_state.videos:
     c1, c2 = st.columns(2)
@@ -64,25 +122,41 @@ if st.session_state.videos:
         if st.button("Unselect All"):
             st.session_state.selected.clear()
 
-# ---------- VIDEO LIST ----------
+# =========================
+# PAGINATION VIEW (5 ONLY)
+# =========================
 
-for i, url in enumerate(st.session_state.videos):
+start = st.session_state.page * VIDEOS_PER_PAGE
+end = start + VIDEOS_PER_PAGE
+visible = st.session_state.videos[start:end]
+
+st.divider()
+st.subheader(
+    f"Showing videos {start + 1} – {min(end, len(st.session_state.videos))}"
+)
+
+# =========================
+# VIDEO LIST
+# =========================
+
+for idx, url in enumerate(visible, start=start):
     st.divider()
 
-    checked = i in st.session_state.selected
-    if st.checkbox(f"Video {i+1}", checked, key=f"chk_{i}"):
-        st.session_state.selected.add(i)
+    checked = idx in st.session_state.selected
+    if st.checkbox(f"Video {idx + 1}", checked, key=f"chk_{idx}"):
+        st.session_state.selected.add(idx)
     else:
-        st.session_state.selected.discard(i)
+        st.session_state.selected.discard(idx)
 
     st.caption(url)
 
-    # PREVIEW
-    if st.button("Play", key=f"play_{i}"):
-        with st.spinner("Loading preview…"):
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("Play", key=f"play_{idx}"):
             r = requests.post(
                 f"{BACKEND}/resolve",
-                json={"url": url},
+                json={"url": url, "quality": quality},
                 timeout=300
             )
             if r.status_code == 200:
@@ -90,40 +164,59 @@ for i, url in enumerate(st.session_state.videos):
             else:
                 st.error("Preview failed")
 
-    # SINGLE DOWNLOAD
-    if st.button("Download", key=f"dl_{i}"):
-        with st.spinner("Downloading…"):
+    with col2:
+        if st.button("Download", key=f"dl_{idx}"):
             r = requests.post(
                 f"{BACKEND}/resolve",
-                json={"url": url},
+                json={"url": url, "quality": quality},
                 timeout=300
             )
             if r.status_code == 200:
                 st.download_button(
                     "Save file",
                     r.content,
-                    file_name=f"video_{i+1}.mp4",
+                    file_name=f"video_{idx + 1}.mp4",
                     mime="video/mp4",
-                    key=f"save_{i}"
+                    key=f"save_{idx}"
                 )
 
-# ---------- DOWNLOAD SELECTED ----------
+# =========================
+# PAGE CONTROLS
+# =========================
+
+p1, p2 = st.columns(2)
+
+with p1:
+    if st.button("⬅ Previous") and st.session_state.page > 0:
+        st.session_state.page -= 1
+
+with p2:
+    if st.button("Next ➡") and end < len(st.session_state.videos):
+        st.session_state.page += 1
+
+# =========================
+# ZIP DOWNLOAD
+# =========================
 
 if st.session_state.selected:
-    st.subheader("Download Selected")
-    for i in sorted(st.session_state.selected):
-        url = st.session_state.videos[i]
-        if st.button(f"Download Selected {i+1}", key=f"bulk_{i}"):
-            r = requests.post(
-                f"{BACKEND}/resolve",
-                json={"url": url},
-                timeout=300
+    st.divider()
+    st.subheader(f"Download {len(st.session_state.selected)} selected videos")
+
+    if st.button("Download Selected as ZIP"):
+        urls = [st.session_state.videos[i] for i in sorted(st.session_state.selected)]
+
+        r = requests.post(
+            f"{BACKEND}/zip",
+            json={"urls": urls, "quality": quality},
+            timeout=600
+        )
+
+        if r.status_code == 200:
+            st.download_button(
+                "Save ZIP",
+                r.content,
+                file_name="videos.zip",
+                mime="application/zip"
             )
-            if r.status_code == 200:
-                st.download_button(
-                    f"Save Selected {i+1}",
-                    r.content,
-                    file_name=f"selected_{i+1}.mp4",
-                    mime="video/mp4",
-                    key=f"save_bulk_{i}"
-                )
+        else:
+            st.error("ZIP download failed")
