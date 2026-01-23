@@ -100,40 +100,33 @@ for idx, url in enumerate(st.session_state.videos):
     st.caption(url)
 
 # =========================
-# =========================
-# DOWNLOAD SELECTED (AUTO-SEQUENCE)
+# # =========================
+# DOWNLOAD ZIP (ONE CLICK)
 # =========================
 
 if st.session_state.selected:
     st.divider()
-    st.subheader(f"{len(st.session_state.selected)} videos ready for download")
+    st.subheader(f"{len(st.session_state.selected)} videos ready")
 
-    if st.button("Download Selected Videos"):
-        st.warning(
-            "Your browser may ask permission for multiple downloads. Allow it once."
-        )
+    if st.button("Download all videos (ZIP)"):
+        urls = [st.session_state.videos[i] for i in sorted(st.session_state.selected)]
 
-        for count, i in enumerate(sorted(st.session_state.selected), start=1):
-            url = st.session_state.videos[i]
-
+        with st.spinner("Preparing ZIP file…"):
             r = requests.post(
-                f"{BACKEND}/download",
+                f"{BACKEND}/download/zip",
                 json={
-                    "url": url,
-                    "index": count,
+                    "urls": urls,
                     "quality": quality
                 },
-                timeout=300
+                timeout=1800
             )
 
-            if r.status_code == 200:
-                # Auto-trigger download without visible button spam
-                st.download_button(
-                    label=f"Downloading {count}.mp4",
-                    data=r.content,
-                    file_name=f"{count}.mp4",
-                    mime="video/mp4",
-                    key=f"auto_{count}"
-                )
-            else:
-                st.error(f"Failed video {count}")
+        if r.status_code == 200:
+            st.download_button(
+                label="Save videos.zip",
+                data=r.content,
+                file_name="videos.zip",
+                mime="application/zip"
+            )
+        else:
+            st.error("ZIP download failed")
