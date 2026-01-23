@@ -1,89 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>TikTok Profile Downloader</title>
 
 <style>
 body {
-  margin: 0;
-  font-family: system-ui, Arial, sans-serif;
-  background: #0b0f1a;
-  color: #e6e6e6;
+    margin: 0;
+    font-family: system-ui, Arial, sans-serif;
+    background: radial-gradient(circle at top, #0f2027, #000);
+    color: #fff;
 }
 
 .container {
-  max-width: 420px;
-  margin: 20px auto;
-  padding: 16px;
-  background: #11162a;
-  border-radius: 12px;
-  box-shadow: 0 0 30px rgba(0,255,255,0.1);
+    max-width: 420px;
+    margin: 20px auto;
+    padding: 16px;
+}
+
+.card {
+    background: rgba(20,20,20,0.9);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 0 20px rgba(0,255,200,0.15);
 }
 
 h2 {
-  text-align: center;
-  margin-bottom: 12px;
-  color: #00f7ff;
+    text-align: center;
+    margin-bottom: 12px;
 }
 
 input, button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 8px;
-  border: none;
-  font-size: 15px;
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
 }
 
 input {
-  background: #0b1022;
-  color: #fff;
-  border: 1px solid #1f2a4a;
+    background: #111;
+    color: #fff;
+    border: 1px solid #333;
 }
 
 button {
-  background: linear-gradient(135deg, #00f7ff, #0066ff);
-  color: #000;
-  font-weight: 600;
+    background: linear-gradient(135deg,#00ffc6,#00b3ff);
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 button:disabled {
-  background: #333;
-  color: #777;
+    background: #444;
+    color: #888;
 }
 
 .progressBox {
-  margin-top: 15px;
-  height: 240px;
-  border-radius: 10px;
-  background: #070b18;
-  overflow: hidden;
-  position: relative;
+    margin-top: 12px;
+    height: 220px;
+    background: #111;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
 }
 
 .progressFill {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 0%;
-  background: linear-gradient(to top, #00ff88, #00f7ff);
-  transition: height 0.2s linear;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 0%;
+    background: linear-gradient(180deg,#00ff9d,#00b3ff);
+    transition: height 0.2s;
 }
 
 .status {
-  margin-top: 10px;
-  text-align: center;
-  font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
 }
 
-.queue {
-  margin-top: 10px;
-  font-size: 13px;
-  color: #aaa;
-  text-align: center;
+.controls {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.controls button {
+    flex: 1;
+}
+
+.videoList {
+    margin-top: 14px;
+}
+
+.videoItem {
+    background: #0d0d0d;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.videoTop {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.videoTop label {
+    flex: 1;
+    font-size: 14px;
+}
+
+.videoButtons {
+    display: flex;
+    gap: 6px;
+}
+
+.videoButtons button {
+    flex: 1;
+    padding: 8px;
+    font-size: 13px;
 }
 </style>
 </head>
@@ -91,135 +133,175 @@ button:disabled {
 <body>
 
 <div class="container">
-  <h2>TikTok Profile Downloader</h2>
+    <div class="card">
+        <h2>TikTok Profile Downloader</h2>
 
-  <input id="profileUrl" placeholder="Paste TikTok profile URL">
+        <input id="profileUrl" placeholder="https://www.tiktok.com/@username" />
 
-  <button id="fetchBtn" onclick="fetchProfile()">Fetch all videos</button>
-  <button id="downloadBtn" onclick="startDownloads()" disabled>Download all videos</button>
+        <button onclick="fetchProfile()">Fetch all videos</button>
 
-  <div class="progressBox">
-    <div id="progressFill" class="progressFill"></div>
-  </div>
+        <div class="progressBox">
+            <div id="progressFill" class="progressFill"></div>
+        </div>
 
-  <div id="status" class="status">Idle</div>
-  <div id="queue" class="queue"></div>
+        <div id="status" class="status">Idle</div>
+
+        <div class="controls">
+            <button onclick="selectAll()">Select all</button>
+            <button onclick="unselectAll()">Unselect all</button>
+        </div>
+
+        <button id="downloadBtn" disabled onclick="downloadSelected()">
+            Download selected videos
+        </button>
+
+        <div id="videoList" class="videoList"></div>
+    </div>
 </div>
 
 <script>
 const BACKEND = "https://tiktok-downloader-backend-production-ce2b.up.railway.app";
 
-let state = {
-  videos: [],
-  current: 0,
-  total: 0,
-  failed: []
-};
+let videoUrls = [];
+let selected = new Set();
+let fetchDone = false;
 
-loadState();
-
-function saveState() {
-  localStorage.setItem("tiktokQueue", JSON.stringify(state));
-}
-
-function loadState() {
-  const s = localStorage.getItem("tiktokQueue");
-  if (s) state = JSON.parse(s);
-}
-
+// ==========================
+// FETCH PROFILE (STREAMING)
+// ==========================
 async function fetchProfile() {
-  state = { videos: [], current: 0, total: 0, failed: [] };
-  saveState();
-
-  document.getElementById("status").innerText = "Fetching video list...";
-  document.getElementById("downloadBtn").disabled = true;
-
-  const res = await fetch(`${BACKEND}/profile/stream`, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ profile_url: document.getElementById("profileUrl").value })
-  });
-
-  if (!res.ok) {
-    document.getElementById("status").innerText = "Failed to fetch profile";
-    return;
-  }
-
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = "";
-
-  while (true) {
-    const {value, done} = await reader.read();
-    if (done) break;
-
-    buffer += decoder.decode(value, {stream:true});
-    const lines = buffer.split("\n");
-    buffer = lines.pop();
-
-    for (const line of lines) {
-      if (!line.trim()) continue;
-      const data = JSON.parse(line);
-
-      state.total = data.total;
-      state.videos.push(data.url);
-      saveState();
-
-      updateProgress(state.videos.length, state.total);
-    }
-  }
-
-  document.getElementById("status").innerText = "All videos fetched";
-  document.getElementById("downloadBtn").disabled = false;
-}
-
-function updateProgress(current, total) {
-  const percent = Math.round((current / total) * 100);
-  document.getElementById("progressFill").style.height = percent + "%";
-  document.getElementById("status").innerText = `Fetched ${current} / ${total}`;
-}
-
-async function startDownloads() {
-  if (!confirm("Allow multiple downloads when Chrome asks. Continue?")) return;
-
-  document.getElementById("fetchBtn").disabled = true;
-  document.getElementById("downloadBtn").disabled = true;
-
-  for (let i = state.current; i < state.videos.length; i++) {
-    state.current = i;
-    saveState();
-
-    document.getElementById("queue").innerText =
-      `Downloading ${i+1} / ${state.videos.length}`;
-
-    try {
-      await downloadSingle(state.videos[i], i + 1);
-    } catch (e) {
-      state.failed.push(i);
+    const url = document.getElementById("profileUrl").value.trim();
+    if (!url) {
+        alert("Enter a profile URL");
+        return;
     }
 
-    await sleep(900);
-  }
+    videoUrls = [];
+    selected.clear();
+    fetchDone = false;
+    document.getElementById("videoList").innerHTML = "";
+    document.getElementById("downloadBtn").disabled = true;
 
-  document.getElementById("status").innerText = "Download complete";
-  document.getElementById("queue").innerText =
-    state.failed.length ? `Failed: ${state.failed.length}` : "All successful";
+    document.getElementById("status").innerText = "Fetching videos...";
+    document.getElementById("progressFill").style.height = "0%";
+
+    const res = await fetch(`${BACKEND}/profile/stream`, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ profile_url: url })
+    });
+
+    if (!res.ok) {
+        document.getElementById("status").innerText = "Failed to fetch profile";
+        return;
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+
+    while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop();
+
+        for (const line of lines) {
+            if (!line.trim()) continue;
+            const data = JSON.parse(line);
+
+            if (!data.url || !data.url.startsWith("http")) continue;
+
+            videoUrls.push(data.url);
+            selected.add(videoUrls.length - 1); // AUTO SELECT
+
+            const percent = Math.round((data.current / data.total) * 100);
+            document.getElementById("progressFill").style.height = percent + "%";
+            document.getElementById("status").innerText =
+                `Fetched ${data.current} / ${data.total}`;
+
+            renderVideo(data.url, videoUrls.length - 1);
+        }
+    }
+
+    fetchDone = true;
+    document.getElementById("status").innerText =
+        `${videoUrls.length} videos ready`;
+    document.getElementById("downloadBtn").disabled = false;
 }
 
-function downloadSingle(url, n) {
-  return new Promise(resolve => {
+// ==========================
+// RENDER VIDEO ITEM
+// ==========================
+function renderVideo(url, index) {
+    const list = document.getElementById("videoList");
+
+    const item = document.createElement("div");
+    item.className = "videoItem";
+
+    item.innerHTML = `
+        <div class="videoTop">
+            <input type="checkbox" checked onchange="toggleSelect(${index}, this.checked)">
+            <label>Video ${index + 1}</label>
+        </div>
+        <div class="videoButtons">
+            <button onclick="preview('${url}')">Preview</button>
+            <button onclick="downloadOne(${index})">Download</button>
+        </div>
+    `;
+
+    list.appendChild(item);
+}
+
+// ==========================
+// SELECTION CONTROLS
+// ==========================
+function toggleSelect(i, state) {
+    state ? selected.add(i) : selected.delete(i);
+}
+
+function selectAll() {
+    selected = new Set(videoUrls.map((_, i) => i));
+    document.querySelectorAll("input[type=checkbox]").forEach(cb => cb.checked = true);
+}
+
+function unselectAll() {
+    selected.clear();
+    document.querySelectorAll("input[type=checkbox]").forEach(cb => cb.checked = false);
+}
+
+// ==========================
+// PREVIEW
+// ==========================
+function preview(url) {
+    window.open(url, "_blank");
+}
+
+// ==========================
+// DOWNLOADS
+// ==========================
+function downloadOne(i) {
     const a = document.createElement("a");
-    a.href = `${BACKEND}/download?url=${encodeURIComponent(url)}&n=${n}`;
-    a.download = `${n}.mp4`;
-    document.body.appendChild(a);
+    a.href = `${BACKEND}/download?url=${encodeURIComponent(videoUrls[i])}&n=${i+1}`;
     a.click();
-    document.body.removeChild(a);
-    setTimeout(resolve, 3000);
-  });
 }
 
-function sleep(ms) {
-  return new Promise(r => setTimeout(r, ms));
+async function downloadSelected() {
+    if (!fetchDone || selected.size === 0) {
+        alert("No videos selected");
+        return;
+    }
+
+    alert("Your browser may ask permission for multiple downloads. Allow it once.");
+
+    for (const i of selected) {
+        const a = document.createElement("a");
+        a.href = `${BACKEND}/download?url=${encodeURIComponent(videoUrls[i])}&n=${i+1}`;
+        a.click();
+        await new Promise(r => setTimeout(r, 700));
+    }
 }
 </script>
 
