@@ -129,4 +129,4 @@ if st.session_state.profile_data:
             st.markdown(
                 f"[⬇ Download {v['index']}.mp4]({download_url})",
                 unsafe_allow_html=True
-                )
+            )
