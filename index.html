@@ -1,33 +1,40 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script async
-  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX"
-  crossorigin="anonymous"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>TikTok Downloader</title>
+  <title>TikTok Downloader – Download Videos Without Watermark</title>
 
-  <meta name="description" content="Download TikTok videos without watermark. Profile and single video downloader." />
+  <meta name="description" content="Download TikTok videos without watermark. Supports profile and single video downloads. Fast, free, and easy." />
 
-  <!-- SEO / CRAWLER -->
-  <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+  <!-- SEO -->
   <meta name="robots" content="index, follow" />
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
- 
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
-<div id="cookieBanner" class="cookie-banner">
-  <p>
-    This website uses cookies to improve user experience and display ads.
-    By continuing to use this site, you agree to our
-    <a href="privacy.html">Privacy Policy</a>.
-  </p>
-  <button id="acceptCookies">Accept</button>
-</div>
+
+  <!-- Google AdSense (add real publisher ID before approval) -->
+  <!--
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+  -->
 </head>
 
 <body>
+
+  <!-- COOKIE CONSENT -->
+  <div id="cookieBanner" class="cookie-banner">
+    <p>
+      This website uses cookies to improve user experience and display ads.
+      By continuing to use this site, you agree to our
+      <a href="privacy.html">Privacy Policy</a>.
+    </p>
+    <button id="acceptCookies">Accept</button>
+  </div>
 
   <!-- TOP NAVIGATION -->
   <nav class="top-nav">
@@ -48,13 +55,16 @@
   <!-- TOP AD SLOT -->
   <div class="ad-slot ad-top">
     Advertisement
+    <!-- AdSense ad code goes here after approval -->
   </div>
 
-  <div class="container">
+  <main class="container">
 
     <!-- HEADER -->
     <h1 class="logo">TikTok Downloader</h1>
-    <p class="subtitle">Download TikTok videos without watermark</p>
+    <p class="subtitle">
+      Download TikTok videos without watermark
+    </p>
 
     <!-- MODE SELECTOR -->
     <div class="mode-select">
@@ -70,28 +80,30 @@
     </div>
 
     <!-- SINGLE VIDEO MODE -->
-    <div id="singleMode" class="card hidden">
+    <section id="singleMode" class="card hidden">
       <input
         type="text"
         id="singleVideoUrl"
         placeholder="Paste TikTok video link"
+        aria-label="TikTok video URL"
       />
       <button id="singleDownloadBtn">
         Download Video
       </button>
-    </div>
+    </section>
 
     <!-- PROFILE MODE -->
-    <div id="profileMode" class="card">
+    <section id="profileMode" class="card">
 
       <input
         type="text"
         id="profileUrl"
         placeholder="Paste TikTok profile link (https://www.tiktok.com/@username)"
+        aria-label="TikTok profile URL"
       />
 
-      <!-- LIMIT SELECT -->
-      <select id="limitSelect">
+      <!-- DOWNLOAD LIMIT -->
+      <select id="limitSelect" aria-label="Download limit">
         <option value="all">All videos</option>
         <option value="5">First 5 videos</option>
         <option value="10">First 10 videos</option>
@@ -103,7 +115,7 @@
       </button>
 
       <!-- STATUS -->
-      <div id="status"></div>
+      <div id="status" role="status"></div>
 
       <!-- PROGRESS BAR -->
       <div id="progressWrapper" style="display:none;">
@@ -117,7 +129,7 @@
         ⬇ Download Selected
       </button>
 
-    </div>
+    </section>
 
     <!-- INLINE AD SLOT -->
     <div class="ad-slot ad-inline">
@@ -125,24 +137,25 @@
     </div>
 
     <!-- VIDEO LIST -->
-    <div id="videoList"></div>
+    <section id="videoList"></section>
 
-    <!-- FOOTER -->
-    <footer class="site-footer">
-      <p>
-        <a href="privacy.html">Privacy Policy</a> |
-        <a href="terms.html">Terms</a> |
-        <a href="disclaimer.html">Disclaimer</a> |
-        <a href="about.html">About</a> |
-        <a href="contact.html">Contact</a>
-      </p>
-      <p class="footer-note">
-        For bulk downloads, use Desktop Chrome and allow multiple downloads when prompted.
-      </p>
-    </footer>
+  </main>
 
-  </div>
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p>
+      <a href="privacy.html">Privacy Policy</a> |
+      <a href="terms.html">Terms</a> |
+      <a href="disclaimer.html">Disclaimer</a> |
+      <a href="about.html">About</a> |
+      <a href="contact.html">Contact</a>
+    </p>
+    <p class="footer-note">
+      For bulk downloads, use Desktop Chrome and allow multiple downloads when prompted.
+    </p>
+  </footer>
 
+  <!-- Scripts -->
   <script src="app.js"></script>
 
 </body>
