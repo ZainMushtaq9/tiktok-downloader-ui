@@ -200,3 +200,18 @@ acceptBtn.onclick = () => {
   localStorage.setItem("cookiesAccepted", "yes");
   banner.style.display = "none";
 };
+function showSkeletons(count = 5) {
+  videoList.innerHTML = "";
+  for (let i = 0; i < count; i++) {
+    const sk = document.createElement("div");
+    sk.className = "skeleton-card";
+    sk.innerHTML = `
+      <div class="skeleton skeleton-thumb"></div>
+      <div class="skeleton-lines">
+        <div class="skeleton skeleton-line" style="width:70%"></div>
+        <div class="skeleton skeleton-line" style="width:40%"></div>
+      </div>
+    `;
+    videoList.appendChild(sk);
+  }
+}
