@@ -6,22 +6,12 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont;
-  transition: background-color 0.25s ease, color 0.25s ease;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 body {
   background: #0b0f19;
   color: #ffffff;
-}
-
-/* =========================
-   LIGHT THEME
-========================= */
-
-body.light {
-  background: #f4f6fb;
-  color: #111;
 }
 
 /* =========================
@@ -50,32 +40,39 @@ body.light {
   margin-bottom: 16px;
 }
 
-body.light .subtitle {
-  color: #555;
+/* =========================
+   AD SAFE BLOCKS
+========================= */
+
+.ad-slot {
+  background: #141a2e;
+  color: #aaa;
+  text-align: center;
+  font-size: 12px;
+  padding: 12px;
+  margin: 12px auto;
+  max-width: 560px;
+  border-radius: 10px;
 }
 
 /* =========================
-   THEME TOGGLE
+   MODE SELECTOR (RADIO)
 ========================= */
 
-.theme-toggle {
-  position: fixed;
-  top: 14px;
-  right: 14px;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: none;
-  background: #1d2236;
-  color: #fff;
-  font-size: 18px;
+.mode-select {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 14px;
+  font-size: 14px;
+}
+
+.mode-select label {
   cursor: pointer;
 }
 
-body.light .theme-toggle {
-  background: #ffffff;
-  color: #111;
-  box-shadow: 0 0 0 1px #ddd;
+.mode-select input {
+  margin-right: 6px;
 }
 
 /* =========================
@@ -87,17 +84,15 @@ body.light .theme-toggle {
   border-radius: 14px;
   padding: 14px;
   margin-bottom: 14px;
-}
-
-body.light .card {
-  background: #ffffff;
+  text-align: left;
 }
 
 /* =========================
    INPUTS
 ========================= */
 
-input {
+input,
+select {
   width: 100%;
   padding: 13px;
   border-radius: 10px;
@@ -106,11 +101,6 @@ input {
   margin-bottom: 10px;
   background: #0f1425;
   color: #ffffff;
-}
-
-body.light input {
-  background: #f0f2f7;
-  color: #111;
 }
 
 /* =========================
@@ -146,16 +136,14 @@ button:active {
   font-size: 13px;
   margin: 10px 0;
   color: #00e0a4;
+  text-align: center;
 }
 
 .footer-note {
   font-size: 12px;
   color: #9aa4bf;
-  margin-top: 16px;
-}
-
-body.light .footer-note {
-  color: #555;
+  margin: 16px 0 10px;
+  text-align: center;
 }
 
 /* =========================
@@ -170,10 +158,6 @@ body.light .footer-note {
   overflow: hidden;
 }
 
-body.light .progress-bar {
-  background: #ddd;
-}
-
 .progress-fill {
   height: 100%;
   width: 0%;
@@ -185,13 +169,14 @@ body.light .progress-bar {
 }
 
 /* =========================
-   VIDMATE-STYLE LIST
+   VIDMATE-STYLE VIDEO LIST
 ========================= */
 
 #videoList {
   margin-top: 10px;
 }
 
+/* Compact row */
 .video-card {
   display: flex;
   align-items: center;
@@ -200,10 +185,6 @@ body.light .progress-bar {
   border-radius: 12px;
   padding: 10px;
   margin-bottom: 10px;
-}
-
-body.light .video-card {
-  background: #ffffff;
 }
 
 /* Thumbnail */
@@ -215,19 +196,33 @@ body.light .video-card {
   flex-shrink: 0;
 }
 
-/* Info text */
+/* Text + button block */
+.video-card div {
+  flex: 1;
+  text-align: left;
+}
+
+/* Title */
 .video-card p {
   font-size: 14px;
   margin-bottom: 6px;
 }
 
-/* Compact button */
+/* Download button (compact) */
 .video-card button {
   width: auto;
   padding: 8px 12px;
   font-size: 13px;
   background: #1d9bf0;
   border-radius: 8px;
+}
+
+/* =========================
+   HIDDEN
+========================= */
+
+.hidden {
+  display: none;
 }
 
 /* =========================
