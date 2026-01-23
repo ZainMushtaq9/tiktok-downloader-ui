@@ -33,15 +33,24 @@ if st.session_state.videos:
         st.markdown(f"### Video {idx}")
         st.code(url)
 
-        download_url = (
-            f"{BACKEND}/download?"
-            + urlencode({"url": url, "quality": quality})
-        )
+        params = urlencode({
+            "url": url,
+            "quality": quality
+        })
 
-        st.download_button(
-            label=f"Download {idx}.mp4 (B&W)",
-            data=requests.get(download_url, stream=True).raw,
-            file_name=f"{idx}.mp4",
-            mime="video/mp4",
-            key=f"dl_{idx}"
+        download_link = f"{BACKEND}/download?{params}"
+
+        st.markdown(
+            f"""
+            <a href="{download_link}" download>
+                <button style="
+                    padding:10px 18px;
+                    font-size:16px;
+                    border-radius:6px;
+                    cursor:pointer;">
+                    Download {idx}.mp4 (B&W)
+                </button>
+            </a>
+            """,
+            unsafe_allow_html=True
         )
