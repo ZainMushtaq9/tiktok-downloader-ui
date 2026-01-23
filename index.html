@@ -1,161 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- =========================
+       BASIC META
+  ========================== -->
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <title>TikTok Downloader – Download Videos Without Watermark</title>
+  <title>TikTok Downloader – Download TikTok Videos Without Watermark</title>
 
-  <meta name="description" content="Download TikTok videos without watermark. Supports profile and single video downloads. Fast, free, and easy." />
+  <meta name="description"
+        content="Free TikTok Downloader to download TikTok videos without watermark. Download single videos or full profiles easily on mobile and desktop." />
 
-  <!-- SEO -->
+  <meta name="keywords"
+        content="TikTok downloader, download TikTok videos, TikTok without watermark, TikTok profile downloader" />
+
   <meta name="robots" content="index, follow" />
-  <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+  <link rel="canonical" href="https://zainmushtaq9.github.io/tiktok-downloader-ui/" />
 
-  <!-- Styles -->
+  <!-- =========================
+       OPEN GRAPH
+  ========================== -->
+  <meta property="og:title" content="TikTok Downloader – No Watermark" />
+  <meta property="og:description" content="Download TikTok videos and profiles without watermark for free." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://zainmushtaq9.github.io/tiktok-downloader-ui/" />
+
+  <!-- =========================
+       PWA
+  ========================== -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0b0f19" />
+
+  <!-- =========================
+       STYLES
+  ========================== -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Google AdSense (add real publisher ID before approval) -->
-  <!--
-  <script async
-    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX"
-    crossorigin="anonymous"></script>
-  -->
+  <!-- =========================
+       SCHEMA (SEO)
+  ========================== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "TikTok Downloader",
+    "url": "https://zainmushtaq9.github.io/tiktok-downloader-ui/",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "All",
+    "description": "Download TikTok videos without watermark. Supports single video and full profile download."
+  }
+  </script>
 </head>
 
 <body>
 
-  <!-- COOKIE CONSENT -->
-  <div id="cookieBanner" class="cookie-banner">
-    <p>
-      This website uses cookies to improve user experience and display ads.
-      By continuing to use this site, you agree to our
-      <a href="privacy.html">Privacy Policy</a>.
-    </p>
-    <button id="acceptCookies">Accept</button>
+<!-- =========================
+     COOKIE CONSENT
+========================== -->
+<div id="cookieBanner" class="cookie-banner">
+  <span>
+    We use cookies to improve experience and show ads.
+    <a href="privacy.html">Learn more</a>
+  </span>
+  <button id="acceptCookies">Accept</button>
+</div>
+
+<!-- =========================
+     TOP NAV
+========================== -->
+<nav class="top-nav">
+  <div class="nav-logo">TikTok Downloader</div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="disclaimer.html">Disclaimer</a>
+    <a href="contact.html">Contact</a>
   </div>
+</nav>
 
-  <!-- TOP NAVIGATION -->
-  <nav class="top-nav">
-    <div class="nav-left">
-      <span class="nav-logo">TikTok Downloader</span>
-    </div>
+<!-- =========================
+     TOP AD SLOT
+========================== -->
+<div class="ad-slot ad-top">
+  <!-- Google AdSense (Top Banner) -->
+</div>
 
-    <div class="nav-right">
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="terms.html">Terms</a>
-      <a href="disclaimer.html">Disclaimer</a>
-      <a href="contact.html">Contact</a>
-    </div>
-  </nav>
+<!-- =========================
+     MAIN CONTAINER
+========================== -->
+<main class="container">
 
-  <!-- TOP AD SLOT -->
-  <div class="ad-slot ad-top">
-    Advertisement
-    <!-- AdSense ad code goes here after approval -->
-  </div>
-
-  <main class="container">
-
-    <!-- HEADER -->
+  <!-- HEADER -->
+  <header>
     <h1 class="logo">TikTok Downloader</h1>
-    <p class="subtitle">
-      Download TikTok videos without watermark
-    </p>
+    <p class="subtitle">Download TikTok videos without watermark</p>
+  </header>
 
-    <!-- MODE SELECTOR -->
-    <div class="mode-select">
-      <label>
-        <input type="radio" name="mode" value="profile" checked />
-        Profile Downloader
-      </label>
+  <!-- MODE SELECT -->
+  <section class="mode-select">
+    <label>
+      <input type="radio" name="mode" value="profile" checked />
+      Profile Downloader
+    </label>
+    <label>
+      <input type="radio" name="mode" value="single" />
+      Single Video
+    </label>
+  </section>
 
-      <label>
-        <input type="radio" name="mode" value="single" />
-        Single Video
-      </label>
-    </div>
+  <!-- SINGLE VIDEO MODE -->
+  <section id="singleMode" class="card hidden">
+    <input
+      type="text"
+      id="singleVideoUrl"
+      placeholder="Paste TikTok video link"
+      autocomplete="off"
+    />
+    <button id="singleDownloadBtn">Download Video</button>
+  </section>
 
-    <!-- SINGLE VIDEO MODE -->
-    <section id="singleMode" class="card hidden">
-      <input
-        type="text"
-        id="singleVideoUrl"
-        placeholder="Paste TikTok video link"
-        aria-label="TikTok video URL"
-      />
-      <button id="singleDownloadBtn">
-        Download Video
-      </button>
-    </section>
+  <!-- PROFILE MODE -->
+  <section id="profileMode" class="card">
 
-    <!-- PROFILE MODE -->
-    <section id="profileMode" class="card">
+    <input
+      type="text"
+      id="profileUrl"
+      placeholder="Paste TikTok profile link (https://www.tiktok.com/@username)"
+      autocomplete="off"
+    />
 
-      <input
-        type="text"
-        id="profileUrl"
-        placeholder="Paste TikTok profile link (https://www.tiktok.com/@username)"
-        aria-label="TikTok profile URL"
-      />
+    <select id="limitSelect">
+      <option value="all">All videos</option>
+      <option value="5">First 5 videos</option>
+      <option value="10">First 10 videos</option>
+      <option value="20">First 20 videos</option>
+    </select>
 
-      <!-- DOWNLOAD LIMIT -->
-      <select id="limitSelect" aria-label="Download limit">
-        <option value="all">All videos</option>
-        <option value="5">First 5 videos</option>
-        <option value="10">First 10 videos</option>
-        <option value="20">First 20 videos</option>
-      </select>
+    <button id="fetchBtn">Fetch Profile Videos</button>
 
-      <button id="fetchBtn">
-        Fetch Profile Videos
-      </button>
+    <!-- STATUS -->
+    <div id="status"></div>
 
-      <!-- STATUS -->
-      <div id="status" role="status"></div>
-
-      <!-- PROGRESS BAR -->
-      <div id="progressWrapper" style="display:none;">
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressFill">0%</div>
-        </div>
+    <!-- PROGRESS -->
+    <div id="progressWrapper" class="hidden">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill">0%</div>
       </div>
-
-      <!-- DOWNLOAD ALL -->
-      <button id="downloadAllBtn" class="download-all">
-        ⬇ Download Selected
-      </button>
-
-    </section>
-
-    <!-- INLINE AD SLOT -->
-    <div class="ad-slot ad-inline">
-      Advertisement
     </div>
 
-    <!-- VIDEO LIST -->
-    <section id="videoList"></section>
+    <button id="downloadAllBtn" class="download-all hidden">
+      ⬇ Download Selected Videos
+    </button>
 
-  </main>
+  </section>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <p>
-      <a href="privacy.html">Privacy Policy</a> |
-      <a href="terms.html">Terms</a> |
-      <a href="disclaimer.html">Disclaimer</a> |
-      <a href="about.html">About</a> |
-      <a href="contact.html">Contact</a>
-    </p>
-    <p class="footer-note">
-      For bulk downloads, use Desktop Chrome and allow multiple downloads when prompted.
-    </p>
-  </footer>
+  <!-- INLINE AD -->
+  <div class="ad-slot ad-inline">
+    <!-- Google AdSense (Inline) -->
+  </div>
 
-  <!-- Scripts -->
-  <script src="app.js"></script>
+  <!-- VIDEO LIST -->
+  <section id="videoList"></section>
+
+</main>
+
+<!-- =========================
+     FOOTER
+========================== -->
+<footer class="site-footer">
+  <p>
+    <a href="privacy.html">Privacy</a> |
+    <a href="terms.html">Terms</a> |
+    <a href="disclaimer.html">Disclaimer</a> |
+    <a href="about.html">About</a> |
+    <a href="contact.html">Contact</a>
+  </p>
+  <p class="footer-note">
+    For bulk downloads, use Desktop Chrome and allow multiple downloads when prompted.
+  </p>
+</footer>
+
+<!-- =========================
+     SCRIPTS
+========================== -->
+<script src="app.js" defer></script>
 
 </body>
 </html>
