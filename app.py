@@ -1,35 +1,26 @@
 import streamlit as st
 import requests
 
-# =========================
-# CONFIG
-# =========================
-
 BACKEND = "https://tiktok-downloader-backend-production-ce2b.up.railway.app"
-CHUNK_SIZE = 20
 
 st.set_page_config(page_title="TikTok Profile Downloader", layout="centered")
 st.title("TikTok Profile Downloader")
-st.caption("Scrape videos incrementally, select & download")
 
 # =========================
 # SESSION STATE
 # =========================
 
-def init_state():
-    defaults = {
-        "profile_url": "",
-        "videos": [],
-        "offset": 0,
-        "done": False,
-        "selected": set(),
-        "error": None
-    }
-    for k, v in defaults.items():
-        if k not in st.session_state:
-            st.session_state[k] = v
+if "profile_url" not in st.session_state:
+    st.session_state.profile_url = ""
 
-init_state()
+if "videos" not in st.session_state:
+    st.session_state.videos = []
+
+if "selected" not in st.session_state:
+    st.session_state.selected = set()
+
+if "scraping" not in st.session_state:
+    st.session_state.scraping = False
 
 # =========================
 # INPUT
@@ -40,126 +31,76 @@ profile_url = st.text_input(
     placeholder="https://www.tiktok.com/@username"
 )
 
-quality = st.selectbox("Video Quality", ["best", "720p", "480p"])
+quality = st.selectbox(
+    "Video Quality",
+    ["best", "720p", "480p"]
+)
 
 # =========================
-# RESET IF PROFILE CHANGED
+# RESET IF PROFILE CHANGES
 # =========================
 
 if profile_url != st.session_state.profile_url:
     st.session_state.profile_url = profile_url
-    st.session_state.videos = []
-    st.session_state.offset = 0
-    st.session_state.done = False
+    st.session_state.videos.clear()
     st.session_state.selected.clear()
-    st.session_state.error = None
 
 # =========================
-# FETCH NEXT CHUNK
+# SCRAPE ALL VIDEOS
 # =========================
 
-def fetch_next():
-    try:
-        r = requests.post(
-            f"{BACKEND}/profile/chunk",
-            json={
-                "profile_url": st.session_state.profile_url,
-                "offset": st.session_state.offset,
-                "limit": CHUNK_SIZE
-            },
-            timeout=60
-        )
+if st.button("Fetch all videos from profile"):
+    if not profile_url:
+        st.warning("Please enter a profile URL")
+    else:
+        st.session_state.scraping = True
+        st.session_state.videos.clear()
+        st.session_state.selected.clear()
 
-        if r.status_code != 200:
-            st.session_state.error = "Backend error while scraping"
-            return
+        with st.spinner("Fetching videos… this may take time"):
+            r = requests.post(
+                f"{BACKEND}/profile/all",
+                json={"profile_url": profile_url},
+                timeout=900
+            )
 
-        data = r.json()
-        new_videos = data["videos"]
-
-        if not new_videos:
-            st.session_state.done = True
-            return
-
-        start_index = len(st.session_state.videos)
-        st.session_state.videos.extend(new_videos)
-        st.session_state.offset = data["offset"]
-
-        # auto-select newly added videos if Select All was active
-        if len(st.session_state.selected) == start_index:
-            for i in range(start_index, len(st.session_state.videos)):
-                st.session_state.selected.add(i)
-
-    except Exception:
-        st.session_state.error = "Connection error"
-
-# =========================
-# CONTROLS
-# =========================
-
-c1, c2 = st.columns(2)
-
-with c1:
-    if st.button("Fetch Next Videos", disabled=st.session_state.done):
-        if not st.session_state.profile_url:
-            st.warning("Enter profile URL")
+        if r.status_code == 200:
+            st.session_state.videos = r.json()["videos"]
+            st.success(f"Fetched {len(st.session_state.videos)} videos")
         else:
-            fetch_next()
+            st.error("Failed to fetch profile videos")
 
-with c2:
-    if st.button("Fetch All Automatically", disabled=st.session_state.done):
-        if not st.session_state.profile_url:
-            st.warning("Enter profile URL")
-        else:
-            with st.spinner("Fetching all videos incrementally…"):
-                while not st.session_state.done:
-                    fetch_next()
+        st.session_state.scraping = False
 
 # =========================
-# STATUS
-# =========================
-
-st.divider()
-st.write(f"Videos loaded: **{len(st.session_state.videos)}**")
-
-if st.session_state.done:
-    st.success("All videos scraped")
-
-if st.session_state.error:
-    st.error(st.session_state.error)
-
-# =========================
-# SELECT CONTROLS
+# VIDEO LIST
 # =========================
 
 if st.session_state.videos:
-    sc1, sc2 = st.columns(2)
+    st.divider()
+    st.subheader(f"Videos found: {len(st.session_state.videos)}")
 
-    with sc1:
+    c1, c2 = st.columns(2)
+    with c1:
         if st.button("Select All"):
             st.session_state.selected = set(range(len(st.session_state.videos)))
-
-    with sc2:
+    with c2:
         if st.button("Unselect All"):
             st.session_state.selected.clear()
 
-# =========================
-# VIDEO LIST (SHOW AS THEY COME)
-# =========================
+    for idx, url in enumerate(st.session_state.videos):
+        st.divider()
 
-for idx, url in enumerate(st.session_state.videos):
-    st.divider()
+        checked = idx in st.session_state.selected
+        if st.checkbox(f"Video {idx + 1}", value=checked, key=f"chk_{idx}"):
+            st.session_state.selected.add(idx)
+        else:
+            st.session_state.selected.discard(idx)
 
-    checked = idx in st.session_state.selected
-    if st.checkbox(f"Video {idx + 1}", value=checked, key=f"chk_{idx}"):
-        st.session_state.selected.add(idx)
-    else:
-        st.session_state.selected.discard(idx)
-
-    st.caption(url)
+        st.caption(url)
 
 # =========================
-# DOWNLOAD SELECTED (ONCE)
+# DOWNLOAD SELECTED
 # =========================
 
 if st.session_state.selected:
@@ -167,21 +108,29 @@ if st.session_state.selected:
     st.subheader(f"Download {len(st.session_state.selected)} selected videos")
 
     if st.button("Download Selected Videos"):
-        urls = [st.session_state.videos[i] for i in sorted(st.session_state.selected)]
+        st.info("Your browser will download videos one-by-one")
 
-        with st.spinner("Preparing download…"):
-            r = requests.post(
-                f"{BACKEND}/zip",
-                json={"urls": urls, "quality": quality},
-                timeout=900
-            )
+        for count, i in enumerate(sorted(st.session_state.selected), start=1):
+            url = st.session_state.videos[i]
 
-        if r.status_code == 200:
-            st.download_button(
-                "Save ZIP file",
-                r.content,
-                file_name="selected_videos.zip",
-                mime="application/zip"
-            )
-        else:
-            st.error("Download failed")
+            with st.spinner(f"Downloading video {count}…"):
+                r = requests.post(
+                    f"{BACKEND}/download",
+                    json={
+                        "url": url,
+                        "index": count,
+                        "quality": quality
+                    },
+                    timeout=300
+                )
+
+            if r.status_code == 200:
+                st.download_button(
+                    label=f"Save {count}.mp4",
+                    data=r.content,
+                    file_name=f"{count}.mp4",
+                    mime="video/mp4",
+                    key=f"save_{count}"
+                )
+            else:
+                st.error(f"Failed to download video {count}")
