@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>TikTok Profile Downloader</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f6f6f6;
+  padding: 20px;
+}
+input, button {
+  padding: 10px;
+  margin: 5px 0;
+  width: 100%;
+}
+button {
+  cursor: pointer;
+}
+.log {
+  margin-top: 15px;
+  background: #fff;
+  padding: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+.success { color: green; }
+.error { color: red; }
+</style>
+</head>
+
+<body>
+
+<h2>TikTok Profile Downloader</h2>
+
+<input id="profile" placeholder="https://www.tiktok.com/@username" />
+<button onclick="start()">Download ALL Videos</button>
+
+<div class="log" id="log"></div>
+
+<script>
+const BACKEND = "https://tiktok-downloader-backend-production-ce2b.up.railway.app";
+
+function log(msg, cls="") {
+  const div = document.createElement("div");
+  div.textContent = msg;
+  if (cls) div.className = cls;
+  document.getElementById("log").appendChild(div);
+}
+
+async function start() {
+  const profile = document.getElementById("profile").value.trim();
+  if (!profile) return alert("Enter profile URL");
+
+  log("Fetching video list...");
+
+  const res = await fetch(`${BACKEND}/profile/all`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ profile_url: profile })
+  });
+
+  if (!res.ok) {
+    log("Failed to fetch profile", "error");
+    return;
+  }
+
+  const data = await res.json();
+  const videos = data.videos;
+
+  log(`Found ${videos.length} videos`);
+  log("Browser will ask permission for multiple downloads. Allow it.");
+
+  for (let i = 0; i < videos.length; i++) {
+    const url = `${BACKEND}/download?url=${encodeURIComponent(videos[i])}&n=${i+1}`;
+    log(`Downloading ${i+1}.mp4`);
+    triggerDownload(url);
+    await sleep(1200); // anti-block + stability
+  }
+
+  log("All downloads queued", "success");
+}
+
+function triggerDownload(url) {
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms));
+}
+</script>
+
+</body>
+</html>
