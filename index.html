@@ -7,16 +7,16 @@
 <style>
 body { font-family: Arial; background:#f4f4f4; }
 .container {
-  max-width:420px; margin:40px auto;
+  max-width:420px; margin:30px auto;
   background:#fff; padding:20px; border-radius:8px;
 }
 input, button { width:100%; padding:10px; margin-top:10px; }
-#progress {
-  height:250px; border:1px solid #ccc; margin-top:15px;
-  display:flex; align-items:flex-end;
-}
+#progress { height:200px; border:1px solid #ccc; margin-top:10px; display:flex; align-items:flex-end; }
 #bar { width:100%; height:0%; background:#28a745; transition:height .2s; }
-#status { margin-top:10px; font-size:14px; }
+#list { max-height:250px; overflow-y:auto; margin-top:10px; }
+.video { font-size:13px; border-bottom:1px solid #eee; padding:6px; }
+.controls { display:flex; gap:10px; margin-top:10px; }
+.controls button { flex:1; }
 </style>
 </head>
 
@@ -25,47 +25,51 @@ input, button { width:100%; padding:10px; margin-top:10px; }
   <h3>TikTok Profile Downloader</h3>
 
   <input id="profile" placeholder="TikTok profile URL">
-  <button onclick="start()">Fetch all videos from profile</button>
+  <button onclick="fetchVideos()">Fetch all videos</button>
 
   <div id="progress"><div id="bar"></div></div>
   <div id="status">Idle</div>
+
+  <div class="controls">
+    <button onclick="selectAll()">Select All</button>
+    <button onclick="unselectAll()">Unselect</button>
+  </div>
+
+  <div id="list"></div>
+
+  <button onclick="downloadSelected()" style="margin-top:15px;">
+    Download selected videos
+  </button>
 </div>
 
 <script>
 const BACKEND = "https://tiktok-downloader-backend-production-ce2b.up.railway.app";
 
-async function start() {
-  document.getElementById("status").innerText = "Connecting...";
+let videos = [];
+let selected = new Set();
+
+async function fetchVideos() {
+  videos = [];
+  selected.clear();
+  document.getElementById("list").innerHTML = "";
   document.getElementById("bar").style.height = "0%";
+  document.getElementById("status").innerText = "Connecting...";
 
-  let res;
-  try {
-    res = await fetch(`${BACKEND}/profile/stream`, {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({
-        profile_url: document.getElementById("profile").value
-      })
-    });
-  } catch (e) {
-    document.getElementById("status").innerText = "Network error";
-    return;
-  }
-
-  if (!res.ok || !res.body) {
-    document.getElementById("status").innerText = "Failed to fetch";
-    return;
-  }
+  const res = await fetch(`${BACKEND}/profile/stream`, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({ profile_url: profile.value })
+  });
 
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
 
   while (true) {
-    const {value, done} = await reader.read();
+    const { value, done } = await reader.read();
     if (done) break;
 
-    buffer += decoder.decode(value, {stream:true});
+    buffer += decoder.decode(value, { stream:true });
     const lines = buffer.split("\n");
     buffer = lines.pop();
 
@@ -73,21 +77,79 @@ async function start() {
       if (!line.trim()) continue;
       const data = JSON.parse(line);
 
-      if (data.error) {
-        document.getElementById("status").innerText = data.error;
-        return;
-      }
+      if (data.current) {
+        videos.push(data.url);
+        selected.add(videos.length - 1);
 
-      if (data.current && data.total) {
-        const pct = Math.round((data.current/data.total)*100);
-        document.getElementById("bar").style.height = pct+"%";
+        document.getElementById("bar").style.height =
+          Math.round((data.current/data.total)*100) + "%";
+
         document.getElementById("status").innerText =
           `Fetched ${data.current} / ${data.total}`;
+
+        renderList();
       }
     }
   }
 
   document.getElementById("status").innerText = "All videos fetched";
+}
+
+function renderList() {
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  videos.forEach((url, i) => {
+    const div = document.createElement("div");
+    div.className = "video";
+
+    div.innerHTML = `
+      <input type="checkbox" ${selected.has(i) ? "checked":""}
+        onchange="toggle(${i})">
+      Video ${i+1}
+    `;
+    list.appendChild(div);
+  });
+}
+
+function toggle(i) {
+  selected.has(i) ? selected.delete(i) : selected.add(i);
+}
+
+function selectAll() {
+  videos.forEach((_, i) => selected.add(i));
+  renderList();
+}
+
+function unselectAll() {
+  selected.clear();
+  renderList();
+}
+
+async function downloadSelected() {
+  if (!selected.size) {
+    alert("No videos selected");
+    return;
+  }
+
+  alert("Your browser may ask permission for multiple downloads. Allow it once.");
+
+  const indexes = [...selected].sort((a,b)=>a-b);
+
+  for (let i = 0; i < indexes.length; i++) {
+    const idx = indexes[i];
+    const url = `${BACKEND}/download?url=${encodeURIComponent(videos[idx])}&n=${idx+1}`;
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${idx+1}.mp4`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    // small delay so browser queue stays stable
+    await new Promise(r => setTimeout(r, 500));
+  }
 }
 </script>
 </body>
