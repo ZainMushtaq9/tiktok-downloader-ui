@@ -14,7 +14,7 @@ st.set_page_config(
 )
 
 st.title("📥 TikTok Profile Downloader")
-st.caption("Mobile-friendly • Select & download • Auto-named files")
+st.caption("Select videos • Download individually or all at once")
 
 # =========================
 # SESSION STATE
@@ -64,12 +64,15 @@ if st.button("Fetch profile"):
                 v["index"] for v in data["videos"]
             }
 
-            st.success(f"{data['total']} videos found")
+            st.success(
+                f"Profile: {data['profile']}  |  "
+                f"Available videos: {data['total']}"
+            )
         else:
             st.error("Failed to fetch profile (TikTok rate limit or invalid URL)")
 
 # =========================
-# DISPLAY RESULTS
+# MAIN UI
 # =========================
 
 if st.session_state.profile_data:
@@ -78,22 +81,30 @@ if st.session_state.profile_data:
     videos = data["videos"]
 
     st.divider()
-    st.subheader(f"Profile: {profile}")
-    st.caption("Files will download as: profile_001.mp4, profile_002.mp4, …")
 
     # =========================
-    # SELECT + DOWNLOAD CONTROLS
+    # TOP CONTROLS (ALIGNED)
     # =========================
 
-    c1, c2 = st.columns([1, 2])
+    col1, col2, col3 = st.columns([1, 1, 2])
 
-    with c1:
+    with col1:
         select_all = st.checkbox(
-            "Select all videos",
+            "Select all",
             value=len(st.session_state.selected) == len(videos)
         )
 
-    with c2:
+        if select_all:
+            st.session_state.selected = {v["index"] for v in videos}
+        else:
+            st.session_state.selected.clear()
+
+    with col2:
+        st.markdown(
+            f"**Selected:** {len(st.session_state.selected)} / {len(videos)}"
+        )
+
+    with col3:
         if st.button("⬇ Download selected videos"):
             for v in videos:
                 if v["index"] in st.session_state.selected:
@@ -105,36 +116,26 @@ if st.session_state.profile_data:
                         f"&quality={quality}"
                     )
 
+                    # Browser-handled download
                     st.markdown(
                         f'<a href="{download_url}" download></a>',
                         unsafe_allow_html=True
                     )
 
-    # Handle Select All / Unselect All
-    if select_all:
-        st.session_state.selected = {v["index"] for v in videos}
-    else:
-        st.session_state.selected.clear()
-
-    st.info(
-        "All videos are selected by default.\n"
-        "Your browser may ask permission once for multiple downloads."
-    )
+    st.divider()
+    st.subheader("Videos on profile")
 
     # =========================
     # VIDEO LIST
     # =========================
 
-    st.divider()
-    st.subheader("Videos")
-
     for v in videos:
-        col1, col2 = st.columns([1, 3], vertical_alignment="top")
+        col1, col2, col3 = st.columns([0.5, 1, 3], vertical_alignment="center")
 
         with col1:
             checked = v["index"] in st.session_state.selected
             if st.checkbox(
-                f"Video {v['index']}",
+                "",
                 value=checked,
                 key=f"chk_{v['index']}"
             ):
@@ -142,13 +143,15 @@ if st.session_state.profile_data:
             else:
                 st.session_state.selected.discard(v["index"])
 
+        with col2:
             if v.get("thumbnail"):
                 st.image(v["thumbnail"], use_column_width=True)
 
-        with col2:
+        with col3:
+            st.markdown(f"**Video {v['index']}**")
             st.caption(v["url"])
 
-            download_url = (
+            single_download = (
                 f"{BACKEND}/download?"
                 f"url={urllib.parse.quote(v['url'])}"
                 f"&index={v['index']}"
@@ -157,6 +160,6 @@ if st.session_state.profile_data:
             )
 
             st.markdown(
-                f"[⬇ Download {v['index']}.mp4]({download_url})",
+                f"[⬇ Download {v['index']}.mp4]({single_download})",
                 unsafe_allow_html=True
             )
