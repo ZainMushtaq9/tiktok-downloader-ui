@@ -6,23 +6,6 @@ BACKEND = "https://tiktok-downloader-backend-production-ce2b.up.railway.app"
 st.set_page_config(page_title="TikTok Profile Downloader", layout="centered")
 st.title("TikTok Profile Downloader")
 
-# =========================
-# SESSION STATE INIT
-# =========================
-
-if "videos" not in st.session_state:
-    st.session_state.videos = []
-
-if "checkbox" not in st.session_state:
-    st.session_state.checkbox = {}   # index -> bool
-
-if "selected" not in st.session_state:
-    st.session_state.selected = set()
-
-# =========================
-# INPUT
-# =========================
-
 profile_url = st.text_input(
     "TikTok Profile URL",
     placeholder="https://www.tiktok.com/@username"
@@ -30,103 +13,73 @@ profile_url = st.text_input(
 
 quality = st.selectbox("Video Quality", ["best", "720p", "480p"])
 
-# =========================
-# FETCH PROFILE VIDEOS
-# =========================
+# ======================
+# SESSION STATE
+# ======================
+
+if "videos" not in st.session_state:
+    st.session_state.videos = []
+
+if "start_download" not in st.session_state:
+    st.session_state.start_download = False
+
+
+# ======================
+# FETCH VIDEOS
+# ======================
 
 if st.button("Fetch all videos from profile"):
-    if not profile_url:
-        st.warning("Enter profile URL")
+    with st.spinner("Fetching videos…"):
+        r = requests.post(
+            f"{BACKEND}/profile/all",
+            json={"profile_url": profile_url},
+            timeout=300
+        )
+
+    if r.status_code == 200:
+        data = r.json()
+        st.session_state.videos = data["videos"]
+        st.success(f"{data['count']} videos ready")
     else:
-        with st.spinner("Fetching videos…"):
-            r = requests.post(
-                f"{BACKEND}/profile/all",
-                json={"profile_url": profile_url},
-                timeout=600
-            )
+        st.error("Failed to fetch videos")
 
-        if r.status_code == 200:
-            st.session_state.videos = r.json()["videos"]
 
-            # 🔥 AUTO-SELECT ALL AFTER SCRAPE
-            st.session_state.checkbox = {
-                i: True for i in range(len(st.session_state.videos))
-            }
-            st.session_state.selected = set(range(len(st.session_state.videos)))
-
-            st.success(f"Fetched {len(st.session_state.videos)} videos (auto-selected)")
-        else:
-            st.error("Failed to fetch profile videos")
-
-# =========================
-# SELECT / UNSELECT BUTTONS
-# =========================
+# ======================
+# DOWNLOAD SECTION
+# ======================
 
 if st.session_state.videos:
-    c1, c2 = st.columns(2)
-
-    with c1:
-        if st.button("Select All"):
-            for i in range(len(st.session_state.videos)):
-                st.session_state.checkbox[i] = True
-            st.session_state.selected = set(range(len(st.session_state.videos)))
-
-    with c2:
-        if st.button("Unselect All"):
-            for i in range(len(st.session_state.videos)):
-                st.session_state.checkbox[i] = False
-            st.session_state.selected.clear()
-
-# =========================
-# VIDEO LIST
-# =========================
-
-for idx, url in enumerate(st.session_state.videos):
-    st.divider()
-
-    checked = st.checkbox(
-        f"Video {idx + 1}",
-        key=f"cb_{idx}",
-        value=st.session_state.checkbox.get(idx, False)
+    st.warning(
+        "⚠️ Your browser will ask permission to download multiple files.\n\n"
+        "Please tap **Allow** once. All videos will then download automatically."
     )
 
-    # Sync state
-    st.session_state.checkbox[idx] = checked
-    if checked:
-        st.session_state.selected.add(idx)
-    else:
-        st.session_state.selected.discard(idx)
+    if st.button("Download all videos"):
+        st.session_state.start_download = True
 
-    st.caption(url)
+# ======================
+# AUTO DOWNLOAD (ONE BY ONE)
+# ======================
 
-# =========================
-# # =========================
-# DOWNLOAD ZIP (ONE CLICK)
-# =========================
-
-if st.session_state.selected:
-    st.divider()
-    st.subheader(f"{len(st.session_state.selected)} videos ready")
-
-    if st.button("Download all videos (ZIP)"):
-        urls = [st.session_state.videos[i] for i in sorted(st.session_state.selected)]
-
-        with st.spinner("Preparing ZIP file…"):
+if st.session_state.start_download:
+    for i, url in enumerate(st.session_state.videos, start=1):
+        with st.spinner(f"Downloading {i}.mp4"):
             r = requests.post(
-                f"{BACKEND}/download/zip",
-                json={
-                    "urls": urls,
-                    "quality": quality
-                },
-                timeout=1800
+                f"{BACKEND}/download",
+                json={"url": url, "quality": quality},
+                timeout=300
             )
 
         if r.status_code == 200:
             st.download_button(
-                label="Save videos.zip",
+                label=f"Downloading {i}.mp4",
                 data=r.content,
-                file_name="videos.zip",
-                mime="application/zip"
+                file_name=f"{i}.mp4",
+                mime="video/mp4",
+                key=f"dl_{i}"
             )
         else:
-            st.error("ZIP download failed")
+            st.error(f"Failed video {i}")
+
+    st.success("All downloads triggered")
+    st.session_state.start_download = False
