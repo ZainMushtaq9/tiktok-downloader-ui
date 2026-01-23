@@ -1,98 +1,246 @@
+/* =========================
+   RESET & BASE
+========================= */
+
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 body {
   background: #0b0f19;
+  color: #ffffff;
+}
+
+/* =========================
+   LIGHT THEME
+========================= */
+
+body.light {
+  background: #f4f6fb;
+  color: #111;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+  max-width: 560px;
+  margin: auto;
+  padding: 16px;
+  text-align: center;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.logo {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #9aa4bf;
+  margin-bottom: 16px;
+}
+
+body.light .subtitle {
+  color: #555;
+}
+
+/* =========================
+   THEME TOGGLE
+========================= */
+
+.theme-toggle {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #1d2236;
   color: #fff;
-  margin: 0;
-  padding: 0;
+  font-size: 18px;
+  cursor: pointer;
 }
-.progress-wrapper {
-  margin-top: 12px;
+
+body.light .theme-toggle {
+  background: #ffffff;
+  color: #111;
+  box-shadow: 0 0 0 1px #ddd;
 }
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+  background: #141a2e;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+body.light .card {
+  background: #ffffff;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+input {
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  border: none;
+  font-size: 15px;
+  margin-bottom: 10px;
+  background: #0f1425;
+  color: #ffffff;
+}
+
+body.light input {
+  background: #f0f2f7;
+  color: #111;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+button {
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  background: #ff2c55;
+  color: #ffffff;
+}
+
+button:active {
+  opacity: 0.85;
+}
+
+.download-all {
+  background: #1d9bf0;
+  margin-top: 8px;
+}
+
+/* =========================
+   STATUS & FOOTER
+========================= */
+
+#status {
+  font-size: 13px;
+  margin: 10px 0;
+  color: #00e0a4;
+}
+
+.footer-note {
+  font-size: 12px;
+  color: #9aa4bf;
+  margin-top: 16px;
+}
+
+body.light .footer-note {
+  color: #555;
+}
+
+/* =========================
+   PROGRESS BAR
+========================= */
 
 .progress-bar {
   width: 100%;
-  height: 10px;
+  height: 8px;
   background: #1c2238;
   border-radius: 10px;
   overflow: hidden;
+}
+
+body.light .progress-bar {
+  background: #ddd;
 }
 
 .progress-fill {
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, #ff2c55, #ff6a88);
-  text-align: center;
   font-size: 10px;
-  color: white;
-  line-height: 10px;
-  transition: width 0.2s ease;
-}
-.container {
-  max-width: 520px;
-  margin: auto;
-  padding: 20px;
+  line-height: 8px;
+  color: #ffffff;
   text-align: center;
 }
 
-.logo {
-  font-size: 28px;
-  margin-bottom: 5px;
-}
+/* =========================
+   VIDMATE-STYLE LIST
+========================= */
 
-.subtitle {
-  font-size: 14px;
-  color: #9aa4bf;
-  margin-bottom: 20px;
-}
-
-input {
-  width: 100%;
-  padding: 14px;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
-  margin-bottom: 12px;
-}
-
-button {
-  width: 100%;
-  padding: 14px;
-  background: #ff2c55;
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-button:active {
-  opacity: 0.9;
-}
-
-#status {
-  margin-top: 15px;
-  font-size: 14px;
-  color: #00e0a4;
+#videoList {
+  margin-top: 10px;
 }
 
 .video-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   background: #141a2e;
-  margin-top: 15px;
-  padding: 12px;
   border-radius: 12px;
-  text-align: left;
+  padding: 10px;
+  margin-bottom: 10px;
 }
 
+body.light .video-card {
+  background: #ffffff;
+}
+
+/* Thumbnail */
 .video-card img {
-  width: 100%;
+  width: 88px;
+  height: 88px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* Info text */
+.video-card p {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+/* Compact button */
+.video-card button {
+  width: auto;
+  padding: 8px 12px;
+  font-size: 13px;
+  background: #1d9bf0;
   border-radius: 8px;
 }
 
-.video-card button {
-  margin-top: 10px;
-  background: #1d9bf0;
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 420px) {
+  .video-card img {
+    width: 72px;
+    height: 72px;
+  }
+
+  .video-card p {
+    font-size: 13px;
+  }
 }
