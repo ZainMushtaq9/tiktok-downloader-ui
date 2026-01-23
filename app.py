@@ -14,7 +14,7 @@ st.set_page_config(
 )
 
 st.title("📥 TikTok Profile Downloader")
-st.caption("Select videos • Download individually or all at once")
+st.caption("Select videos • Download sequentially • Mobile friendly")
 
 # =========================
 # SESSION STATE
@@ -25,6 +25,9 @@ if "profile_data" not in st.session_state:
 
 if "selected" not in st.session_state:
     st.session_state.selected = set()
+
+if "download_queue" not in st.session_state:
+    st.session_state.download_queue = []
 
 # =========================
 # INPUTS
@@ -59,13 +62,15 @@ if st.button("Fetch profile"):
             data = r.json()
             st.session_state.profile_data = data
 
-            # AUTO-SELECT ALL VIDEOS
+            # AUTO-SELECT ALL
             st.session_state.selected = {
                 v["index"] for v in data["videos"]
             }
 
+            st.session_state.download_queue = []
+
             st.success(
-                f"Profile: {data['profile']}  |  "
+                f"Profile: {data['profile']} | "
                 f"Available videos: {data['total']}"
             )
         else:
@@ -83,12 +88,12 @@ if st.session_state.profile_data:
     st.divider()
 
     # =========================
-    # TOP CONTROLS (ALIGNED)
+    # TOP CONTROLS
     # =========================
 
-    col1, col2, col3 = st.columns([1, 1, 2])
+    c1, c2, c3 = st.columns([1, 1, 2])
 
-    with col1:
+    with c1:
         select_all = st.checkbox(
             "Select all",
             value=len(st.session_state.selected) == len(videos)
@@ -99,35 +104,55 @@ if st.session_state.profile_data:
         else:
             st.session_state.selected.clear()
 
-    with col2:
+    with c2:
         st.markdown(
             f"**Selected:** {len(st.session_state.selected)} / {len(videos)}"
         )
 
-    with col3:
-        if st.button("⬇ Download selected videos"):
-            for v in videos:
-                if v["index"] in st.session_state.selected:
-                    download_url = (
-                        f"{BACKEND}/download?"
-                        f"url={urllib.parse.quote(v['url'])}"
-                        f"&index={v['index']}"
-                        f"&profile={profile}"
-                        f"&quality={quality}"
-                    )
+    with c3:
+        if st.button("⬇ Start downloading selected videos"):
+            st.session_state.download_queue = [
+                v for v in videos
+                if v["index"] in st.session_state.selected
+            ]
 
-                    # Browser-handled download
-                    st.markdown(
-                        f'<a href="{download_url}" download></a>',
-                        unsafe_allow_html=True
-                    )
+    # =========================
+    # DOWNLOAD QUEUE (REAL)
+    # =========================
 
-    st.divider()
-    st.subheader("Videos on profile")
+    if st.session_state.download_queue:
+        current = st.session_state.download_queue[0]
+        remaining = len(st.session_state.download_queue)
+
+        download_url = (
+            f"{BACKEND}/download?"
+            f"url={urllib.parse.quote(current['url'])}"
+            f"&index={current['index']}"
+            f"&profile={profile}"
+            f"&quality={quality}"
+        )
+
+        st.divider()
+        st.info(
+            f"Downloading video {current['index']} "
+            f"({remaining} remaining)"
+        )
+
+        st.markdown(
+            f"[⬇ Click here to download video {current['index']}.mp4]({download_url})",
+            unsafe_allow_html=True
+        )
+
+        if st.button("Next download"):
+            st.session_state.download_queue.pop(0)
+            st.rerun()
 
     # =========================
     # VIDEO LIST
     # =========================
+
+    st.divider()
+    st.subheader("Videos on profile")
 
     for v in videos:
         col1, col2, col3 = st.columns([0.5, 1, 3], vertical_alignment="center")
@@ -162,4 +187,4 @@ if st.session_state.profile_data:
             st.markdown(
                 f"[⬇ Download {v['index']}.mp4]({single_download})",
                 unsafe_allow_html=True
-            )
+        )
