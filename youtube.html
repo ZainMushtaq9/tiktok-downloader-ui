@@ -7,17 +7,15 @@
   <title>YouTube Video & Playlist Downloader | Free Online Tool</title>
 
   <meta name="description"
-        content="Download YouTube videos and playlists online for personal use. Fast, free, no software required. Supports single videos and full playlists." />
+        content="Download YouTube videos and playlists online. One-click playlist downloader with sequential downloads." />
 
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://zainmushtaq9.github.io/tiktok-downloader-ui/youtube.html">
 
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-<!-- TOP NAV -->
 <nav class="top-nav">
   <div class="nav-left">
     <span class="nav-logo">Downloader Tools</span>
@@ -30,12 +28,12 @@
   </div>
 </nav>
 
-<div class="container">
+<main class="container">
 
   <h1 class="logo">YouTube Downloader</h1>
   <p class="subtitle">
-    Download YouTube videos or playlists for personal use.<br>
-    No registration. No software required.
+    Download YouTube videos or full playlists.<br>
+    Playlist downloads start automatically one by one.
   </p>
 
   <!-- INPUT CARD -->
@@ -44,7 +42,6 @@
       type="text"
       id="youtubeUrl"
       placeholder="Paste YouTube video or playlist link"
-      aria-label="YouTube video or playlist URL"
     />
 
     <select id="limitSelect">
@@ -65,22 +62,21 @@
     </div>
   </div>
 
-  <!-- DOWNLOAD CONTROLS -->
+  <!-- DOWNLOAD QUEUE CONTROLS -->
   <div id="downloadControls" class="card hidden">
     <button id="downloadAllBtn" class="download-all">
-      ⬇ Download All Videos
+      ⬇ Download All Videos (5s delay)
     </button>
 
     <p class="footer-note">
-      Videos will download one by one.<br>
-      Please allow multiple downloads when prompted by your browser.
+      Downloads will start one by one.<br>
+      Please allow multiple downloads when your browser asks.
     </p>
   </div>
 
   <!-- VIDEO LIST -->
   <div id="videoList"></div>
 
-  <!-- FOOTER -->
   <footer class="site-footer">
     <p>
       <a href="privacy.html">Privacy</a> |
@@ -88,11 +84,17 @@
       <a href="disclaimer.html">Disclaimer</a>
     </p>
     <p class="footer-note">
-      This website does not host videos. All content belongs to its respective owners.
+      This website does not host videos. All media belongs to respective owners.
     </p>
   </footer>
 
-</div>
+</main>
+
+<noscript>
+  <p style="text-align:center;padding:16px;">
+    JavaScript is required for this tool to work.
+  </p>
+</noscript>
 
 <script src="app.js"></script>
 </body>
