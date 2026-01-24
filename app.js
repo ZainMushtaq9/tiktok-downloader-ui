@@ -5,10 +5,10 @@
 const BACKEND_URL =
   "https://tiktok-downloader-backend-production-ce2b.up.railway.app";
 
-const DOWNLOAD_DELAY_MS = 1000; // Safe delay to avoid blocking
+const DOWNLOAD_DELAY_MS = 1000; // safe delay between downloads
 
 /* ======================================================
-   DOM ELEMENTS
+   DOM ELEMENTS (DEFENSIVE)
 ====================================================== */
 
 const profileUrlInput = document.getElementById("profileUrl");
@@ -38,42 +38,17 @@ let currentProfile = "";
 let videos = [];
 
 /* ======================================================
-   MODE SWITCHING
+   UTILITIES
 ====================================================== */
 
-modeRadios.forEach(radio => {
-  radio.addEventListener("change", () => {
-    if (radio.value === "single") {
-      profileMode.classList.add("hidden");
-      singleMode.classList.remove("hidden");
-    } else {
-      singleMode.classList.add("hidden");
-      profileMode.classList.remove("hidden");
-    }
-    resetUI();
-  });
-});
-
-/* ======================================================
-   UI HELPERS
-====================================================== */
-
-function resetUI() {
-  statusDiv.textContent = "";
-  videoList.innerHTML = "";
-  progressWrapper.classList.add("hidden");
-  updateProgress(0);
-  downloadAllBtn.classList.add("hidden");
-  videos = [];
-}
-
-function updateProgress(percent) {
-  progressFill.style.width = percent + "%";
-  progressFill.textContent = percent + "%";
-}
-
-function showProgress() {
-  progressWrapper.classList.remove("hidden");
+// Strip tracking params from TikTok URLs
+function normalizeUrl(raw) {
+  try {
+    const u = new URL(raw.trim());
+    return `${u.origin}${u.pathname}`;
+  } catch {
+    return raw.trim();
+  }
 }
 
 function sleep(ms) {
@@ -81,10 +56,53 @@ function sleep(ms) {
 }
 
 /* ======================================================
+   UI HELPERS
+====================================================== */
+
+function resetUI() {
+  if (statusDiv) statusDiv.textContent = "";
+  if (videoList) videoList.innerHTML = "";
+  if (progressWrapper) progressWrapper.classList.add("hidden");
+  updateProgress(0);
+  if (downloadAllBtn) downloadAllBtn.classList.add("hidden");
+  videos = [];
+}
+
+function updateProgress(percent) {
+  if (!progressFill) return;
+  progressFill.style.width = percent + "%";
+  progressFill.textContent = percent + "%";
+}
+
+function showProgress() {
+  if (progressWrapper) progressWrapper.classList.remove("hidden");
+}
+
+/* ======================================================
+   MODE SWITCHING
+====================================================== */
+
+if (modeRadios.length) {
+  modeRadios.forEach(radio => {
+    radio.addEventListener("change", () => {
+      if (radio.value === "single") {
+        profileMode?.classList.add("hidden");
+        singleMode?.classList.remove("hidden");
+      } else {
+        singleMode?.classList.add("hidden");
+        profileMode?.classList.remove("hidden");
+      }
+      resetUI();
+    });
+  });
+}
+
+/* ======================================================
    SKELETON LOADER
 ====================================================== */
 
 function showSkeletons(count = 5) {
+  if (!videoList) return;
   videoList.innerHTML = "";
   for (let i = 0; i < count; i++) {
     const sk = document.createElement("div");
@@ -105,11 +123,15 @@ function showSkeletons(count = 5) {
 ====================================================== */
 
 fetchBtn?.addEventListener("click", async () => {
-  const profileUrl = profileUrlInput.value.trim();
-  if (!profileUrl) {
+  if (!profileUrlInput || !statusDiv) return;
+
+  const rawUrl = profileUrlInput.value;
+  if (!rawUrl) {
     statusDiv.textContent = "Please enter a TikTok profile URL.";
     return;
   }
+
+  const profileUrl = normalizeUrl(rawUrl);
 
   resetUI();
   statusDiv.textContent = "Fetching profile videos…";
@@ -122,36 +144,32 @@ fetchBtn?.addEventListener("click", async () => {
       `${BACKEND_URL}/profile?profile_url=${encodeURIComponent(profileUrl)}`
     );
 
-    if (!res.ok) {
-      throw new Error("PROFILE_FETCH_FAILED");
+    const data = await res.json();
+
+    if (!res.ok || data.detail) {
+      throw new Error(data.detail || "Profile fetch failed");
     }
 
-    const data = await res.json();
-    currentProfile = data.profile;
+    currentProfile = data.profile || "tiktok_profile";
 
-    const limit = limitSelect.value;
+    const limit = limitSelect?.value || "all";
     videos =
       limit === "all"
         ? data.videos
-        : data.videos.slice(0, parseInt(limit));
+        : data.videos.slice(0, parseInt(limit, 10));
 
     updateProgress(100);
     statusDiv.textContent = `${videos.length} videos found on this profile.`;
 
     renderVideoList(videos);
-    downloadAllBtn.classList.remove("hidden");
+    downloadAllBtn?.classList.remove("hidden");
 
   } catch (err) {
     console.error(err);
     updateProgress(0);
-
-    if (err.message === "PROFILE_FETCH_FAILED") {
-      statusDiv.textContent =
-        "Failed to fetch profile. The profile may be private or temporarily blocked.";
-    } else {
-      statusDiv.textContent =
-        "Unexpected error occurred. Please try again later.";
-    }
+    statusDiv.textContent =
+      err.message ||
+      "Failed to fetch profile. The profile may be private or temporarily unavailable.";
   }
 });
 
@@ -160,6 +178,7 @@ fetchBtn?.addEventListener("click", async () => {
 ====================================================== */
 
 function renderVideoList(list) {
+  if (!videoList) return;
   videoList.innerHTML = "";
 
   list.forEach(video => {
@@ -182,10 +201,12 @@ function renderVideoList(list) {
 }
 
 /* ======================================================
-   SINGLE VIDEO DOWNLOAD
+   SINGLE VIDEO DOWNLOAD (FROM LIST)
 ====================================================== */
 
 function downloadSingle(video) {
+  if (!statusDiv) return;
+
   statusDiv.textContent =
     "Your browser may ask permission to download the file.";
 
@@ -193,7 +214,7 @@ function downloadSingle(video) {
     `${BACKEND_URL}/download` +
     `?url=${encodeURIComponent(video.url)}` +
     `&index=${video.index}` +
-    `&profile=${currentProfile}` +
+    `&profile=${encodeURIComponent(currentProfile)}` +
     `&quality=best`;
 
   triggerDownload(url);
@@ -204,7 +225,7 @@ function downloadSingle(video) {
 ====================================================== */
 
 downloadAllBtn?.addEventListener("click", async () => {
-  if (!videos.length) return;
+  if (!videos.length || !statusDiv) return;
 
   statusDiv.textContent =
     "Starting downloads… Please allow multiple downloads when prompted.";
@@ -222,7 +243,7 @@ downloadAllBtn?.addEventListener("click", async () => {
       `${BACKEND_URL}/download` +
       `?url=${encodeURIComponent(video.url)}` +
       `&index=${video.index}` +
-      `&profile=${currentProfile}` +
+      `&profile=${encodeURIComponent(currentProfile)}` +
       `&quality=best`;
 
     triggerDownload(url);
@@ -238,18 +259,22 @@ downloadAllBtn?.addEventListener("click", async () => {
 ====================================================== */
 
 singleDownloadBtn?.addEventListener("click", () => {
-  const url = singleVideoInput.value.trim();
-  if (!url) {
+  if (!singleVideoInput || !statusDiv) return;
+
+  const raw = singleVideoInput.value;
+  if (!raw) {
     statusDiv.textContent = "Please paste a TikTok video link.";
     return;
   }
+
+  const cleanUrl = normalizeUrl(raw);
 
   statusDiv.textContent =
     "Your browser may ask permission to download the file.";
 
   const downloadUrl =
     `${BACKEND_URL}/download` +
-    `?url=${encodeURIComponent(url)}` +
+    `?url=${encodeURIComponent(cleanUrl)}` +
     `&index=1` +
     `&profile=single_video` +
     `&quality=best`;
@@ -258,7 +283,7 @@ singleDownloadBtn?.addEventListener("click", () => {
 });
 
 /* ======================================================
-   DOWNLOAD TRIGGER (SAFE)
+   SAFE DOWNLOAD TRIGGER
 ====================================================== */
 
 function triggerDownload(url) {
