@@ -4,29 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>TikTok Video Downloader – Download TikTok Videos Without Watermark</title>
+  <title>TikTok Downloader – Video Downloader Tools</title>
 
   <meta name="description"
-        content="Free TikTok video downloader to download TikTok videos and profiles without watermark. Fast, secure, and works on mobile and desktop." />
-
-  <meta name="keywords"
-        content="tiktok video downloader, download tiktok videos without watermark, tiktok profile downloader, tiktok video download online" />
+        content="Download TikTok videos without watermark using Video Downloader Tools. Fetch videos from TikTok profiles or download single videos easily." />
 
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://zainmushtaq9.github.io/tiktok-downloader-ui/tiktok.html" />
 
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "TikTok Video Downloader",
-    "description": "Download TikTok videos and profiles without watermark using an online tool",
-    "url": "https://zainmushtaq9.github.io/tiktok-downloader-ui/tiktok.html"
-  }
-  </script>
 </head>
 
 <body>
@@ -36,7 +22,6 @@
 ========================= -->
 <nav class="top-nav">
   <div class="nav-left">
-    <img src="logo.png" alt="Video Downloader Tools Logo" style="height:22px;vertical-align:middle;">
     <span class="nav-logo">Video Downloader Tools</span>
   </div>
 
@@ -47,6 +32,7 @@
     <a href="instagram.html">Instagram</a>
     <a href="twitter.html">Twitter</a>
     <a href="facebook.html">Facebook</a>
+    <a href="likee.html">Likee</a>
   </div>
 </nav>
 
@@ -60,170 +46,79 @@
 <div class="container">
 
 <!-- =========================
-     PAGE HEADER
+     HEADER
 ========================= -->
-<h1 class="logo">
-  TikTok Video Downloader
-</h1>
-
+<h1 class="logo">TikTok Video Downloader</h1>
 <p class="subtitle">
-  Download TikTok videos and profiles without watermark – fast and free.
+  Download TikTok videos from profiles or single links
 </p>
 
 <!-- =========================
-     TOOL SECTION (UNCHANGED)
+     MODE SELECTOR
 ========================= -->
-<div class="card">
+<div class="mode-select">
+  <label>
+    <input type="radio" name="mode" value="profile" checked />
+    Profile Downloader
+  </label>
+
+  <label>
+    <input type="radio" name="mode" value="single" />
+    Single Video
+  </label>
+</div>
+
+<!-- =========================
+     PROFILE MODE
+========================= -->
+<div id="profileMode" class="card">
 
   <input
     type="text"
     id="profileUrl"
-    placeholder="Paste TikTok video or profile link here"
+    placeholder="Paste TikTok profile link (https://www.tiktok.com/@username)"
   />
 
+  <select id="limitSelect">
+    <option value="all">All videos</option>
+    <option value="5">First 5 videos</option>
+    <option value="10">First 10 videos</option>
+    <option value="20">First 20 videos</option>
+  </select>
+
   <button id="fetchBtn">
-    Download TikTok Videos
+    Fetch Profile Videos
   </button>
 
   <div id="status"></div>
 
-  <div id="progressWrapper" style="display:none;">
+  <!-- PROGRESS BAR -->
+  <div id="progressWrapper" class="hidden">
     <div class="progress-bar">
       <div class="progress-fill" id="progressFill">0%</div>
     </div>
   </div>
 
+  <button id="downloadAllBtn" class="download-all hidden">
+    ⬇ Download All Videos
+  </button>
+
 </div>
 
 <!-- =========================
-     SEO CONTENT START
+     SINGLE VIDEO MODE
 ========================= -->
-<div class="card">
+<div id="singleMode" class="card hidden">
 
-  <h2>What is TikTok Video Downloader?</h2>
+  <input
+    type="text"
+    id="singleVideoUrl"
+    placeholder="Paste TikTok video link"
+  />
 
-  <p>
-    TikTok Video Downloader is a free online tool that allows users to download
-    publicly available TikTok videos directly to their device. This tool works
-    entirely in the browser and does not require any app installation,
-    registration, or login.
-  </p>
-
-  <p>
-    With this downloader, you can save TikTok videos for offline viewing,
-    educational use, or personal reference while maintaining full control
-    over your downloaded files.
-  </p>
-
-</div>
-
-<div class="card">
-
-  <h2>Download TikTok Videos Without Watermark</h2>
-
-  <p>
-    Many users search for a way to download TikTok videos without watermark.
-    This tool is designed to process public TikTok links and generate clean
-    downloadable video files that can be saved on mobile phones, tablets,
-    or desktop computers.
-  </p>
-
-  <p>
-    The downloader supports both single video links and public TikTok profile
-    links, allowing bulk video downloads where available.
-  </p>
-
-</div>
-
-
-
-     <div class="card">
-
-  <h2>How to Download TikTok Videos</h2>
-
-  <p>
-    Downloading TikTok videos using this online tool is simple and does not
-    require technical knowledge. Follow these steps to save videos quickly
-    and securely:
-  </p>
-
-  <ol style="line-height:1.8;">
-    <li>Open the TikTok app or website and copy the video or profile link</li>
-    <li>Paste the link into the input field above</li>
-    <li>Click the “Download TikTok Videos” button</li>
-    <li>Select the video you want to download</li>
-    <li>Save the file to your device</li>
-  </ol>
-
-  <p>
-    The process works directly in your browser and supports both individual
-    videos and public TikTok profile links.
-  </p>
-
-</div>
-
-<div class="card">
-
-  <h2>Is It Legal to Download TikTok Videos?</h2>
-
-  <p>
-    Downloading publicly available TikTok videos may be legal depending on
-    how the content is used and local copyright laws. This tool is intended
-    for personal, educational, and offline viewing purposes only.
-  </p>
-
-  <p>
-    Users are responsible for ensuring that their use of downloaded content
-    complies with TikTok’s terms of service and applicable copyright laws.
-    Video Downloader Tools does not host or distribute copyrighted content.
-  </p>
-
-</div>
-
-<div class="card">
-
-  <h2>Supported Devices and Browsers</h2>
-
-  <p>
-    This TikTok video downloader works on a wide range of devices and operating
-    systems. The tool is fully browser-based and does not require additional
-    software.
-  </p>
-
-  <ul style="line-height:1.8;">
-    <li>Android smartphones and tablets</li>
-    <li>iPhone and iPad (iOS)</li>
-    <li>Windows and macOS computers</li>
-    <li>Linux-based systems</li>
-    <li>Modern browsers such as Chrome, Firefox, Edge, and Safari</li>
-  </ul>
-
-</div>
-
-<div class="card">
-
-  <h2>Frequently Asked Questions</h2>
-
-  <h3>Can I download entire TikTok profiles?</h3>
-  <p>
-    Yes, public TikTok profiles can be processed to display available videos
-    for download. Availability may depend on platform restrictions.
-  </p>
-
-  <h3>Do I need to install any app?</h3>
-  <p>
-    No installation is required. This tool works directly in your browser.
-  </p>
-
-  <h3>Is this TikTok downloader free?</h3>
-  <p>
-    Yes, the tool is completely free to use without registration.
-  </p>
-
-  <h3>Does this tool work on mobile?</h3>
-  <p>
-    Yes, the downloader is optimized for mobile devices and tablets.
-  </p>
+  <button id="singleDownloadBtn">
+    Download Video
+  </button>
 
 </div>
 
@@ -235,17 +130,16 @@
 </div>
 
 <!-- =========================
+     VIDEO LIST
+========================= -->
+<div id="videoList"></div>
+
+<!-- =========================
      FOOTER
 ========================= -->
 <footer class="site-footer">
   <p>
     <a href="index.html">Home</a> |
-    <a href="tiktok.html">TikTok</a> |
-    <a href="youtube.html">YouTube</a> |
-    <a href="instagram.html">Instagram</a> |
-    <a href="twitter.html">Twitter</a> |
-    <a href="facebook.html">Facebook</a> |
-    <a href="likee.html">Likee</a> |
     <a href="about.html">About</a> |
     <a href="privacy.html">Privacy Policy</a> |
     <a href="terms.html">Terms</a> |
@@ -254,7 +148,7 @@
   </p>
 
   <p class="footer-note">
-    © 2026 Video Downloader Tools. All rights reserved.
+    For bulk downloads, use Desktop Chrome and allow multiple downloads when prompted.
   </p>
 </footer>
 
@@ -274,8 +168,4 @@
 <script src="app.js"></script>
 
 </body>
-         </html>
-
-
-
-     
+</html>
