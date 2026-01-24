@@ -1,253 +1,281 @@
-<!-- =========================
-     PAGE HEADER / SEO HERO
-========================= -->
-<section class="card" style="margin-bottom:18px;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <h1 style="font-size:22px;margin-bottom:8px;">
-    TikTok Video Downloader Online (Free & No Watermark)
-  </h1>
+  <title>TikTok Video Downloader – Download TikTok Videos Without Watermark</title>
 
-  <p style="font-size:14px;color:#9aa4bf;line-height:1.7;">
-    Download TikTok videos online using our free TikTok video downloader.
-    This tool allows you to save publicly available TikTok videos and profile
-    content directly to your device without installing any software.
-  </p>
+  <meta name="description"
+        content="Free TikTok video downloader to download TikTok videos and profiles without watermark. Fast, secure, and works on mobile and desktop." />
 
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.7;margin-top:10px;">
-    Video Downloader Tools provides a fast, browser-based solution for users
-    who want to download TikTok videos for offline viewing, educational use,
-    or personal reference. The tool works on desktop, mobile, and tablet
-    devices and does not require login or registration.
-  </p>
+  <meta name="keywords"
+        content="tiktok video downloader, download tiktok videos without watermark, tiktok profile downloader, tiktok video download online" />
 
-</section>
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://zainmushtaq9.github.io/tiktok-downloader-ui/tiktok.html" />
 
-<!-- =========================
-     WHAT IS TIKTOK DOWNLOADER
-========================= -->
-<section class="card">
+  <link rel="stylesheet" href="style.css" />
 
-  <h2 style="font-size:18px;margin-bottom:8px;">
-    What Is a TikTok Video Downloader?
-  </h2>
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "TikTok Video Downloader",
+    "description": "Download TikTok videos and profiles without watermark using an online tool",
+    "url": "https://zainmushtaq9.github.io/tiktok-downloader-ui/tiktok.html"
+  }
+  </script>
+</head>
 
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.8;">
-    A TikTok video downloader is an online utility that allows users to download
-    publicly accessible videos from TikTok by using the video link or profile URL.
-    Instead of streaming the video repeatedly, users can save the content locally
-    for offline access.
-  </p>
-
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.8;margin-top:10px;">
-    Our TikTok downloader works entirely in the browser. This means you do not
-    need to install apps, browser extensions, or third-party software. Simply
-    paste the TikTok video link into the downloader above and follow the on-screen
-    instructions.
-  </p>
-
-</section>
+<body>
 
 <!-- =========================
-     WHY USERS SEARCH THIS TOOL
+     TOP NAVIGATION
 ========================= -->
-<section class="card">
+<nav class="top-nav">
+  <div class="nav-left">
+    <img src="logo.png" alt="Video Downloader Tools Logo" style="height:22px;vertical-align:middle;">
+    <span class="nav-logo">Video Downloader Tools</span>
+  </div>
 
-  <h2 style="font-size:18px;margin-bottom:8px;">
-    Why Do Users Download TikTok Videos?
-  </h2>
-
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.8;">
-    Millions of users search for TikTok video downloader tools every month for
-    a variety of legitimate reasons. Common use cases include saving educational
-    content, referencing tutorials, offline viewing while traveling, or archiving
-    publicly shared media.
-  </p>
-
-  <ul style="font-size:14px;color:#cbd3ff;line-height:1.9;margin-left:18px;">
-    <li>Save public TikTok videos for offline viewing</li>
-    <li>Download tutorial or educational TikTok clips</li>
-    <li>Archive public content for personal reference</li>
-    <li>Access videos without repeated buffering</li>
-  </ul>
-
-</section>
-
-
+  <div class="nav-right">
+    <a href="index.html">Home</a>
+    <a href="tiktok.html">TikTok</a>
+    <a href="youtube.html">YouTube</a>
+    <a href="instagram.html">Instagram</a>
+    <a href="twitter.html">Twitter</a>
+    <a href="facebook.html">Facebook</a>
+  </div>
+</nav>
 
 <!-- =========================
-     HOW TO DOWNLOAD TIKTOK VIDEOS
+     TOP AD SLOT
 ========================= -->
-<section class="card" style="margin-top:20px;">
+<div class="ad-slot ad-top">
+  Advertisement
+</div>
 
-  <h2 style="font-size:18px;margin-bottom:8px;">
-    How to Download TikTok Videos Online
-  </h2>
+<div class="container">
 
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.8;">
-    Downloading TikTok videos using Video Downloader Tools is a simple
-    step-by-step process that works directly in your web browser.
-    No registration, login, or software installation is required.
+<!-- =========================
+     PAGE HEADER
+========================= -->
+<h1 class="logo">
+  TikTok Video Downloader
+</h1>
+
+<p class="subtitle">
+  Download TikTok videos and profiles without watermark – fast and free.
+</p>
+
+<!-- =========================
+     TOOL SECTION (UNCHANGED)
+========================= -->
+<div class="card">
+
+  <input
+    type="text"
+    id="profileUrl"
+    placeholder="Paste TikTok video or profile link here"
+  />
+
+  <button id="fetchBtn">
+    Download TikTok Videos
+  </button>
+
+  <div id="status"></div>
+
+  <div id="progressWrapper" style="display:none;">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill">0%</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- =========================
+     SEO CONTENT START
+========================= -->
+<div class="card">
+
+  <h2>What is TikTok Video Downloader?</h2>
+
+  <p>
+    TikTok Video Downloader is a free online tool that allows users to download
+    publicly available TikTok videos directly to their device. This tool works
+    entirely in the browser and does not require any app installation,
+    registration, or login.
   </p>
 
-  <ol style="font-size:14px;color:#cbd3ff;line-height:1.9;margin-left:18px;">
-    <li>Open the TikTok app or website and copy the link of a public video.</li>
-    <li>Paste the copied TikTok video URL into the downloader field above.</li>
-    <li>Click the download button and wait for the video to be processed.</li>
-    <li>Save the video file to your device once the download is ready.</li>
+  <p>
+    With this downloader, you can save TikTok videos for offline viewing,
+    educational use, or personal reference while maintaining full control
+    over your downloaded files.
+  </p>
+
+</div>
+
+<div class="card">
+
+  <h2>Download TikTok Videos Without Watermark</h2>
+
+  <p>
+    Many users search for a way to download TikTok videos without watermark.
+    This tool is designed to process public TikTok links and generate clean
+    downloadable video files that can be saved on mobile phones, tablets,
+    or desktop computers.
+  </p>
+
+  <p>
+    The downloader supports both single video links and public TikTok profile
+    links, allowing bulk video downloads where available.
+  </p>
+
+</div>
+
+
+
+     <div class="card">
+
+  <h2>How to Download TikTok Videos</h2>
+
+  <p>
+    Downloading TikTok videos using this online tool is simple and does not
+    require technical knowledge. Follow these steps to save videos quickly
+    and securely:
+  </p>
+
+  <ol style="line-height:1.8;">
+    <li>Open the TikTok app or website and copy the video or profile link</li>
+    <li>Paste the link into the input field above</li>
+    <li>Click the “Download TikTok Videos” button</li>
+    <li>Select the video you want to download</li>
+    <li>Save the file to your device</li>
   </ol>
 
-  <p style="font-size:13px;color:#9aa4bf;margin-top:10px;">
-    Note: The tool only works with publicly accessible TikTok videos.
+  <p>
+    The process works directly in your browser and supports both individual
+    videos and public TikTok profile links.
   </p>
 
-</section>
+</div>
 
-<!-- =========================
-     TIKTOK PROFILE DOWNLOAD
-========================= -->
-<section class="card">
+<div class="card">
 
-  <h2 style="font-size:18px;margin-bottom:8px;">
-    Download TikTok Profile Videos
-  </h2>
+  <h2>Is It Legal to Download TikTok Videos?</h2>
 
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.8;">
-    In addition to single video downloads, our tool supports downloading
-    multiple public videos from a TikTok profile. This feature is useful
-    for users who want to save several videos from the same creator
-    for offline viewing or reference.
+  <p>
+    Downloading publicly available TikTok videos may be legal depending on
+    how the content is used and local copyright laws. This tool is intended
+    for personal, educational, and offline viewing purposes only.
   </p>
 
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.8;margin-top:10px;">
-    Simply paste a TikTok profile URL into the downloader, and the tool
-    will fetch a list of available public videos. You can then choose
-    which videos to download based on your needs.
+  <p>
+    Users are responsible for ensuring that their use of downloaded content
+    complies with TikTok’s terms of service and applicable copyright laws.
+    Video Downloader Tools does not host or distribute copyrighted content.
   </p>
 
-</section>
+</div>
 
-<!-- =========================
-     DEVICE & BROWSER COMPATIBILITY
-========================= -->
-<section class="card">
+<div class="card">
 
-  <h2 style="font-size:18px;margin-bottom:8px;">
-    Supported Devices and Browsers
-  </h2>
+  <h2>Supported Devices and Browsers</h2>
 
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.8;">
-    Video Downloader Tools is designed to work across a wide range of
-    devices and modern web browsers. The downloader is fully responsive
-    and adapts to different screen sizes.
+  <p>
+    This TikTok video downloader works on a wide range of devices and operating
+    systems. The tool is fully browser-based and does not require additional
+    software.
   </p>
 
-  <ul style="font-size:14px;color:#cbd3ff;line-height:1.9;margin-left:18px;">
-    <li>Desktop computers (Windows, macOS, Linux)</li>
-    <li>Mobile phones (Android and iOS)</li>
-    <li>Tablets and touchscreen devices</li>
+  <ul style="line-height:1.8;">
+    <li>Android smartphones and tablets</li>
+    <li>iPhone and iPad (iOS)</li>
+    <li>Windows and macOS computers</li>
+    <li>Linux-based systems</li>
     <li>Modern browsers such as Chrome, Firefox, Edge, and Safari</li>
   </ul>
 
-  <p style="font-size:13px;color:#9aa4bf;margin-top:10px;">
-    For bulk downloads, desktop browsers may provide a smoother experience.
+</div>
+
+<div class="card">
+
+  <h2>Frequently Asked Questions</h2>
+
+  <h3>Can I download entire TikTok profiles?</h3>
+  <p>
+    Yes, public TikTok profiles can be processed to display available videos
+    for download. Availability may depend on platform restrictions.
   </p>
 
-</section>
+  <h3>Do I need to install any app?</h3>
+  <p>
+    No installation is required. This tool works directly in your browser.
+  </p>
 
+  <h3>Is this TikTok downloader free?</h3>
+  <p>
+    Yes, the tool is completely free to use without registration.
+  </p>
 
+  <h3>Does this tool work on mobile?</h3>
+  <p>
+    Yes, the downloader is optimized for mobile devices and tablets.
+  </p>
 
+</div>
 
 <!-- =========================
-     LEGAL & RESPONSIBILITY NOTICE
+     INLINE AD SLOT
 ========================= -->
-<section class="card" style="margin-top:20px;">
-
-  <h2 style="font-size:18px;margin-bottom:8px;">
-    Legal Use and Responsibility
-  </h2>
-
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.8;">
-    Video Downloader Tools does not host, store, or distribute any TikTok videos.
-    All media content remains hosted on TikTok and is accessed only through
-    publicly available links provided by users.
-  </p>
-
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.8;margin-top:10px;">
-    Users are responsible for ensuring that their use of downloaded content
-    complies with applicable copyright laws and TikTok’s terms of service.
-    This tool is intended for personal, educational, and informational use only.
-  </p>
-
-</section>
+<div class="ad-slot ad-inline">
+  Advertisement
+</div>
 
 <!-- =========================
-     FREQUENTLY ASKED QUESTIONS
+     FOOTER
 ========================= -->
-<section class="card">
-
-  <h2 style="font-size:18px;margin-bottom:8px;">
-    Frequently Asked Questions
-  </h2>
-
-  <h3 style="font-size:15px;margin-top:10px;">
-    Is this TikTok downloader free to use?
-  </h3>
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.7;">
-    Yes. Video Downloader Tools provides free access to its TikTok downloader
-    without requiring registration or payment.
+<footer class="site-footer">
+  <p>
+    <a href="index.html">Home</a> |
+    <a href="tiktok.html">TikTok</a> |
+    <a href="youtube.html">YouTube</a> |
+    <a href="instagram.html">Instagram</a> |
+    <a href="twitter.html">Twitter</a> |
+    <a href="facebook.html">Facebook</a> |
+    <a href="likee.html">Likee</a> |
+    <a href="about.html">About</a> |
+    <a href="privacy.html">Privacy Policy</a> |
+    <a href="terms.html">Terms</a> |
+    <a href="disclaimer.html">Disclaimer</a> |
+    <a href="contact.html">Contact</a>
   </p>
 
-  <h3 style="font-size:15px;margin-top:10px;">
-    Do I need to install any software?
-  </h3>
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.7;">
-    No installation is required. The downloader works directly in your web
-    browser on desktop and mobile devices.
+  <p class="footer-note">
+    © 2026 Video Downloader Tools. All rights reserved.
   </p>
+</footer>
 
-  <h3 style="font-size:15px;margin-top:10px;">
-    Can I download private TikTok videos?
-  </h3>
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.7;">
-    No. The tool only supports publicly accessible TikTok videos and profiles.
-  </p>
-
-</section>
+</div> <!-- END CONTAINER -->
 
 <!-- =========================
-     OTHER PLATFORM TOOLS
+     COOKIE CONSENT
 ========================= -->
-<section class="card">
-
-  <h2 style="font-size:18px;margin-bottom:8px;">
-    Explore Other Video Downloader Tools
-  </h2>
-
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.8;">
-    Video Downloader Tools also provides platform-specific pages for other
-    popular social media websites. These tools follow the same principles
-    of simplicity, accessibility, and user responsibility.
+<div id="cookieBanner" class="cookie-banner">
+  <p>
+    This website uses cookies to improve user experience and display ads.
+    By using this site, you agree to our <a href="privacy.html">Privacy Policy</a>.
   </p>
+  <button id="acceptCookies">Accept</button>
+</div>
 
-  <ul style="font-size:14px;color:#cbd3ff;line-height:1.9;margin-left:18px;">
-    <li><a href="youtube.html">YouTube Video Downloader</a> (coming soon)</li>
-    <li><a href="instagram.html">Instagram Video Downloader</a> (coming soon)</li>
-    <li><a href="twitter.html">Twitter / X Video Downloader</a> (coming soon)</li>
-    <li><a href="facebook.html">Facebook Video Downloader</a> (coming soon)</li>
-    <li><a href="likee.html">Likee Video Downloader</a> (coming soon)</li>
-  </ul>
+<script src="app.js"></script>
 
-</section>
+</body>
+         </html>
 
-<!-- =========================
-     SEO CLOSE
-========================= -->
-<section class="card">
 
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.8;">
-    If you are looking for a reliable TikTok video downloader online,
-    Video Downloader Tools offers a simple and efficient solution for
-    downloading public TikTok videos directly from your browser.
-  </p>
 
-</section>
+     
