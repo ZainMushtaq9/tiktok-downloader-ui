@@ -2,15 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>TikTok Downloader – Video Downloader Tools</title>
+  <title>TikTok Profile & Video Downloader | Free Online Tool</title>
 
   <meta name="description"
-        content="Download TikTok videos without watermark using Video Downloader Tools. Fetch videos from TikTok profiles or download single videos easily." />
+        content="Download TikTok videos from public profiles. One-click bulk download with sequential queue. No watermark, no software." />
 
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://zainmushtaq9.github.io/tiktok-downloader-ui/tiktok.html" />
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -22,149 +21,146 @@
 ========================= -->
 <nav class="top-nav">
   <div class="nav-left">
-    <span class="nav-logo">Video Downloader Tools</span>
+    <span class="nav-logo">Downloader Tools</span>
   </div>
-
   <div class="nav-right">
     <a href="index.html">Home</a>
-    <a href="tiktok.html">TikTok</a>
+    <a href="tiktok.html" class="active">TikTok</a>
     <a href="youtube.html">YouTube</a>
-    <a href="instagram.html">Instagram</a>
-    <a href="twitter.html">Twitter</a>
-    <a href="facebook.html">Facebook</a>
-    <a href="likee.html">Likee</a>
+    <a href="about.html">About</a>
   </div>
 </nav>
 
 <!-- =========================
-     TOP AD SLOT
+     MAIN CONTAINER
 ========================= -->
-<div class="ad-slot ad-top">
-  Advertisement
-</div>
-
 <div class="container">
 
-<!-- =========================
-     HEADER
-========================= -->
-<h1 class="logo">TikTok Video Downloader</h1>
-<p class="subtitle">
-  Download TikTok videos from profiles or single links
-</p>
+  <h1 class="logo">TikTok Downloader</h1>
+  <p class="subtitle">
+    Download videos from TikTok public profiles.  
+    Bulk downloads start automatically, one by one.
+  </p>
 
-<!-- =========================
-     MODE SELECTOR
-========================= -->
-<div class="mode-select">
-  <label>
-    <input type="radio" name="mode" value="profile" checked />
-    Profile Downloader
-  </label>
-
-  <label>
-    <input type="radio" name="mode" value="single" />
-    Single Video
-  </label>
-</div>
-
-<!-- =========================
-     PROFILE MODE
-========================= -->
-<div id="profileMode" class="card">
-
-  <input
-    type="text"
-    id="profileUrl"
-    placeholder="Paste TikTok profile link (https://www.tiktok.com/@username)"
-  />
-
-  <select id="limitSelect">
-    <option value="all">All videos</option>
-    <option value="5">First 5 videos</option>
-    <option value="10">First 10 videos</option>
-    <option value="20">First 20 videos</option>
-  </select>
-
-  <button id="fetchBtn">
-    Fetch Profile Videos
-  </button>
-
-  <div id="status"></div>
-
-  <!-- PROGRESS BAR -->
-  <div id="progressWrapper" class="hidden">
-    <div class="progress-bar">
-      <div class="progress-fill" id="progressFill">0%</div>
-    </div>
+  <!-- =========================
+       MODE SELECTOR
+  ========================= -->
+  <div class="mode-select">
+    <label>
+      <input type="radio" name="mode" value="profile" checked />
+      Profile Downloader
+    </label>
+    <label>
+      <input type="radio" name="mode" value="single" />
+      Single Video
+    </label>
   </div>
 
-  <button id="downloadAllBtn" class="download-all hidden">
-    ⬇ Download All Videos
-  </button>
+  <!-- =========================
+       SINGLE VIDEO MODE
+  ========================= -->
+  <div id="singleMode" class="card hidden">
+
+    <input
+      type="text"
+      id="singleVideoUrl"
+      placeholder="Paste TikTok video link"
+    />
+
+    <button id="singleDownloadBtn">
+      Download Video
+    </button>
+
+    <p class="footer-note">
+      Works for public TikTok videos only.
+    </p>
+
+  </div>
+
+  <!-- =========================
+       PROFILE MODE
+  ========================= -->
+  <div id="profileMode" class="card">
+
+    <input
+      type="text"
+      id="profileUrl"
+      placeholder="Paste TikTok profile link (https://www.tiktok.com/@username)"
+    />
+
+    <select id="limitSelect">
+      <option value="all">Download all videos</option>
+      <option value="5">First 5 videos</option>
+      <option value="10">First 10 videos</option>
+      <option value="20">First 20 videos</option>
+    </select>
+
+    <button id="fetchBtn">
+      Fetch Profile Videos
+    </button>
+
+    <div id="status"></div>
+
+    <!-- PROGRESS -->
+    <div id="progressWrapper" class="hidden">
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill">0%</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- =========================
+       DOWNLOAD CONTROLS
+  ========================= -->
+  <div id="downloadControls" class="card hidden">
+
+    <button id="downloadAllBtn" class="download-all">
+      ⬇ Download All Videos
+    </button>
+
+    <p class="footer-note">
+      Videos download sequentially with a short delay.  
+      Please allow multiple downloads when prompted by your browser.
+    </p>
+
+  </div>
+
+  <!-- =========================
+       VIDEO LIST
+  ========================= -->
+  <div id="videoList"></div>
+
+  <!-- =========================
+       FOOTER
+  ========================= -->
+  <footer class="site-footer">
+    <p>
+      <a href="privacy.html">Privacy</a> |
+      <a href="terms.html">Terms</a> |
+      <a href="disclaimer.html">Disclaimer</a>
+    </p>
+    <p class="footer-note">
+      This tool does not host videos. All content belongs to respective owners.
+    </p>
+  </footer>
 
 </div>
-
-<!-- =========================
-     SINGLE VIDEO MODE
-========================= -->
-<div id="singleMode" class="card hidden">
-
-  <input
-    type="text"
-    id="singleVideoUrl"
-    placeholder="Paste TikTok video link"
-  />
-
-  <button id="singleDownloadBtn">
-    Download Video
-  </button>
-
-</div>
-
-<!-- =========================
-     INLINE AD SLOT
-========================= -->
-<div class="ad-slot ad-inline">
-  Advertisement
-</div>
-
-<!-- =========================
-     VIDEO LIST
-========================= -->
-<div id="videoList"></div>
-
-<!-- =========================
-     FOOTER
-========================= -->
-<footer class="site-footer">
-  <p>
-    <a href="index.html">Home</a> |
-    <a href="about.html">About</a> |
-    <a href="privacy.html">Privacy Policy</a> |
-    <a href="terms.html">Terms</a> |
-    <a href="disclaimer.html">Disclaimer</a> |
-    <a href="contact.html">Contact</a>
-  </p>
-
-  <p class="footer-note">
-    For bulk downloads, use Desktop Chrome and allow multiple downloads when prompted.
-  </p>
-</footer>
-
-</div> <!-- END CONTAINER -->
 
 <!-- =========================
      COOKIE CONSENT
 ========================= -->
 <div id="cookieBanner" class="cookie-banner">
   <p>
-    This website uses cookies to improve user experience and display ads.
-    By using this site, you agree to our <a href="privacy.html">Privacy Policy</a>.
+    This site uses cookies to improve user experience and display ads.
+    <a href="privacy.html">Learn more</a>
   </p>
   <button id="acceptCookies">Accept</button>
 </div>
 
+<!-- =========================
+     SCRIPT (MUST BE LAST)
+========================= -->
 <script src="app.js"></script>
 
 </body>
