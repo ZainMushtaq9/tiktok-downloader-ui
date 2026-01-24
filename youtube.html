@@ -2,262 +2,98 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>YouTube Video Downloader – Download YouTube Videos Online</title>
+  <title>YouTube Video & Playlist Downloader | Free Online Tool</title>
 
   <meta name="description"
-        content="Free YouTube video downloader to download YouTube videos online in high quality. Fast, secure, and works on mobile and desktop browsers." />
-
-  <meta name="keywords"
-        content="youtube video downloader, download youtube videos online, youtube downloader free, save youtube videos" />
+        content="Download YouTube videos and playlists online for personal use. Fast, free, no software required. Supports single videos and full playlists." />
 
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://zainmushtaq9.github.io/tiktok-downloader-ui/youtube.html" />
+  <link rel="canonical" href="https://zainmushtaq9.github.io/tiktok-downloader-ui/youtube.html">
 
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "YouTube Video Downloader",
-    "description": "Download YouTube videos online using a browser-based tool",
-    "url": "https://zainmushtaq9.github.io/tiktok-downloader-ui/youtube.html"
-  }
-  </script>
 </head>
 
 <body>
 
-<!-- =========================
-     TOP NAVIGATION
-========================= -->
+<!-- TOP NAV -->
 <nav class="top-nav">
   <div class="nav-left">
-    <img src="logo.png" alt="Video Downloader Tools Logo" style="height:22px;vertical-align:middle;">
-    <span class="nav-logo">Video Downloader Tools</span>
+    <span class="nav-logo">Downloader Tools</span>
   </div>
-
   <div class="nav-right">
     <a href="index.html">Home</a>
     <a href="tiktok.html">TikTok</a>
-    <a href="youtube.html">YouTube</a>
-    <a href="instagram.html">Instagram</a>
-    <a href="twitter.html">Twitter</a>
-    <a href="facebook.html">Facebook</a>
+    <a href="youtube.html" class="active">YouTube</a>
+    <a href="about.html">About</a>
   </div>
 </nav>
 
-<!-- =========================
-     TOP AD SLOT
-========================= -->
-<div class="ad-slot ad-top">
-  Advertisement
-</div>
-
 <div class="container">
 
-<!-- =========================
-     PAGE HEADER
-========================= -->
-<h1 class="logo">
-  YouTube Video Downloader
-</h1>
-
-<p class="subtitle">
-  Download YouTube videos online – fast, free, and browser-based.
-</p>
-
-<!-- =========================
-     TOOL PLACEHOLDER
-========================= -->
-<div class="card">
-
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.7;">
-    The YouTube Video Downloader tool is currently under development.
-    This page provides information about how the tool will work once available.
+  <h1 class="logo">YouTube Downloader</h1>
+  <p class="subtitle">
+    Download YouTube videos or playlists for personal use.<br>
+    No registration. No software required.
   </p>
 
-</div>
+  <!-- INPUT CARD -->
+  <div class="card">
+    <input
+      type="text"
+      id="youtubeUrl"
+      placeholder="Paste YouTube video or playlist link"
+      aria-label="YouTube video or playlist URL"
+    />
 
-<!-- =========================
-     SEO CONTENT START
-========================= -->
-<div class="card">
+    <select id="limitSelect">
+      <option value="all">Download all videos</option>
+      <option value="5">First 5 videos</option>
+      <option value="10">First 10 videos</option>
+      <option value="20">First 20 videos</option>
+    </select>
 
-  <h2>What is a YouTube Video Downloader?</h2>
+    <button id="analyzeBtn">Analyze Link</button>
 
-  <p>
-    A YouTube video downloader is an online tool that allows users to save
-    publicly available YouTube videos directly to their device for offline
-    viewing. These tools work through a web browser and do not require
-    additional software installation.
-  </p>
+    <div id="status"></div>
 
-  <p>
-    Video Downloader Tools aims to provide a simple and user-friendly way
-    to process YouTube video links once the feature is fully released.
-  </p>
+    <div id="progressWrapper" class="hidden">
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill">0%</div>
+      </div>
+    </div>
+  </div>
 
-</div>
+  <!-- DOWNLOAD CONTROLS -->
+  <div id="downloadControls" class="card hidden">
+    <button id="downloadAllBtn" class="download-all">
+      ⬇ Download All Videos
+    </button>
 
-<div class="card">
+    <p class="footer-note">
+      Videos will download one by one.<br>
+      Please allow multiple downloads when prompted by your browser.
+    </p>
+  </div>
 
-  <h2>Download YouTube Videos Online</h2>
+  <!-- VIDEO LIST -->
+  <div id="videoList"></div>
 
-  <p>
-    Many users search for ways to download YouTube videos online for
-    educational reference, offline access, or personal use. Browser-based
-    tools allow users to perform this task without installing third-party
-    applications.
-  </p>
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p>
+      <a href="privacy.html">Privacy</a> |
+      <a href="terms.html">Terms</a> |
+      <a href="disclaimer.html">Disclaimer</a>
+    </p>
+    <p class="footer-note">
+      This website does not host videos. All content belongs to its respective owners.
+    </p>
+  </footer>
 
-  <p>
-    This page is designed to explain the functionality and limitations
-    of YouTube video downloading while maintaining compliance with
-    platform policies.
-  </p>
-
-</div>
-
-<div class="card">
-
-  <h2>How the YouTube Video Downloader Will Work</h2>
-
-  <p>
-    Once available, the YouTube Video Downloader will allow users to paste a
-    public YouTube video link into the tool and generate downloadable formats
-    directly in the browser. The process is designed to be simple and
-    beginner-friendly.
-  </p>
-
-  <ol style="line-height:1.8;">
-    <li>Copy the public YouTube video link</li>
-    <li>Paste the link into the downloader input field</li>
-    <li>Choose an available format or quality</li>
-    <li>Download the video to your device</li>
-  </ol>
-
-  <p>
-    The tool will work without registration, software installation, or
-    account login, keeping the experience lightweight and accessible.
-  </p>
-
-</div>
-
-<div class="card">
-
-  <h2>Is It Legal to Download YouTube Videos?</h2>
-
-  <p>
-    Downloading YouTube videos may be subject to YouTube’s terms of service
-    and local copyright laws. This tool is intended for educational,
-    informational, and personal offline viewing purposes only.
-  </p>
-
-  <p>
-    Users are responsible for ensuring that their use of downloaded content
-    complies with applicable laws and platform policies. Video Downloader
-    Tools does not host or distribute copyrighted media.
-  </p>
-
-</div>
-
-<div class="card">
-
-  <h2>Supported Devices and Browsers</h2>
-
-  <p>
-    The YouTube Video Downloader is designed to work on modern devices
-    and browsers, including:
-  </p>
-
-  <ul style="line-height:1.8;">
-    <li>Android smartphones and tablets</li>
-    <li>iPhone and iPad (iOS)</li>
-    <li>Windows and macOS computers</li>
-    <li>Linux-based systems</li>
-    <li>Chrome, Firefox, Edge, and Safari browsers</li>
-  </ul>
-
-</div>
-
-<div class="card">
-
-  <h2>Frequently Asked Questions</h2>
-
-  <h3>Is the YouTube downloader free?</h3>
-  <p>
-    Yes, the tool will be available for free without registration.
-  </p>
-
-  <h3>Do I need to install any software?</h3>
-  <p>
-    No installation is required. The downloader will work directly in your browser.
-  </p>
-
-  <h3>Can I download videos on mobile?</h3>
-  <p>
-    Yes, the tool is planned to support both mobile and desktop devices.
-  </p>
-
-</div>
-
-<!-- =========================
-     INLINE AD SLOT
-========================= -->
-<div class="ad-slot ad-inline">
-  Advertisement
-</div>
-
-<!-- =========================
-     FOOTER
-========================= -->
-<footer class="site-footer">
-  <p>
-    <a href="index.html">Home</a> |
-    <a href="tiktok.html">TikTok</a> |
-    <a href="youtube.html">YouTube</a> |
-    <a href="instagram.html">Instagram</a> |
-    <a href="twitter.html">Twitter</a> |
-    <a href="facebook.html">Facebook</a> |
-    <a href="likee.html">Likee</a> |
-    <a href="about.html">About</a> |
-    <a href="privacy.html">Privacy Policy</a> |
-    <a href="terms.html">Terms</a> |
-    <a href="disclaimer.html">Disclaimer</a> |
-    <a href="contact.html">Contact</a>
-  </p>
-
-  <p class="footer-note">
-    © 2026 Video Downloader Tools. All rights reserved.
-  </p>
-</footer>
-
-</div> <!-- END CONTAINER -->
-
-<!-- =========================
-     COOKIE CONSENT
-========================= -->
-<div id="cookieBanner" class="cookie-banner">
-  <p>
-    This website uses cookies to improve user experience and display ads.
-    By using this site, you agree to our <a href="privacy.html">Privacy Policy</a>.
-  </p>
-  <button id="acceptCookies">Accept</button>
 </div>
 
 <script src="app.js"></script>
-
 </body>
 </html>
-
-
-
-
-
-
-
-     
