@@ -7,7 +7,7 @@
   <title>YouTube Video & Playlist Downloader | Free Online Tool</title>
 
   <meta name="description"
-        content="Download YouTube videos and playlists online. One-click playlist downloader with sequential downloads." />
+        content="Download YouTube videos or full playlists online. One-click playlist downloads with sequential queue. No software required." />
 
   <meta name="robots" content="index, follow" />
 
@@ -16,6 +16,9 @@
 
 <body>
 
+<!-- =========================
+     TOP NAVIGATION
+========================= -->
 <nav class="top-nav">
   <div class="nav-left">
     <span class="nav-logo">Downloader Tools</span>
@@ -28,16 +31,22 @@
   </div>
 </nav>
 
-<main class="container">
+<!-- =========================
+     MAIN CONTAINER
+========================= -->
+<div class="container">
 
   <h1 class="logo">YouTube Downloader</h1>
   <p class="subtitle">
-    Download YouTube videos or full playlists.<br>
-    Playlist downloads start automatically one by one.
+    Download single YouTube videos or full playlists.  
+    Playlist videos download one by one automatically.
   </p>
 
-  <!-- INPUT CARD -->
+  <!-- =========================
+       INPUT CARD
+  ========================= -->
   <div class="card">
+
     <input
       type="text"
       id="youtubeUrl"
@@ -51,32 +60,45 @@
       <option value="20">First 20 videos</option>
     </select>
 
-    <button id="analyzeBtn">Analyze Link</button>
+    <button id="analyzeBtn">
+      Analyze Link
+    </button>
 
     <div id="status"></div>
 
+    <!-- Progress -->
     <div id="progressWrapper" class="hidden">
       <div class="progress-bar">
         <div id="progressFill" class="progress-fill">0%</div>
       </div>
     </div>
+
   </div>
 
-  <!-- DOWNLOAD QUEUE CONTROLS -->
+  <!-- =========================
+       DOWNLOAD CONTROLS
+  ========================= -->
   <div id="downloadControls" class="card hidden">
+
     <button id="downloadAllBtn" class="download-all">
-      ⬇ Download All Videos (5s delay)
+      ⬇ Download All Videos
     </button>
 
     <p class="footer-note">
-      Downloads will start one by one.<br>
-      Please allow multiple downloads when your browser asks.
+      Playlist videos download sequentially with a short delay.  
+      Please allow multiple downloads when prompted by your browser.
     </p>
+
   </div>
 
-  <!-- VIDEO LIST -->
+  <!-- =========================
+       VIDEO LIST
+  ========================= -->
   <div id="videoList"></div>
 
+  <!-- =========================
+       FOOTER
+  ========================= -->
   <footer class="site-footer">
     <p>
       <a href="privacy.html">Privacy</a> |
@@ -84,18 +106,27 @@
       <a href="disclaimer.html">Disclaimer</a>
     </p>
     <p class="footer-note">
-      This website does not host videos. All media belongs to respective owners.
+      This tool does not host videos. All media belongs to their respective owners.
     </p>
   </footer>
 
-</main>
+</div>
 
-<noscript>
-  <p style="text-align:center;padding:16px;">
-    JavaScript is required for this tool to work.
+<!-- =========================
+     COOKIE CONSENT
+========================= -->
+<div id="cookieBanner" class="cookie-banner">
+  <p>
+    This site uses cookies to improve user experience and display ads.
+    <a href="privacy.html">Learn more</a>
   </p>
-</noscript>
+  <button id="acceptCookies">Accept</button>
+</div>
 
+<!-- =========================
+     SCRIPT (MUST BE LAST)
+========================= -->
 <script src="app.js"></script>
+
 </body>
-</html>
+  </html>
