@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>TikTok Video Downloader | Download Single Videos & Full Profiles</title>
+
+  <meta name="description"
+        content="Download TikTok videos without watermark. Save single TikTok videos or download full TikTok profiles using our free online tool." />
+
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://zainmushtaq9.github.io/tiktok-downloader-ui/tiktok.html" />
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "TikTok Video Downloader",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "All",
+    "description": "Download TikTok videos and full profiles without watermark using a fast and secure online tool."
+  }
+  </script>
+</head>
+
+<body>
+
+<!-- =========================
+     TOP NAVIGATION
+========================= -->
+<nav class="top-nav">
+  <div class="nav-left">
+    <img src="logo.png" alt="Video Downloader Logo" style="height:22px;vertical-align:middle;">
+    <span class="nav-logo">Video Downloader Tools</span>
+  </div>
+
+  <div class="nav-right">
+    <a href="index.html">Home</a>
+    <a href="tiktok.html">TikTok</a>
+    <a href="youtube.html">YouTube</a>
+    <a href="instagram.html">Instagram</a>
+    <a href="about.html">About</a>
+  </div>
+</nav>
+
+<!-- =========================
+     TOP AD SLOT
+========================= -->
+<div class="ad-slot ad-top">
+  Advertisement
+</div>
+
+<div class="container">
+
+<!-- =========================
+     PAGE HEADER
+========================= -->
+<h1 class="logo">
+  TikTok Video Downloader
+</h1>
+
+<p class="subtitle">
+  Download TikTok videos without watermark — single videos or entire profiles.
+</p>
+
+<p style="font-size:14px;color:#9aa4bf;margin-bottom:18px;">
+  This TikTok downloader allows you to save public TikTok videos directly to your device
+  for offline viewing, content research, or personal reference. No registration required.
+</p>
+
+<!-- =========================
+     MODE SELECTOR
+========================= -->
+<div class="mode-select">
+  <label>
+    <input type="radio" name="mode" value="profile" checked />
+    Download Full Profile
+  </label>
+
+  <label>
+    <input type="radio" name="mode" value="single" />
+    Download Single Video
+  </label>
+</div>
+
+<!-- =========================
+     SINGLE VIDEO MODE
+========================= -->
+<div id="singleMode" class="card hidden">
+
+  <h2 style="font-size:17px;margin-bottom:6px;">
+    Download a Single TikTok Video
+  </h2>
+
+  <p style="font-size:14px;color:#cbd3ff;margin-bottom:10px;">
+    Paste a TikTok video link below to download the video without watermark.
+  </p>
+
+  <input
+    type="text"
+    id="singleVideoUrl"
+    placeholder="Paste TikTok video URL"
+    autocomplete="off"
+  />
+
+  <!-- Preview (IMAGE ONLY) -->
+  <div id="singlePreview" class="hidden" style="margin-bottom:10px;">
+    <img src="" alt="TikTok video preview" class="video-thumb" />
+  </div>
+
+  <button id="singleDownloadBtn">
+    Download Video
+  </button>
+
+</div>
+
+<!-- =========================
+     PROFILE MODE
+========================= -->
+<div id="profileMode" class="card">
+
+  <h2 style="font-size:17px;margin-bottom:6px;">
+    Download All Videos From a TikTok Profile
+  </h2>
+
+  <p style="font-size:14px;color:#cbd3ff;margin-bottom:10px;">
+    Paste a TikTok profile link to fetch and download multiple videos from a single account.
+    This is useful for creators, analysts, and users who want bulk access.
+  </p>
+
+  <input
+    type="text"
+    id="profileUrl"
+    placeholder="https://www.tiktok.com/@username"
+    autocomplete="off"
+  />
+
+  <select id="limitSelect">
+    <option value="all">Download all videos</option>
+    <option value="5">First 5 videos</option>
+    <option value="10">First 10 videos</option>
+    <option value="20">First 20 videos</option>
+  </select>
+
+  <button id="fetchBtn">
+    Fetch Profile Videos
+  </button>
+
+  <!-- STATUS -->
+  <div id="status"></div>
+
+  <!-- PROGRESS -->
+  <div id="progressWrapper" class="hidden">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill">0%</div>
+    </div>
+  </div>
+
+  <button id="downloadAllBtn" class="download-all hidden">
+    ⬇ Download Selected Videos
+  </button>
+
+</div>
+
+  
+<!-- =========================
+     VIDEO RESULTS LIST
+========================= -->
+<div id="videoList" style="margin-top:16px;"></div>
+
+<!-- =========================
+     HOW IT WORKS (SEO + TRUST)
+========================= -->
+<div class="card" style="margin-top:20px;">
+  <h2 style="font-size:18px;margin-bottom:8px;">
+    How to Download TikTok Videos
+  </h2>
+
+  <ol style="font-size:14px;color:#cbd3ff;line-height:1.7;padding-left:16px;">
+    <li>Copy the TikTok video or profile link.</li>
+    <li>Paste the link into the input box above.</li>
+    <li>Preview thumbnails will appear for available videos.</li>
+    <li>Select the videos you want to download.</li>
+    <li>Click the download button and allow browser permission.</li>
+  </ol>
+
+  <p style="font-size:14px;color:#9aa4bf;margin-top:10px;">
+    All downloads are user-initiated. No automatic or background downloads are performed.
+  </p>
+</div>
+
+<!-- =========================
+     PLATFORM NAVIGATION
+========================= -->
+<div class="card" style="text-align:center;margin-top:20px;">
+  <h2 style="font-size:18px;margin-bottom:10px;">
+    Other Video Downloader Tools
+  </h2>
+
+  <p style="font-size:14px;color:#9aa4bf;margin-bottom:12px;">
+    Explore tools for other popular platforms
+  </p>
+
+  <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
+    <a href="youtube.html" class="card" style="width:130px;text-align:center;">
+      <img src="youtube.png" alt="YouTube Downloader" style="height:36px;">
+      <p>YouTube</p>
+    </a>
+
+    <a href="instagram.html" class="card" style="width:130px;text-align:center;">
+      <img src="instagram.png" alt="Instagram Downloader" style="height:36px;">
+      <p>Instagram</p>
+    </a>
+
+    <a href="twitter.html" class="card" style="width:130px;text-align:center;">
+      <img src="twitter.png" alt="Twitter Downloader" style="height:36px;">
+      <p>Twitter</p>
+    </a>
+
+    <a href="facebook.html" class="card" style="width:130px;text-align:center;">
+      <img src="facebook.png" alt="Facebook Downloader" style="height:36px;">
+      <p>Facebook</p>
+    </a>
+
+    <a href="likee.html" class="card" style="width:130px;text-align:center;">
+      <img src="likee.png" alt="Likee Downloader" style="height:36px;">
+      <p>Likee</p>
+    </a>
+  </div>
+</div>
+
+<!-- =========================
+     DISCLAIMER (CRITICAL)
+========================= -->
+<div class="card" style="margin-top:20px;">
+  <p style="font-size:13px;color:#9aa4bf;line-height:1.6;">
+    Disclaimer: This website is not affiliated with TikTok or ByteDance.
+    Users are responsible for ensuring they have the right to download and
+    use any content. This tool is intended for downloading publicly available
+    content for personal use, research, or offline viewing.
+  </p>
+</div>
+
+<!-- =========================
+     FOOTER
+========================= -->
+<footer class="site-footer">
+  <p>
+    <a href="index.html">Home</a> |
+    <a href="about.html">About</a> |
+    <a href="privacy.html">Privacy Policy</a> |
+    <a href="terms.html">Terms</a> |
+    <a href="disclaimer.html">Disclaimer</a> |
+    <a href="contact.html">Contact</a>
+  </p>
+
+  <p class="footer-note">
+    Tip: For bulk downloads, use Desktop Chrome and allow multiple downloads when prompted.
+  </p>
+
+  <p class="footer-note">
+    © 2026 Video Downloader Tools. All rights reserved.
+  </p>
+</footer>
+
+</div> <!-- END CONTAINER -->
+
+<!-- =========================
+     COOKIE CONSENT
+========================= -->
+<div id="cookieBanner" class="cookie-banner">
+  <p>
+    This website uses cookies to improve user experience and display ads.
+    By using this site, you agree to our <a href="privacy.html">Privacy Policy</a>.
+  </p>
+  <button id="acceptCookies">Accept</button>
+</div>
+
+<script src="app.js"></script>
+
+</body>
+  </html>
