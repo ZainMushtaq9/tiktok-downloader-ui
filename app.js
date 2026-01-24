@@ -1,21 +1,66 @@
+/* ======================================================
+   CONFIG
+====================================================== */
+
 const BACKEND =
   "https://tiktok-downloader-backend-production-ce2b.up.railway.app";
 
-const analyzeBtn = document.getElementById("analyzeBtn");
+const DOWNLOAD_DELAY_MS = 5000; // 5 seconds (safe, anti-block)
+
+/* ======================================================
+   DOM ELEMENTS
+====================================================== */
+
 const youtubeUrlInput = document.getElementById("youtubeUrl");
-const videoList = document.getElementById("videoList");
+const analyzeBtn = document.getElementById("analyzeBtn");
+
 const statusDiv = document.getElementById("status");
+const videoList = document.getElementById("videoList");
+
+const downloadControls = document.getElementById("downloadControls");
+const downloadAllBtn = document.getElementById("downloadAllBtn");
+
 const progressWrapper = document.getElementById("progressWrapper");
 const progressFill = document.getElementById("progressFill");
-const downloadAllBtn = document.getElementById("downloadAllBtn");
-const downloadControls = document.getElementById("downloadControls");
+
 const limitSelect = document.getElementById("limitSelect");
 
-let videos = [];
+/* ======================================================
+   STATE
+====================================================== */
 
-/* =========================
-   ANALYZE LINK
-========================= */
+let videos = [];
+let currentMode = "single"; // single | playlist
+
+/* ======================================================
+   HELPERS
+====================================================== */
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function resetUI() {
+  statusDiv.textContent = "";
+  videoList.innerHTML = "";
+  downloadControls.classList.add("hidden");
+  progressWrapper.classList.add("hidden");
+  updateProgress(0);
+  videos = [];
+}
+
+function updateProgress(percent) {
+  progressFill.style.width = percent + "%";
+  progressFill.textContent = percent + "%";
+}
+
+function showProgress() {
+  progressWrapper.classList.remove("hidden");
+}
+
+/* ======================================================
+   ANALYZE YOUTUBE LINK
+====================================================== */
 
 analyzeBtn.addEventListener("click", async () => {
   const url = youtubeUrlInput.value.trim();
@@ -24,77 +69,88 @@ analyzeBtn.addEventListener("click", async () => {
     return;
   }
 
+  resetUI();
   statusDiv.textContent = "Analyzing link...";
-  videoList.innerHTML = "";
-  videos = [];
-  downloadControls.classList.add("hidden");
-  progressWrapper.classList.add("hidden");
 
   try {
     const infoRes = await fetch(
       `${BACKEND}/youtube/info?url=${encodeURIComponent(url)}`
     );
 
-    if (!infoRes.ok) throw new Error();
+    if (!infoRes.ok) {
+      throw new Error("ANALYZE_FAILED");
+    }
 
     const info = await infoRes.json();
 
-    // SINGLE VIDEO
+    // ---------------- SINGLE VIDEO ----------------
     if (info.type === "single") {
-      videos = [{
-        index: 1,
-        url: url,
-        title: info.title,
-        thumbnail: info.thumbnail
-      }];
+      currentMode = "single";
 
-      renderVideos();
+      videos = [
+        {
+          index: 1,
+          url: url,
+          title: info.title,
+          thumbnail: info.thumbnail
+        }
+      ];
+
+      renderVideos(videos);
       statusDiv.textContent = "1 video ready for download.";
       downloadControls.classList.remove("hidden");
     }
 
-    // PLAYLIST
+    // ---------------- PLAYLIST ----------------
     if (info.type === "playlist") {
+      currentMode = "playlist";
       statusDiv.textContent = "Fetching playlist videos...";
 
       const listRes = await fetch(
         `${BACKEND}/youtube/playlist?url=${encodeURIComponent(url)}`
       );
 
-      if (!listRes.ok) throw new Error();
+      if (!listRes.ok) {
+        throw new Error("PLAYLIST_FAILED");
+      }
 
       const listData = await listRes.json();
+
       videos = listData.videos;
 
+      // Apply limit (first N)
       const limit = limitSelect.value;
       if (limit !== "all") {
         videos = videos.slice(0, parseInt(limit));
       }
 
-      renderVideos();
-      statusDiv.textContent = `${videos.length} videos ready for download.`;
+      renderVideos(videos);
+      statusDiv.textContent =
+        `${videos.length} videos ready. Click “Download All” to start.`;
+
       downloadControls.classList.remove("hidden");
     }
 
-  } catch (e) {
+  } catch (err) {
+    console.error(err);
     statusDiv.textContent =
-      "Failed to analyze link. The video or playlist may be private or unavailable.";
+      "Failed to analyze link. Please check the URL or try again later.";
   }
 });
 
-/* =========================
-   RENDER VIDEO LIST
-========================= */
+/* ======================================================
+   RENDER VIDEO LIST (THUMBNAIL PREVIEW ONLY)
+====================================================== */
 
-function renderVideos() {
+function renderVideos(list) {
   videoList.innerHTML = "";
 
-  videos.forEach((video, idx) => {
+  list.forEach(video => {
     const card = document.createElement("div");
     card.className = "video-card";
 
     card.innerHTML = `
-      ${video.thumbnail ? `<img src="${video.thumbnail}" loading="lazy" alt="Video thumbnail">` : ""}
+      ${video.thumbnail ? `<img src="${video.thumbnail}" loading="lazy" />` : ""}
       <div>
         <p>${video.title || "YouTube Video"}</p>
         <button>Download</button>
@@ -102,39 +158,43 @@ function renderVideos() {
     `;
 
     card.querySelector("button").addEventListener("click", () => {
-      triggerDownload(video, idx + 1);
+      triggerDownload(video, video.index);
     });
 
     videoList.appendChild(card);
   });
 }
 
-/* =========================
-   DOWNLOAD ALL (SEQUENTIAL)
-========================= */
+/* ======================================================
+   DOWNLOAD ALL (SEQUENTIAL QUEUE WITH DELAY)
+====================================================== */
 
 downloadAllBtn.addEventListener("click", async () => {
   if (!videos.length) return;
 
-  progressWrapper.classList.remove("hidden");
+  statusDiv.textContent =
+    "Starting downloads. Please allow multiple downloads when prompted.";
+  showProgress();
 
   for (let i = 0; i < videos.length; i++) {
     const percent = Math.round(((i + 1) / videos.length) * 100);
-    progressFill.style.width = percent + "%";
-    progressFill.textContent = percent + "%";
+    updateProgress(percent);
+
+    statusDiv.textContent =
+      `Downloading ${i + 1} of ${videos.length}...`;
 
     triggerDownload(videos[i], i + 1);
 
-    // safe delay
-    await new Promise(r => setTimeout(r, 1200));
+    // Delay between downloads (important)
+    await sleep(DOWNLOAD_DELAY_MS);
   }
 
   statusDiv.textContent = "All downloads have been triggered.";
 });
 
-/* =========================
-   TRIGGER DOWNLOAD
-========================= */
+/* ======================================================
+   DOWNLOAD SINGLE VIDEO
+====================================================== */
 
 function triggerDownload(video, index) {
   const a = document.createElement("a");
@@ -148,4 +208,5 @@ function triggerDownload(video, index) {
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
+}moveChild(a);
 }
