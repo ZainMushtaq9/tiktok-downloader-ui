@@ -2,30 +2,35 @@
 <html lang="en">
 <head>
   <!-- =========================
-       BASIC META
+       CORE META
   ========================== -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <title>TikTok Downloader – Download TikTok Videos Without Watermark</title>
+  <title>
+    TikTok Video Downloader – Download Single Videos & Full Profiles Without Watermark
+  </title>
 
   <meta name="description"
-        content="Free TikTok Downloader to download TikTok videos without watermark. Download single videos or full profiles easily on mobile and desktop." />
+        content="Download TikTok videos without watermark. Free TikTok downloader supporting single video links and full profile bulk downloads on mobile and desktop." />
 
   <meta name="keywords"
-        content="TikTok downloader, download TikTok videos, TikTok without watermark, TikTok profile downloader" />
+        content="tiktok downloader, download tiktok video, tiktok profile downloader, download all tiktok videos, tiktok without watermark" />
 
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://zainmushtaq9.github.io/tiktok-downloader-ui/" />
 
   <!-- =========================
-       OPEN GRAPH
+       SEO / SOCIAL
   ========================== -->
-  <meta property="og:title" content="TikTok Downloader – No Watermark" />
-  <meta property="og:description" content="Download TikTok videos and profiles without watermark for free." />
+  <meta property="og:title"
+        content="TikTok Downloader – Download Videos & Profiles Without Watermark" />
+  <meta property="og:description"
+        content="Free tool to download TikTok videos and entire profiles without watermark." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://zainmushtaq9.github.io/tiktok-downloader-ui/" />
+  <meta property="og:url"
+        content="https://zainmushtaq9.github.io/tiktok-downloader-ui/" />
 
   <!-- =========================
        PWA
@@ -39,7 +44,7 @@
   <link rel="stylesheet" href="style.css" />
 
   <!-- =========================
-       SCHEMA (SEO)
+       STRUCTURED DATA
   ========================== -->
   <script type="application/ld+json">
   {
@@ -49,7 +54,7 @@
     "url": "https://zainmushtaq9.github.io/tiktok-downloader-ui/",
     "applicationCategory": "UtilityApplication",
     "operatingSystem": "All",
-    "description": "Download TikTok videos without watermark. Supports single video and full profile download."
+    "description": "Download TikTok videos and full profiles without watermark. Supports single video and bulk profile downloads."
   }
   </script>
 </head>
@@ -61,14 +66,14 @@
 ========================== -->
 <div id="cookieBanner" class="cookie-banner">
   <span>
-    We use cookies to improve experience and show ads.
+    We use cookies to improve user experience and show ads.
     <a href="privacy.html">Learn more</a>
   </span>
   <button id="acceptCookies">Accept</button>
 </div>
 
 <!-- =========================
-     TOP NAV
+     TOP NAVIGATION
 ========================== -->
 <nav class="top-nav">
   <div class="nav-logo">TikTok Downloader</div>
@@ -86,61 +91,88 @@
      TOP AD SLOT
 ========================== -->
 <div class="ad-slot ad-top">
-  <!-- Google AdSense (Top Banner) -->
+  <!-- AdSense Top Banner -->
 </div>
 
 <!-- =========================
-     MAIN CONTAINER
+     MAIN CONTENT
 ========================== -->
 <main class="container">
 
-  <!-- HEADER -->
+  <!-- =========================
+       HERO / PRIMARY INTENT
+  ========================== -->
   <header>
-    <h1 class="logo">TikTok Downloader</h1>
-    <p class="subtitle">Download TikTok videos without watermark</p>
+    <h1 class="logo">
+      TikTok Video Downloader
+    </h1>
+    <p class="subtitle">
+      Download TikTok videos without watermark – single videos or full profiles.
+    </p>
   </header>
 
-  <!-- MODE SELECT -->
-  <section class="mode-select">
+  <!-- =========================
+       MODE SELECTION
+  ========================== -->
+  <section class="mode-select" aria-label="Download mode">
     <label>
       <input type="radio" name="mode" value="profile" checked />
-      Profile Downloader
+      Download Full Profile
     </label>
     <label>
       <input type="radio" name="mode" value="single" />
-      Single Video
+      Download Single Video
     </label>
   </section>
 
-  <!-- SINGLE VIDEO MODE -->
+  <!-- =========================
+       SINGLE VIDEO MODE
+  ========================== -->
   <section id="singleMode" class="card hidden">
+    <h2>Download a Single TikTok Video</h2>
+    <p>
+      Paste a TikTok video link below to download it instantly without watermark.
+    </p>
+
     <input
       type="text"
       id="singleVideoUrl"
       placeholder="Paste TikTok video link"
       autocomplete="off"
     />
-    <button id="singleDownloadBtn">Download Video</button>
+
+    <button id="singleDownloadBtn">
+      Download Video
+    </button>
   </section>
 
-  <!-- PROFILE MODE -->
+  <!-- =========================
+       PROFILE MODE
+  ========================== -->
   <section id="profileMode" class="card">
+    <h2>Download All Videos From a TikTok Profile</h2>
+    <p>
+      Paste a TikTok profile link to download multiple videos from a single account.
+      Ideal for creators, researchers, and bulk downloads.
+    </p>
 
     <input
       type="text"
       id="profileUrl"
-      placeholder="Paste TikTok profile link (https://www.tiktok.com/@username)"
+      placeholder="https://www.tiktok.com/@username"
       autocomplete="off"
     />
 
     <select id="limitSelect">
-      <option value="all">All videos</option>
+      <option value="all">Download all videos</option>
       <option value="5">First 5 videos</option>
       <option value="10">First 10 videos</option>
       <option value="20">First 20 videos</option>
     </select>
 
-    <button id="fetchBtn">Fetch Profile Videos</button>
+    <button id="fetchBtn">
+      Fetch Profile Videos
+    </button>
 
     <!-- STATUS -->
     <div id="status"></div>
@@ -155,16 +187,39 @@
     <button id="downloadAllBtn" class="download-all hidden">
       ⬇ Download Selected Videos
     </button>
-
   </section>
 
-  <!-- INLINE AD -->
+  <!-- =========================
+       INLINE AD
+  ========================== -->
   <div class="ad-slot ad-inline">
-    <!-- Google AdSense (Inline) -->
+    <!-- AdSense Inline -->
   </div>
 
-  <!-- VIDEO LIST -->
-  <section id="videoList"></section>
+  <!-- =========================
+       RESULTS
+  ========================== -->
+  <section id="videoList" aria-live="polite"></section>
+
+  <!-- =========================
+       TRUST & FAQ CONTENT
+  ========================== -->
+  <section class="card">
+    <h2>Why Use This TikTok Downloader?</h2>
+    <ul>
+      <li>No watermark on downloaded videos</li>
+      <li>Supports single video and full profile downloads</li>
+      <li>Works on mobile, tablet, and desktop</li>
+      <li>No registration or login required</li>
+      <li>Files are fetched directly from TikTok</li>
+    </ul>
+
+    <h3>Is this TikTok downloader safe?</h3>
+    <p>
+      Yes. This website does not store videos or collect personal data.
+      All downloads are performed directly from public TikTok URLs.
+    </p>
+  </section>
 
 </main>
 
@@ -180,13 +235,10 @@
     <a href="contact.html">Contact</a>
   </p>
   <p class="footer-note">
-    For bulk downloads, use Desktop Chrome and allow multiple downloads when prompted.
+    Tip: For bulk downloads, use Desktop Chrome and allow multiple downloads when prompted.
   </p>
 </footer>
 
-<!-- =========================
-     SCRIPTS
-========================== -->
 <script src="app.js" defer></script>
 
 </body>
