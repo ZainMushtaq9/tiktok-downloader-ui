@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>TikTok Profile & Video Downloader | Free Online Tool</title>
+  <title>TikTok Video & Profile Downloader | Free Online Tool</title>
 
   <meta name="description"
-        content="Download TikTok videos from public profiles. One-click bulk download with sequential queue. No watermark, no software." />
+        content="Download TikTok videos from public profiles or single video links. Bulk downloads supported. Free, fast, no watermark." />
 
   <meta name="robots" content="index, follow" />
 
@@ -38,12 +38,12 @@
 
   <h1 class="logo">TikTok Downloader</h1>
   <p class="subtitle">
-    Download videos from TikTok public profiles.  
+    Download videos from public TikTok profiles or single video links.  
     Bulk downloads start automatically, one by one.
   </p>
 
   <!-- =========================
-       MODE SELECTOR
+       MODE SELECT
   ========================= -->
   <div class="mode-select">
     <label>
@@ -54,27 +54,6 @@
       <input type="radio" name="mode" value="single" />
       Single Video
     </label>
-  </div>
-
-  <!-- =========================
-       SINGLE VIDEO MODE
-  ========================= -->
-  <div id="singleMode" class="card hidden">
-
-    <input
-      type="text"
-      id="singleVideoUrl"
-      placeholder="Paste TikTok video link"
-    />
-
-    <button id="singleDownloadBtn">
-      Download Video
-    </button>
-
-    <p class="footer-note">
-      Works for public TikTok videos only.
-    </p>
-
   </div>
 
   <!-- =========================
@@ -101,28 +80,31 @@
 
     <div id="status"></div>
 
-    <!-- PROGRESS -->
     <div id="progressWrapper" class="hidden">
       <div class="progress-bar">
         <div id="progressFill" class="progress-fill">0%</div>
       </div>
     </div>
 
+    <button id="downloadAllBtn" class="download-all hidden">
+      ⬇ Download All Videos
+    </button>
   </div>
 
   <!-- =========================
-       DOWNLOAD CONTROLS
+       SINGLE VIDEO MODE
   ========================= -->
-  <div id="downloadControls" class="card hidden">
+  <div id="singleMode" class="card hidden">
 
-    <button id="downloadAllBtn" class="download-all">
-      ⬇ Download All Videos
+    <input
+      type="text"
+      id="singleVideoUrl"
+      placeholder="Paste TikTok video link"
+    />
+
+    <button id="singleDownloadBtn">
+      Download Video
     </button>
-
-    <p class="footer-note">
-      Videos download sequentially with a short delay.  
-      Please allow multiple downloads when prompted by your browser.
-    </p>
 
   </div>
 
@@ -141,27 +123,23 @@
       <a href="disclaimer.html">Disclaimer</a>
     </p>
     <p class="footer-note">
-      This tool does not host videos. All content belongs to respective owners.
+      This tool does not host any content. All videos belong to their respective owners.
     </p>
   </footer>
 
 </div>
 
 <!-- =========================
-     COOKIE CONSENT
+     COOKIE BANNER
 ========================= -->
 <div id="cookieBanner" class="cookie-banner">
   <p>
-    This site uses cookies to improve user experience and display ads.
-    <a href="privacy.html">Learn more</a>
+    This website uses cookies to improve user experience and display ads.
+    By continuing, you agree to our <a href="privacy.html">Privacy Policy</a>.
   </p>
   <button id="acceptCookies">Accept</button>
 </div>
 
-<!-- =========================
-     SCRIPT (MUST BE LAST)
-========================= -->
 <script src="app.js"></script>
-
 </body>
 </html>
