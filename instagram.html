@@ -2,31 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>Instagram Video Downloader – Download Instagram Videos Online</title>
+  <title>Instagram Video Downloader | Download Reels & Posts</title>
 
   <meta name="description"
-        content="Free Instagram video downloader to download Instagram reels and videos online. Works on mobile and desktop without installation." />
-
-  <meta name="keywords"
-        content="instagram video downloader, download instagram reels, instagram video download online, save instagram videos" />
+        content="Download Instagram videos and reels online. Fast, free, and no software required. Supports public Instagram video links." />
 
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://zainmushtaq9.github.io/tiktok-downloader-ui/instagram.html" />
 
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Instagram Video Downloader",
-    "description": "Download Instagram videos and reels using an online browser-based tool",
-    "url": "https://zainmushtaq9.github.io/tiktok-downloader-ui/instagram.html"
-  }
-  </script>
 </head>
 
 <body>
@@ -36,221 +21,99 @@
 ========================= -->
 <nav class="top-nav">
   <div class="nav-left">
-    <img src="logo.png" alt="Video Downloader Tools Logo" style="height:22px;vertical-align:middle;">
-    <span class="nav-logo">Video Downloader Tools</span>
+    <span class="nav-logo">Downloader Tools</span>
   </div>
-
   <div class="nav-right">
     <a href="index.html">Home</a>
     <a href="tiktok.html">TikTok</a>
     <a href="youtube.html">YouTube</a>
-    <a href="instagram.html">Instagram</a>
-    <a href="twitter.html">Twitter</a>
-    <a href="facebook.html">Facebook</a>
+    <a href="instagram.html" class="active">Instagram</a>
+    <a href="about.html">About</a>
   </div>
 </nav>
 
 <!-- =========================
-     TOP AD SLOT
+     MAIN CONTAINER
 ========================= -->
-<div class="ad-slot ad-top">
-  Advertisement
-</div>
-
 <div class="container">
 
-<!-- =========================
-     PAGE HEADER
-========================= -->
-<h1 class="logo">
-  Instagram Video Downloader
-</h1>
-
-<p class="subtitle">
-  Download Instagram videos and reels online – fast and easy.
-</p>
-
-<!-- =========================
-     TOOL PLACEHOLDER
-========================= -->
-<div class="card">
-
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.7;">
-    The Instagram Video Downloader tool is currently under development.
-    This page explains how the downloader will work and provides useful
-    information for users.
+  <h1 class="logo">Instagram Video Downloader</h1>
+  <p class="subtitle">
+    Download Instagram Reels and video posts.  
+    Public videos only. No login required.
   </p>
 
-</div>
-
-<!-- =========================
-     SEO CONTENT START
-========================= -->
-<div class="card">
-
-  <h2>What is an Instagram Video Downloader?</h2>
-
-  <p>
-    An Instagram video downloader is an online utility that allows users
-    to save publicly available Instagram videos and reels to their device.
-    These tools work directly in a web browser without requiring apps or
-    software installation.
-  </p>
-
-  <p>
-    Video Downloader Tools aims to offer a simple solution for downloading
-    Instagram content once the feature is fully released.
-  </p>
-
-</div>
-
-<div class="card">
-
-  <h2>Download Instagram Reels and Videos Online</h2>
-
-  <p>
-    Instagram reels and videos are widely used for entertainment,
-    education, and creative inspiration. Many users look for ways to
-    download these videos for offline viewing or reference.
-  </p>
-
-  <p>
-    Online Instagram video downloaders provide a convenient method to
-    process public links and generate downloadable files without
-    installing additional software.
-  </p>
-
-</div>
-
-
-
+  <!-- =========================
+       INPUT CARD
+  ========================= -->
   <div class="card">
 
-  <h2>How the Instagram Video Downloader Will Work</h2>
+    <input
+      type="text"
+      id="instagramUrl"
+      placeholder="Paste Instagram video or reel link"
+    />
 
-  <p>
-    Once available, the Instagram Video Downloader will allow users to paste
-    a public Instagram video or reel link into the tool and generate a
-    downloadable file directly in the browser. The process is designed to
-    be simple and accessible for all users.
-  </p>
+    <button id="instagramDownloadBtn">
+      Download Video
+    </button>
 
-  <ol style="line-height:1.8;">
-    <li>Copy the public Instagram video or reel link</li>
-    <li>Paste the link into the downloader input field</li>
-    <li>Process the link using the online tool</li>
-    <li>Download the video to your device</li>
-  </ol>
+    <div id="status"></div>
 
-  <p>
-    The downloader will operate without registration, login, or software
-    installation, making it suitable for both mobile and desktop users.
-  </p>
+    <div id="progressWrapper" class="hidden">
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill">0%</div>
+      </div>
+    </div>
 
-</div>
+  </div>
 
-<div class="card">
+  <!-- =========================
+       INFO SECTION (SEO + TRUST)
+  ========================= -->
+  <div class="card">
+    <h3>How to Download Instagram Videos</h3>
+    <ol style="font-size:14px; color:#9aa4bf;">
+      <li>Copy the Instagram video or reel link</li>
+      <li>Paste the link above</li>
+      <li>Click the download button</li>
+      <li>Allow download when your browser asks</li>
+    </ol>
+    <p class="footer-note">
+      This tool works only for public Instagram content.
+    </p>
+  </div>
 
-  <h2>Is It Legal to Download Instagram Videos?</h2>
-
-  <p>
-    Downloading Instagram videos may be subject to Instagram’s terms of
-    service and local copyright laws. This tool is intended for personal,
-    educational, and offline viewing purposes only.
-  </p>
-
-  <p>
-    Users are responsible for ensuring that their use of downloaded content
-    complies with applicable laws and platform policies. Video Downloader
-    Tools does not host or distribute copyrighted media.
-  </p>
-
-</div>
-
-<div class="card">
-
-  <h2>Supported Devices and Browsers</h2>
-
-  <p>
-    The Instagram Video Downloader is designed to work across modern devices
-    and web browsers, including:
-  </p>
-
-  <ul style="line-height:1.8;">
-    <li>Android smartphones and tablets</li>
-    <li>iPhone and iPad (iOS)</li>
-    <li>Windows and macOS computers</li>
-    <li>Linux-based systems</li>
-    <li>Chrome, Firefox, Edge, and Safari browsers</li>
-  </ul>
+  <!-- =========================
+       FOOTER
+  ========================= -->
+  <footer class="site-footer">
+    <p>
+      <a href="privacy.html">Privacy</a> |
+      <a href="terms.html">Terms</a> |
+      <a href="disclaimer.html">Disclaimer</a>
+    </p>
+    <p class="footer-note">
+      We do not store or host Instagram content on our servers.
+    </p>
+  </footer>
 
 </div>
-
-<div class="card">
-
-  <h2>Frequently Asked Questions</h2>
-
-  <h3>Is the Instagram video downloader free?</h3>
-  <p>
-    Yes, the tool will be available for free without registration.
-  </p>
-
-  <h3>Do I need to install any app?</h3>
-  <p>
-    No installation is required. The downloader will work directly in your browser.
-  </p>
-
-  <h3>Can I download Instagram reels on mobile?</h3>
-  <p>
-    Yes, the tool is planned to support mobile and tablet devices.
-  </p>
-
-</div>
-
-<!-- =========================
-     INLINE AD SLOT
-========================= -->
-<div class="ad-slot ad-inline">
-  Advertisement
-</div>
-
-<!-- =========================
-     FOOTER
-========================= -->
-<footer class="site-footer">
-  <p>
-    <a href="index.html">Home</a> |
-    <a href="tiktok.html">TikTok</a> |
-    <a href="youtube.html">YouTube</a> |
-    <a href="instagram.html">Instagram</a> |
-    <a href="twitter.html">Twitter</a> |
-    <a href="facebook.html">Facebook</a> |
-    <a href="likee.html">Likee</a> |
-    <a href="about.html">About</a> |
-    <a href="privacy.html">Privacy Policy</a> |
-    <a href="terms.html">Terms</a> |
-    <a href="disclaimer.html">Disclaimer</a> |
-    <a href="contact.html">Contact</a>
-  </p>
-
-  <p class="footer-note">
-    © 2026 Video Downloader Tools. All rights reserved.
-  </p>
-</footer>
-
-</div> <!-- END CONTAINER -->
 
 <!-- =========================
      COOKIE CONSENT
 ========================= -->
 <div id="cookieBanner" class="cookie-banner">
   <p>
-    This website uses cookies to improve user experience and display ads.
-    By using this site, you agree to our <a href="privacy.html">Privacy Policy</a>.
+    This website uses cookies to improve user experience and ads.
+    By continuing, you agree to our <a href="privacy.html">Privacy Policy</a>.
   </p>
   <button id="acceptCookies">Accept</button>
 </div>
 
+<!-- =========================
+     SCRIPT
+========================= -->
 <script src="app.js"></script>
 
 </body>
