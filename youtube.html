@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>YouTube Video & Playlist Downloader | Free Online Tool</title>
+  <title>YouTube Video & Playlist Downloader – Free Online Tool</title>
 
   <meta name="description"
-        content="Download YouTube videos and playlists online. Supports single videos and full playlists with sequential download queue. No software required." />
+        content="Download YouTube videos and full playlists online. One-click playlist downloads supported. Browser-based, free, no software required." />
 
   <meta name="robots" content="index, follow" />
 
@@ -16,117 +16,144 @@
 
 <body>
 
-<!-- =========================
-     TOP NAVIGATION
-========================= -->
 <nav class="top-nav">
   <div class="nav-left">
-    <span class="nav-logo">Downloader Tools</span>
+    <span class="nav-logo">Video Downloader Tools</span>
   </div>
+
   <div class="nav-right">
     <a href="index.html">Home</a>
     <a href="tiktok.html">TikTok</a>
     <a href="youtube.html" class="active">YouTube</a>
+    <a href="instagram.html">Instagram</a>
+    <a href="facebook.html">Facebook</a>
+    <a href="likee.html">Likee</a>
     <a href="about.html">About</a>
   </div>
 </nav>
 
-<!-- =========================
-     MAIN CONTAINER
-========================= -->
 <div class="container">
 
-  <h1 class="logo">YouTube Downloader</h1>
-  <p class="subtitle">
-    Download single YouTube videos or full playlists.  
-    Playlist videos download automatically one by one.
+
+<h1 class="logo">YouTube Downloader</h1>
+
+<p class="subtitle">
+  Download YouTube videos or complete playlists directly in your browser.
+  Playlist downloads start automatically, one video at a time.
+</p>
+
+<div class="card">
+
+  <input
+    type="text"
+    id="youtubeUrl"
+    placeholder="Paste YouTube video or playlist link"
+  />
+
+  <select id="youtubeLimit">
+    <option value="all">Download full playlist</option>
+    <option value="5">First 5 videos</option>
+    <option value="10">First 10 videos</option>
+    <option value="20">First 20 videos</option>
+  </select>
+
+  <button id="youtubeAnalyzeBtn">
+    Analyze YouTube Link
+  </button>
+
+  <div id="youtubeStatus"></div>
+
+  <div id="youtubeProgress" class="hidden">
+    <div class="progress-bar">
+      <div id="youtubeProgressFill" class="progress-fill">0%</div>
+    </div>
+  </div>
+
+</div>
+
+<div id="youtubeResults"></div>
+
+
+
+  <div id="youtubeDownloadControls" class="card hidden">
+
+  <button id="youtubeDownloadAllBtn" class="download-all">
+    ⬇ Download Selected Videos
+  </button>
+
+  <p class="footer-note">
+    Playlist videos will download sequentially.
+    Please allow multiple downloads when prompted by your browser.
   </p>
 
-  <!-- =========================
-       INPUT CARD
-  ========================= -->
+  </div>
+
+
+
   <div class="card">
 
-    <input
-      type="text"
-      id="youtubeUrl"
-      placeholder="Paste YouTube video or playlist link"
-    />
+  <h2>YouTube Playlist Downloader</h2>
 
-    <select id="limitSelect">
-      <option value="all">Download all videos</option>
-      <option value="5">First 5 videos</option>
-      <option value="10">First 10 videos</option>
-      <option value="20">First 20 videos</option>
-    </select>
-
-    <button id="analyzeBtn">
-      Analyze Link
-    </button>
-
-    <div id="status"></div>
-
-    <div id="progressWrapper" class="hidden">
-      <div class="progress-bar">
-        <div id="progressFill" class="progress-fill">0%</div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- =========================
-       DOWNLOAD CONTROLS
-  ========================= -->
-  <div id="downloadControls" class="card hidden">
-
-    <button id="downloadAllBtn" class="download-all">
-      ⬇ Download All Videos
-    </button>
-
-    <p class="footer-note">
-      Playlist downloads start sequentially.  
-      Please allow multiple downloads when prompted by your browser.
-    </p>
-
-  </div>
-
-  <!-- =========================
-       VIDEO LIST
-  ========================= -->
-  <div id="videoList"></div>
-
-  <!-- =========================
-       FOOTER
-  ========================= -->
-  <footer class="site-footer">
-    <p>
-      <a href="privacy.html">Privacy</a> |
-      <a href="terms.html">Terms</a> |
-      <a href="disclaimer.html">Disclaimer</a>
-    </p>
-    <p class="footer-note">
-      This website does not host any videos.
-      All content belongs to their respective owners.
-    </p>
-  </footer>
-
-</div>
-
-<!-- =========================
-     COOKIE CONSENT
-========================= -->
-<div id="cookieBanner" class="cookie-banner">
   <p>
-    This website uses cookies to improve user experience and display ads.
-    By continuing, you agree to our <a href="privacy.html">Privacy Policy</a>.
+    This tool allows users to download complete YouTube playlists
+    without installing any software. Playlist videos are processed
+    individually and downloaded sequentially to reduce errors and
+    improve reliability.
   </p>
-  <button id="acceptCookies">Accept</button>
+
+  <p>
+    Many online tools only support single video downloads.
+    Playlist downloading is a specialized feature designed for
+    educational use, offline reference, and content organization.
+  </p>
+
 </div>
 
-<!-- =========================
-     SCRIPT (MUST BE LAST)
-========================= -->
-<script src="app.js"></script>
+<div class="card">
 
+  <h2>How to Download YouTube Videos or Playlists</h2>
+
+  <ol>
+    <li>Copy a public YouTube video or playlist link.</li>
+    <li>Paste the link into the input field above.</li>
+    <li>Select how many videos to download.</li>
+    <li>Analyze the link and start the download queue.</li>
+  </ol>
+
+  <p>
+    Private videos, paid content, and restricted playlists are not supported.
+  </p>
+
+</div>
+
+<div class="card">
+
+  <h2>Legal & Responsible Use</h2>
+
+  <p>
+    This YouTube downloader is intended for personal, educational,
+    and offline viewing purposes only. Users must comply with
+    YouTube’s terms of service and applicable copyright laws.
+  </p>
+
+</div>
+
+
+
+  <footer class="site-footer">
+  <p>
+    <a href="privacy.html">Privacy</a> |
+    <a href="terms.html">Terms</a> |
+    <a href="disclaimer.html">Disclaimer</a>
+  </p>
+  <p class="footer-note">
+    This website does not host YouTube content.
+    All media belongs to its respective owners.
+  </p>
+</footer>
+
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
