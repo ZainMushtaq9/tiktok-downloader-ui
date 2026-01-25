@@ -1,212 +1,751 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Online Video Downloader Tools – Save Public Videos for Offline Reference</title>
+<title>Online Video Downloader Tools – Process Public Videos Online</title>
 
-  <meta name="description"
-        content="Browser-based tools to process publicly available videos from popular platforms. Designed for offline reference, research, and educational use." />
+<meta name="description" content="Browser-based tools to process publicly accessible videos from TikTok, YouTube, Instagram, Facebook, and Likee for offline reference and research.">
 
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://yourdomain.com/" />
+<meta name="robots" content="index, follow">
 
-  <link rel="stylesheet" href="style.css" />
+<style>
+/* ===============================
+   CSS RESET + BASE
+================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Video Downloader Tools",
-    "url": "https://yourdomain.com/",
-    "description": "Online tools for processing publicly available videos for offline reference and educational purposes."
-  }
-  </script>
+:root {
+  --bg-dark: #0b0f1a;
+  --bg-light: #f7f9fc;
+  --text-dark: #eaeaf0;
+  --text-light: #1a1a1a;
+  --muted-dark: #9aa4c7;
+  --muted-light: #555;
+  --accent: #ff2d55;
+  --border-dark: #1e2440;
+  --border-light: #ddd;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-dark);
+  line-height: 1.7;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* ===============================
+   LIGHT MODE
+================================ */
+body.light {
+  background: var(--bg-light);
+  color: var(--text-light);
+}
+
+/* ===============================
+   CONTAINER
+================================ */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 24px 16px 60px;
+}
+
+/* ===============================
+   TYPOGRAPHY
+================================ */
+h1 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  margin-bottom: 14px;
+}
+
+h2 {
+  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+  margin: 40px 0 14px;
+}
+
+p {
+  font-size: 1rem;
+  margin-bottom: 14px;
+  color: var(--muted-dark);
+}
+
+body.light p {
+  color: var(--muted-light);
+}
+
+/* ===============================
+   LINKS AS BUTTONS
+================================ */
+a.button-link {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  background: rgba(255,255,255,0.06);
+  color: var(--text-dark);
+  border: 1px solid var(--border-dark);
+  transition: all 0.2s ease;
+}
+
+a.button-link:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+body.light a.button-link {
+  background: #fff;
+  color: var(--text-light);
+  border-color: var(--border-light);
+}
+
+/* ===============================
+   AD PLACEHOLDERS
+================================ */
+.ad-slot {
+  margin: 28px 0;
+  padding: 24px;
+  text-align: center;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+  color: var(--muted-dark);
+  font-size: 0.9rem;
+}
+
+body.light .ad-slot {
+  background: #eee;
+  color: #666;
+}
+</style>
 </head>
 
-<body>
+  <body>
 
-<!-- =========================
+<!-- ===============================
      TOP NAVIGATION
-========================= -->
-<nav class="top-nav">
-  <div class="nav-left">
-    <span class="nav-logo">Video Downloader Tools</span>
+================================ -->
+<header class="top-nav">
+  <div class="nav-inner">
+
+    <div class="nav-brand">
+      <span class="brand-name">Video Downloader Tools</span>
+    </div>
+
+    <!-- DESKTOP MENU -->
+    <nav class="nav-links desktop-menu">
+      <a href="index.html">Home</a>
+      <a href="tiktok.html">TikTok</a>
+      <a href="youtube.html">YouTube</a>
+      <a href="instagram.html">Instagram</a>
+      <a href="facebook.html">Facebook</a>
+      <a href="likee.html">Likee</a>
+      <a href="about.html">About</a>
+    </nav>
+
+    <!-- ACTIONS -->
+    <div class="nav-actions">
+      <button id="themeToggle" class="theme-btn" aria-label="Toggle theme">
+        🌙
+      </button>
+
+      <button id="menuToggle" class="menu-btn" aria-label="Open menu">
+        ☰
+      </button>
+    </div>
+
   </div>
-  <div class="nav-right">
-    <a href="index.html" class="active">Home</a>
+
+  <!-- MOBILE MENU -->
+  <nav id="mobileMenu" class="mobile-menu">
+    <a href="index.html">Home</a>
     <a href="tiktok.html">TikTok</a>
     <a href="youtube.html">YouTube</a>
     <a href="instagram.html">Instagram</a>
     <a href="facebook.html">Facebook</a>
     <a href="likee.html">Likee</a>
     <a href="about.html">About</a>
-  </div>
-</nav>
+  </nav>
+</header>
 
-<!-- =========================
-     TOP AD SLOT (SAFE)
-========================= -->
-<div class="ad-slot ad-top">
-  Advertisement
-</div>
+<style>
+/* ===============================
+   NAVIGATION STYLES
+================================ */
+.top-nav {
+  border-bottom: 1px solid var(--border-dark);
+  background: rgba(10,14,30,0.95);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
 
-<div class="container">
+body.light .top-nav {
+  background: #fff;
+  border-color: var(--border-light);
+}
 
-<!-- =========================
-     HERO SECTION
-========================= -->
-<h1 class="logo">
-  Online Video Downloader Tools
-</h1>
+.nav-inner {
+  max-width: 1100px;
+  margin: auto;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-<p class="subtitle">
-  Browser-based utilities to process publicly accessible videos for offline
-  reference, research, and personal organization.
-</p>
+.brand-name {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
 
-<!-- =========================
-     INTRO CONTENT
-========================= -->
-<div class="content-block">
-  <p>
-    Video Downloader Tools is a collection of simple online utilities designed
-    to help users process publicly available video content from popular social
-    media and video-sharing platforms. These tools work directly in your web
-    browser and do not require software installation or account registration.
-  </p>
+.nav-links a {
+  margin-left: 18px;
+  text-decoration: none;
+  color: var(--muted-dark);
+  font-size: 0.95rem;
+}
 
-  <p>
-    Our platform is intended for educational, research, and offline reference
-    purposes only. We do not host any media files and do not provide access to
-    private or restricted content.
-  </p>
-</div>
+.nav-links a:hover {
+  color: var(--accent);
+}
 
-<!-- =========================
-     SUPPORTED PLATFORMS
-========================= -->
-<div class="content-block">
-  <h2>Supported Video Platforms</h2>
+body.light .nav-links a {
+  color: var(--muted-light);
+}
 
-  <p>
-    The tools available on this website are designed to work with publicly
-    accessible videos from several major platforms. Each platform has its own
-    dedicated page with specific functionality and limitations.
-  </p>
+.nav-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
 
-  <ul class="platform-list">
-    <li><strong>TikTok:</strong> Process public profile videos or individual video links.</li>
-    <li><strong>YouTube:</strong> Handle single videos or extract videos from public playlists.</li>
-    <li><strong>Instagram:</strong> Download publicly available video posts.</li>
-    <li><strong>Facebook:</strong> Process public Facebook video links.</li>
-    <li><strong>Likee:</strong> Download videos shared publicly on Likee.</li>
-  </ul>
+/* THEME BUTTON */
+.theme-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--text-dark);
+}
 
-  <p>
-    Each platform operates under its own content policies and technical
-    structure. Our tools are built to respect these differences and only work
-    with content that is publicly accessible.
-  </p>
-</div>
+body.light .theme-btn {
+  color: var(--text-light);
+}
 
-<!-- =========================
-     HOW IT WORKS
-========================= -->
-<div class="content-block">
-  <h2>How These Tools Work</h2>
+/* MENU BUTTON (MOBILE) */
+.menu-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none;
+  color: var(--text-dark);
+}
 
-  <p>
-    All tools on this website follow a simple browser-based process:
-  </p>
+body.light .menu-btn {
+  color: var(--text-light);
+}
 
-  <ol>
-    <li>Copy the link of a publicly accessible video or playlist.</li>
-    <li>Paste the link into the appropriate tool on this website.</li>
-    <li>The tool processes the public video information.</li>
-    <li>Your browser handles the download or offline saving process.</li>
-  </ol>
+/* MOBILE MENU */
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  border-top: 1px solid var(--border-dark);
+}
 
-  <p>
-    No content is stored on our servers. All processing is performed on-demand
-    based on user-provided public links.
-  </p>
-</div>
+.mobile-menu a {
+  padding: 14px 16px;
+  text-decoration: none;
+  color: var(--text-dark);
+  border-bottom: 1px solid var(--border-dark);
+}
 
-<!-- =========================
-     RESPONSIBLE USE
-========================= -->
-<div class="content-block">
-  <h2>Responsible and Legal Use</h2>
+body.light .mobile-menu {
+  border-color: var(--border-light);
+}
 
-  <p>
-    Users are responsible for ensuring that their use of downloaded content
-    complies with local laws and the terms of service of the respective
-    platforms. These tools are intended for personal, educational, and research
-    purposes only.
-  </p>
+body.light .mobile-menu a {
+  color: var(--text-light);
+  border-color: var(--border-light);
+}
 
-  <p>
-    Video Downloader Tools does not encourage copyright infringement and does
-    not provide access to private, restricted, or paid content.
-  </p>
-</div>
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .desktop-menu {
+    display: none;
+  }
+  .menu-btn {
+    display: block;
+  }
+}
+</style>
 
-<!-- =========================
-     INLINE AD SLOT
-========================= -->
-<div class="ad-slot ad-inline">
-  Advertisement
-</div>
+<script>
+/* ===============================
+   THEME TOGGLE
+================================ */
+const themeToggle = document.getElementById("themeToggle");
+const savedTheme = localStorage.getItem("theme");
 
-<!-- =========================
-     TRUST SIGNALS
-========================= -->
-<div class="content-block">
-  <h2>Why Choose Video Downloader Tools?</h2>
+if (savedTheme === "light") {
+  document.body.classList.add("light");
+  themeToggle.textContent = "☀️";
+}
 
-  <ul>
-    <li>Browser-based – no software installation required</li>
-    <li>Works on mobile, tablet, and desktop devices</li>
-    <li>No user accounts or registration</li>
-    <li>Clear focus on publicly available content</li>
-    <li>Simple interface designed for usability</li>
-  </ul>
-</div>
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("light");
+  const isLight = document.body.classList.contains("light");
+  themeToggle.textContent = isLight ? "☀️" : "🌙";
+  localStorage.setItem("theme", isLight ? "light" : "dark");
+});
 
-<!-- =========================
+/* ===============================
+   MOBILE MENU TOGGLE
+================================ */
+const menuBtn = document.getElementById("menuToggle");
+const mobileMenu = document.getElementById("mobileMenu");
+
+menuBtn.addEventListener("click", () => {
+  mobileMenu.style.display =
+    mobileMenu.style.display === "flex" ? "none" : "flex";
+});
+</script>
+
+
+
+
+    <!-- ===============================
+     MAIN CONTAINER
+================================ -->
+<main class="main-container">
+
+  <!-- ===============================
+       HERO SECTION
+  ================================ -->
+  <section class="hero">
+    <h1>Online Video Downloader Tools</h1>
+
+    <p class="hero-subtitle">
+      Browser-based tools to process publicly accessible videos for offline
+      reference, research, and personal organization.
+    </p>
+
+    <div class="hero-actions">
+      <a href="tiktok.html" class="hero-btn">TikTok Downloader</a>
+      <a href="youtube.html" class="hero-btn">YouTube Downloader</a>
+      <a href="instagram.html" class="hero-btn">Instagram Downloader</a>
+      <a href="facebook.html" class="hero-btn">Facebook Downloader</a>
+      <a href="likee.html" class="hero-btn">Likee Downloader</a>
+    </div>
+  </section>
+
+  <!-- ===============================
+       AD PLACEHOLDER (TOP)
+  ================================ -->
+  <section class="ad-box">
+    Advertisement
+  </section>
+
+  <!-- ===============================
+       ABOUT PLATFORM
+  ================================ -->
+  <section class="content-block">
+    <h2>What Is Video Downloader Tools?</h2>
+    <p>
+      Video Downloader Tools is a collection of simple online utilities designed
+      to help users process publicly available video content from popular social
+      media and video-sharing platforms. These tools work directly in your web
+      browser and do not require software installation or account registration.
+    </p>
+    <p>
+      The platform is intended for educational, research, and offline reference
+      purposes only. We do not host any media files and do not provide access to
+      private, restricted, or paid content.
+    </p>
+  </section>
+
+  <!-- ===============================
+       SUPPORTED PLATFORMS
+  ================================ -->
+  <section class="content-block">
+    <h2>Supported Video Platforms</h2>
+    <ul class="platform-list">
+      <li><strong>TikTok:</strong> Process public profile videos or individual video links.</li>
+      <li><strong>YouTube:</strong> Download single videos or extract videos from public playlists.</li>
+      <li><strong>Instagram:</strong> Download publicly available video posts and reels.</li>
+      <li><strong>Facebook:</strong> Process public Facebook video links.</li>
+      <li><strong>Likee:</strong> Download videos shared publicly on Likee.</li>
+    </ul>
+    <p>
+      Each platform operates under its own content policies and technical
+      structure. Our tools respect these differences and work only with
+      content that is publicly accessible.
+    </p>
+  </section>
+
+  <!-- ===============================
+       HOW IT WORKS
+  ================================ -->
+  <section class="content-block">
+    <h2>How These Tools Work</h2>
+    <ol class="steps">
+      <li>Copy the link of a publicly accessible video or playlist.</li>
+      <li>Paste the link into the appropriate tool on this website.</li>
+      <li>The tool processes the public video information.</li>
+      <li>Your browser handles the download or offline saving process.</li>
+    </ol>
+    <p>
+      No content is stored on our servers. All processing is performed
+      on-demand based on user-provided public links.
+    </p>
+  </section>
+
+  <!-- ===============================
+       AD PLACEHOLDER (INLINE)
+  ================================ -->
+  <section class="ad-box">
+    Advertisement
+  </section>
+
+  <!-- ===============================
+       RESPONSIBLE USE
+  ================================ -->
+  <section class="content-block">
+    <h2>Responsible and Legal Use</h2>
+    <p>
+      Users are responsible for ensuring that their use of downloaded content
+      complies with local laws and the terms of service of the respective
+      platforms. These tools are intended for personal, educational, and
+      research purposes only.
+    </p>
+    <p>
+      Video Downloader Tools does not encourage copyright infringement and
+      does not provide access to private, restricted, or paid content.
+    </p>
+  </section>
+
+</main>
+
+<style>
+/* ===============================
+   MAIN LAYOUT
+================================ */
+.main-container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 40px 16px 60px;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.hero h1 {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  color: var(--muted-dark);
+  max-width: 700px;
+  margin: 0 auto 26px;
+}
+
+body.light .hero-subtitle {
+  color: var(--muted-light);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.hero-btn {
+  background: var(--card-dark);
+  border: 1px solid var(--border-dark);
+  padding: 12px 18px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  transition: all 0.25s ease;
+}
+
+.hero-btn:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+body.light .hero-btn {
+  background: var(--card-light);
+  border-color: var(--border-light);
+  color: var(--text-light);
+}
+
+/* CONTENT BLOCK */
+.content-block {
+  margin-bottom: 34px;
+}
+
+.content-block h2 {
+  font-size: 1.45rem;
+  margin-bottom: 12px;
+}
+
+.content-block p,
+.content-block li {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--muted-dark);
+}
+
+body.light .content-block p,
+body.light .content-block li {
+  color: var(--muted-light);
+}
+
+.platform-list {
+  padding-left: 18px;
+  margin: 12px 0;
+}
+
+.steps {
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+/* AD PLACEHOLDER */
+.ad-box {
+  margin: 36px 0;
+  height: 120px;
+  border-radius: 12px;
+  background: var(--card-dark);
+  border: 1px dashed var(--border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted-dark);
+  font-size: 0.9rem;
+}
+
+body.light .ad-box {
+  background: var(--card-light);
+  border-color: var(--border-light);
+  color: var(--muted-light);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+}
+  </style>
+
+
+    <!-- ===============================
      FOOTER
-========================= -->
+================================ -->
 <footer class="site-footer">
-  <p>
-    <a href="privacy.html">Privacy Policy</a> |
-    <a href="terms.html">Terms of Service</a> |
-    <a href="disclaimer.html">Disclaimer</a> |
-    <a href="contact.html">Contact</a>
-  </p>
+  <div class="footer-inner">
 
-  <p class="footer-note">
-    © 2026 Video Downloader Tools. This website does not host any media files.
-    All content belongs to its respective owners.
-  </p>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="tiktok.html">TikTok</a>
+      <a href="youtube.html">YouTube</a>
+      <a href="instagram.html">Instagram</a>
+      <a href="facebook.html">Facebook</a>
+      <a href="likee.html">Likee</a>
+      <a href="about.html">About</a>
+    </div>
+
+    <div class="footer-links secondary">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="disclaimer.html">Disclaimer</a>
+      <a href="contact.html">Contact</a>
+    </div>
+
+    <p class="footer-note">
+      © 2026 Video Downloader Tools.  
+      This website does not host or store any media files.
+      All content belongs to its respective owners.
+    </p>
+
+  </div>
 </footer>
 
-</div>
-
-<!-- =========================
+<!-- ===============================
      COOKIE CONSENT
-========================= -->
+================================ -->
 <div id="cookieBanner" class="cookie-banner">
   <p>
-    This website uses cookies to improve user experience and display ads.
-    By continuing to browse this site, you agree to our
+    This website uses cookies to improve user experience and display
+    advertisements in accordance with Google AdSense policies.
+    By continuing to use this site, you agree to our
     <a href="privacy.html">Privacy Policy</a>.
   </p>
   <button id="acceptCookies">Accept</button>
 </div>
 
-<script src="app.js"></script>
-</body>
-</html>
+<style>
+/* ===============================
+   FOOTER
+================================ */
+.site-footer {
+  background: var(--card-dark);
+  border-top: 1px solid var(--border-dark);
+  padding: 32px 16px;
+}
+
+body.light .site-footer {
+  background: var(--card-light);
+  border-color: var(--border-light);
+}
+
+.footer-inner {
+  max-width: 1100px;
+  margin: auto;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.footer-links.secondary {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: var(--muted-dark);
+}
+
+body.light .footer-links a {
+  color: var(--muted-light);
+}
+
+.footer-links a:hover {
+  color: var(--accent);
+}
+
+.footer-note {
+  font-size: 0.8rem;
+  color: var(--muted-dark);
+  margin-top: 14px;
+  line-height: 1.6;
+}
+
+body.light .footer-note {
+  color: var(--muted-light);
+}
+
+/* ===============================
+   COOKIE BANNER
+================================ */
+.cookie-banner {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 920px;
+  width: calc(100% - 32px);
+  background: var(--card-dark);
+  border: 1px solid var(--border-dark);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 9999;
+}
+
+body.light .cookie-banner {
+  background: var(--card-light);
+  border-color: var(--border-light);
+}
+
+.cookie-banner p {
+  font-size: 0.85rem;
+  color: var(--muted-dark);
+  line-height: 1.5;
+}
+
+body.light .cookie-banner p {
+  color: var(--muted-light);
+}
+
+.cookie-banner a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.cookie-banner button {
+  background: var(--accent);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.cookie-banner button:hover {
+  opacity: 0.9;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .cookie-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cookie-banner button {
+    align-self: flex-end;
+  }
+}
+</style>
+
+<script>
+/* ===============================
+   COOKIE LOGIC
+================================ */
+(function () {
+  const banner = document.getElementById("cookieBanner");
+  const btn = document.getElementById("acceptCookies");
+
+  if (localStorage.getItem("cookiesAccepted")) {
+    banner.style.display = "none";
+  }
+
+  btn.addEventListener("click", function () {
+    localStorage.setItem("cookiesAccepted", "true");
+    banner.style.display = "none";
+  });
+})();
+</script>
