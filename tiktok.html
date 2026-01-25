@@ -4,18 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TikTok Video Downloader – Download Public TikTok Videos</title>
+<title>TikTok Video Downloader – Process Public TikTok Videos</title>
 
 <meta name="description"
-content="Download publicly accessible TikTok videos from profiles or individual video links. Browser-based tool for personal, educational, and offline reference use.">
+content="Browser-based TikTok video downloader to process publicly accessible profile videos or single video links for offline reference and research.">
 
 <meta name="robots" content="index, follow">
 
 <style>
-/* ===== BASE RESET ===== */
+/* ===============================
+   RESET + COLOR SYSTEM (INDEX MATCH)
+================================ */
 *{margin:0;padding:0;box-sizing:border-box}
 
-/* ===== COLOR SYSTEM (MATCH index.html) ===== */
 :root{
 --bg-dark:#0b0f1a;
 --bg-light:#f7f9fc;
@@ -30,7 +31,6 @@ content="Download publicly accessible TikTok videos from profiles or individual 
 --card-light:#ffffff;
 }
 
-/* ===== BODY ===== */
 body{
 font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
 background:var(--bg-dark);
@@ -44,14 +44,12 @@ background:var(--bg-light);
 color:var(--text-light);
 }
 
-/* ===== CONTAINER ===== */
 .container{
 max-width:1100px;
 margin:auto;
 padding:40px 16px 70px;
 }
 
-/* ===== CARDS ===== */
 .card{
 background:var(--card-dark);
 border:1px solid var(--border-dark);
@@ -65,7 +63,6 @@ background:var(--card-light);
 border-color:var(--border-light);
 }
 
-/* ===== TEXT ===== */
 h1{font-size:2rem;margin-bottom:12px}
 h2{font-size:1.4rem;margin-bottom:10px}
 
@@ -79,7 +76,6 @@ body.light li{
 color:var(--muted-light);
 }
 
-/* ===== INPUTS ===== */
 input,select{
 width:100%;
 padding:14px;
@@ -95,7 +91,6 @@ body.light select{
 border-color:var(--border-light);
 }
 
-/* ===== BUTTON ===== */
 button{
 background:var(--accent);
 border:none;
@@ -109,7 +104,9 @@ width:100%;
 
 button:hover{opacity:.9}
 
-/* ===== PROGRESS BAR ===== */
+/* ===============================
+   PROGRESS BAR
+================================ */
 .progress-wrap{
 display:none;
 margin-top:14px;
@@ -133,7 +130,9 @@ transition:width .3s;
 
 
 
-<body>
+
+
+  <body>
 
 <header class="top-nav">
   <div class="nav-inner">
@@ -171,65 +170,61 @@ transition:width .3s;
 </header>
 
 
-
 <main class="container">
 
 <h1>TikTok Video Downloader</h1>
 
 <p>
-Download publicly accessible TikTok videos from profile pages or
-individual video links. Works directly in your browser.
+Process publicly accessible TikTok videos from profile pages or individual
+video links. Works directly in your browser.
 </p>
 
 <div class="card">
 
-  <label>
-    <input type="radio" name="mode" value="profile" checked>
-    Profile Downloader
-  </label>
+<label>
+<input type="radio" name="mode" value="profile" checked>
+Profile Downloader
+</label>
 
-  <label style="margin-left:16px">
-    <input type="radio" name="mode" value="single">
-    Single Video
-  </label>
+<label style="margin-left:16px">
+<input type="radio" name="mode" value="single">
+Single Video
+</label>
 
-  <input
-    id="tiktokUrl"
-    type="text"
-    placeholder="Paste public TikTok profile or video link"
-  >
+<input
+id="tiktokUrl"
+type="text"
+placeholder="Paste public TikTok profile or video link"
+/>
 
-  <select id="limit">
-    <option value="all">All videos</option>
-    <option value="5">First 5</option>
-    <option value="10">First 10</option>
-    <option value="20">First 20</option>
-  </select>
+<select id="limit">
+<option value="all">All videos</option>
+<option value="5">First 5</option>
+<option value="10">First 10</option>
+<option value="20">First 20</option>
+</select>
 
-  <button id="processBtn">Process TikTok Link</button>
+<button id="processBtn">Process TikTok Link</button>
 
-  <!-- PROGRESS -->
-  <div class="progress-wrap" id="progressWrap">
-    <p style="font-size:.8rem;margin-bottom:6px">Processing…</p>
-    <div class="progress-bar">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
-  </div>
+<div class="progress-wrap" id="progressWrap">
+<p style="font-size:.8rem;margin-bottom:6px">Processing…</p>
+<div class="progress-bar">
+<div class="progress-fill" id="progressFill"></div>
+</div>
+</div>
 
-  <p id="status"></p>
+<p id="status"></p>
 
 </div>
 
-
-   
-   <div class="card" id="results" style="display:none">
-  <h2>Available Videos</h2>
-  <div id="videoList"></div>
-   </div>
+<div class="card" id="results" style="display:none">
+<h2>Available Videos</h2>
+<div id="videoList"></div>
+  </div>
 
 
 
-   <div class="card">
+<div class="card">
 <h2>How to Download TikTok Videos</h2>
 <ol>
 <li>Copy a public TikTok profile or video link.</li>
@@ -268,28 +263,44 @@ All videos belong to their respective owners.
 
 
 
-   <script>
-/* ===== THEME ===== */
-const t = document.getElementById("themeToggle");
+
+
+
+<script>
+/* ===============================
+   THEME
+================================ */
+const themeToggle = document.getElementById("themeToggle");
+
 if(localStorage.theme==="light"){
 document.body.classList.add("light");
-t.textContent="☀️";
-}
-t.onclick=()=>{
-document.body.classList.toggle("light");
-localStorage.theme=document.body.classList.contains("light")?"light":"dark";
-t.textContent=document.body.classList.contains("light")?"☀️":"🌙";
+themeToggle.textContent="☀️";
 }
 
-/* ===== MOBILE MENU ===== */
+themeToggle.onclick=()=>{
+document.body.classList.toggle("light");
+const isLight=document.body.classList.contains("light");
+localStorage.theme=isLight?"light":"dark";
+themeToggle.textContent=isLight?"☀️":"🌙";
+};
+
+/* ===============================
+   MOBILE MENU
+================================ */
 menuToggle.onclick=()=>{
 mobileMenu.style.display=
 mobileMenu.style.display==="flex"?"none":"flex";
-}
+};
 
-/* ===== PROCESS LOGIC ===== */
+/* ===============================
+   TIKTOK LOGIC (CORRECT)
+================================ */
+const BASE="https://tiktok-downloader-backend-production-ce2b.up.railway.app";
+
 processBtn.onclick=async()=>{
 const url=tiktokUrl.value.trim();
+const mode=document.querySelector('input[name="mode"]:checked').value;
+
 if(!url){
 status.textContent="Please enter a valid TikTok URL.";
 return;
@@ -298,30 +309,37 @@ return;
 status.textContent="";
 results.style.display="none";
 progressWrap.style.display="block";
-progressFill.style.width="20%";
+progressFill.style.width="30%";
 
 try{
-/* EXAMPLE BACKEND CALL */
-const res=await fetch("/api/tiktok",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-url:url,
-mode:document.querySelector('input[name="mode"]:checked').value,
-limit:limit.value
-})
-});
+
+/* SINGLE VIDEO = DIRECT DOWNLOAD */
+if(mode==="single"){
+progressFill.style.width="100%";
+window.location.href=
+`${BASE}/tiktok/single?url=`+encodeURIComponent(url);
+return;
+}
+
+/* PROFILE MODE */
+const res=await fetch(
+`${BASE}/tiktok/profile?profile_url=`+encodeURIComponent(url)
+);
 
 progressFill.style.width="70%";
 
+if(!res.ok) throw new Error();
+
 const data=await res.json();
 
-/* RENDER */
 videoList.innerHTML="";
-data.videos.forEach(v=>{
+
+data.videos.forEach((v,i)=>{
+const link=`${BASE}/tiktok/single?url=${encodeURIComponent(v.url)}`;
 videoList.innerHTML+=`
 <p>
-<a href="${v.download}" target="_blank">Download video</a>
+<strong>Video ${i+1}</strong><br>
+<a href="${link}" target="_blank">Download video</a>
 </p>`;
 });
 
@@ -329,15 +347,26 @@ results.style.display="block";
 progressFill.style.width="100%";
 progressWrap.style.display="none";
 
-}catch(e){
-status.textContent="Failed to process link. Try again.";
+}catch{
+status.textContent="Failed to fetch TikTok data.";
 progressWrap.style.display="none";
 }
-}
+};
 </script>
 
 </body>
 </html>
 
 
-   
+
+
+
+
+
+
+
+    
+
+  
+
+    
