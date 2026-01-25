@@ -1,133 +1,226 @@
-</body>
-</html>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>TikTok Video Downloader – Download Public TikTok Videos</title>
+<title>TikTok Video Downloader – Download Public TikTok Videos</title>
 
-  <meta name="description"
-        content="Download videos from public TikTok profiles or individual video links. Browser-based tool for personal and educational use." />
+<meta name="description"
+content="Download publicly accessible TikTok videos from profiles or individual video links. Browser-based tool for personal and educational use.">
 
-  <meta name="robots" content="index, follow" />
+<meta name="robots" content="index, follow">
 
-  <link rel="stylesheet" href="style.css" />
+
+  <style>
+/* ==== SAME CSS AS index.html (DO NOT CHANGE COLORS SYSTEM) ==== */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg-dark:#0b0f1a;
+--bg-light:#f7f9fc;
+--text-dark:#eaeaf0;
+--text-light:#1a1a1a;
+--muted-dark:#9aa4c7;
+--muted-light:#555;
+--accent:#ff2d55;
+--border-dark:#1e2440;
+--border-light:#ddd;
+--card-dark:rgba(255,255,255,0.04);
+--card-light:#fff;
+}
+body{
+font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+background:var(--bg-dark);
+color:var(--text-dark);
+line-height:1.7;
+transition:.3s;
+}
+body.light{
+background:var(--bg-light);
+color:var(--text-light);
+}
+.container{
+max-width:1100px;
+margin:auto;
+padding:40px 16px 60px;
+}
+.card{
+background:var(--card-dark);
+border:1px solid var(--border-dark);
+border-radius:14px;
+padding:22px;
+margin-bottom:28px;
+}
+body.light .card{
+background:var(--card-light);
+border-color:var(--border-light);
+}
+h1{font-size:2rem;margin-bottom:12px}
+h2{font-size:1.4rem;margin-bottom:10px}
+p,li{color:var(--muted-dark);font-size:.95rem}
+body.light p,body.light li{color:var(--muted-light)}
+input,select{
+width:100%;
+padding:14px;
+border-radius:10px;
+border:1px solid var(--border-dark);
+background:transparent;
+color:inherit;
+margin-bottom:14px;
+}
+body.light input,body.light select{
+border-color:var(--border-light);
+}
+button{
+background:var(--accent);
+border:none;
+color:#fff;
+padding:14px;
+border-radius:12px;
+font-size:.95rem;
+cursor:pointer;
+}
+button:hover{opacity:.9}
+</style>
 </head>
-
 <body>
 
-<nav class="top-nav">
-  <div class="nav-left">
-    <span class="nav-logo">Video Downloader Tools</span>
+
+  <header class="top-nav">
+  <div class="nav-inner">
+
+    <div class="nav-brand">
+      <span class="brand-name">Video Downloader Tools</span>
+    </div>
+
+    <nav class="nav-links desktop-menu">
+      <a href="index.html">Home</a>
+      <a href="tiktok.html">TikTok</a>
+      <a href="youtube.html">YouTube</a>
+      <a href="instagram.html">Instagram</a>
+      <a href="facebook.html">Facebook</a>
+      <a href="likee.html">Likee</a>
+      <a href="about.html">About</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button id="themeToggle">🌙</button>
+      <button id="menuToggle">☰</button>
+    </div>
+
   </div>
 
-  <div class="nav-right">
+  <nav id="mobileMenu" class="mobile-menu">
     <a href="index.html">Home</a>
-    <a href="tiktok.html" class="active">TikTok</a>
+    <a href="tiktok.html">TikTok</a>
     <a href="youtube.html">YouTube</a>
     <a href="instagram.html">Instagram</a>
     <a href="facebook.html">Facebook</a>
     <a href="likee.html">Likee</a>
     <a href="about.html">About</a>
-  </div>
-</nav>
+  </nav>
+  </header>
 
-<div class="container">
+<main class="container">
 
-  <h1 class="logo">TikTok Video Downloader</h1>
+<h1>TikTok Video Downloader</h1>
 
-<p class="subtitle">
-  Download publicly available TikTok videos from profiles or single video links.
-  Works directly in your browser without installation.
+<p>
+Download publicly accessible TikTok videos from profile pages or
+individual video links. Works directly in your browser.
 </p>
 
 <div class="card">
 
-  <div class="mode-select">
-    <label>
-      <input type="radio" name="tiktokMode" value="profile" checked />
-      Profile Downloader
-    </label>
-    <label>
-      <input type="radio" name="tiktokMode" value="single" />
-      Single Video
-    </label>
-  </div>
+  <label>
+    <input type="radio" name="mode" value="profile" checked>
+    Profile Downloader
+  </label>
+
+  <label style="margin-left:16px">
+    <input type="radio" name="mode" value="single">
+    Single Video
+  </label>
 
   <input
     type="text"
     id="tiktokUrl"
     placeholder="Paste public TikTok profile or video link"
-  />
+  >
 
-  <select id="tiktokLimit">
+  <select id="limit">
     <option value="all">All videos</option>
-    <option value="5">First 5 videos</option>
-    <option value="10">First 10 videos</option>
-    <option value="20">First 20 videos</option>
+    <option value="5">First 5</option>
+    <option value="10">First 10</option>
+    <option value="20">First 20</option>
   </select>
 
-  <button id="tiktokActionBtn">
-    Process TikTok Link
-  </button>
+  <button id="processBtn">Process TikTok Link</button>
 
-  <div id="tiktokStatus"></div>
+  <p id="status"></p>
 
 </div>
 
-<div id="tiktokResults"></div>
+
 
   <div class="card">
-
-  <h2>How to Download TikTok Videos</h2>
-
-  <ol>
-    <li>Copy the link of a public TikTok profile or video.</li>
-    <li>Paste the link into the input field above.</li>
-    <li>Select profile or single video mode.</li>
-    <li>Process and download videos through your browser.</li>
-  </ol>
-
-  <p>
-    This tool supports only publicly accessible TikTok content.
-    Private or restricted accounts cannot be processed.
-  </p>
-
+<h2>How to Download TikTok Videos</h2>
+<ol>
+<li>Copy a public TikTok profile or video link.</li>
+<li>Paste the link into the field above.</li>
+<li>Select profile or single video mode.</li>
+<li>Process and download videos through your browser.</li>
+</ol>
+<p>
+Only publicly accessible TikTok content is supported.
+Private or restricted accounts cannot be processed.
+</p>
 </div>
 
 <div class="card">
-
-  <h2>Responsible Use</h2>
-
-  <p>
-    This TikTok downloader is intended for personal, educational,
-    and offline reference purposes only. Users are responsible for
-    complying with TikTok’s terms of service and local copyright laws.
-  </p>
-
+<h2>Responsible Use</h2>
+<p>
+This TikTok downloader is intended for personal, educational,
+and offline reference purposes only. Users are responsible
+for complying with TikTok’s terms of service and local laws.
+</p>
 </div>
 
 
+  
+  
 
 <footer class="site-footer">
-  <p>
-    <a href="privacy.html">Privacy</a> |
-    <a href="terms.html">Terms</a> |
-    <a href="disclaimer.html">Disclaimer</a>
-  </p>
-  <p class="footer-note">
-    This website does not host TikTok content.
-    All videos belong to their respective owners.
-  </p>
+<p>
+<a href="privacy.html">Privacy</a> |
+<a href="terms.html">Terms</a> |
+<a href="disclaimer.html">Disclaimer</a>
+</p>
+<p style="font-size:.8rem;color:#9aa4c7">
+This website does not host TikTok content.
+All videos belong to their respective owners.
+</p>
 </footer>
 
-</div>
+</main>
 
-<script src="app.js"></script>
+<script>
+/* THEME */
+const t=document.getElementById("themeToggle");
+if(localStorage.theme==="light"){document.body.classList.add("light");t.textContent="☀️"}
+t.onclick=()=>{document.body.classList.toggle("light");localStorage.theme=document.body.classList.contains("light")?"light":"dark";t.textContent=document.body.classList.contains("light")?"☀️":"🌙"}
+
+/* MOBILE MENU */
+document.getElementById("menuToggle").onclick=()=>{
+const m=document.getElementById("mobileMenu");
+m.style.display=m.style.display==="flex"?"none":"flex";
+}
+</script>
+
 </body>
 </html>
+
+
 
 
 
