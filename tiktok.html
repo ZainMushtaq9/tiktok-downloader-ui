@@ -6,13 +6,10 @@
 
 <title>TikTok Video Downloader – Process Public TikTok Videos Online</title>
 
-<meta name="description" content="Process publicly accessible TikTok videos from individual video links or public profiles for offline reference and educational use. No login required.">
+<meta name="description" content="Process publicly accessible TikTok videos using public video links or profiles. Preview video details and download for offline reference. No login required.">
 
 <meta name="robots" content="index, follow">
 
-<!-- ===============================
-   BASE STYLES (SAME SYSTEM)
-================================ -->
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -69,8 +66,18 @@ font-size:.95rem;
 cursor:pointer;
 }
 button:hover{opacity:.9}
-.result-list button{display:block;margin-top:10px;width:100%}
-.status{margin-top:10px;font-size:.9rem}
+.preview{
+display:flex;
+gap:16px;
+align-items:center;
+margin-top:16px;
+}
+.preview img{
+width:120px;
+border-radius:10px;
+border:1px solid var(--border-dark);
+}
+.preview-info{font-size:.9rem}
 .ad-slot{
 margin:32px 0;
 padding:24px;
@@ -91,15 +98,12 @@ color:var(--muted-light);
 
 <body>
 
-<!-- ===============================
-     NAVBAR (COPIED AS-IS)
-================================ -->
+<!-- NAVBAR (UNCHANGED / COPIED AS-IS) -->
 <header class="top-nav">
   <div class="nav-inner">
     <div class="nav-brand">
       <span class="brand-name">Video Downloader Tools</span>
     </div>
-
     <nav class="nav-links desktop-menu">
       <a href="index.html">Home</a>
       <a href="tiktok.html">TikTok</a>
@@ -109,13 +113,11 @@ color:var(--muted-light);
       <a href="likee.html">Likee</a>
       <a href="about.html">About</a>
     </nav>
-
     <div class="nav-actions">
       <button id="themeToggle" class="theme-btn">🌙</button>
       <button id="menuToggle" class="menu-btn">☰</button>
     </div>
   </div>
-
   <nav id="mobileMenu" class="mobile-menu">
     <a href="index.html">Home</a>
     <a href="tiktok.html">TikTok</a>
@@ -127,25 +129,6 @@ color:var(--muted-light);
   </nav>
 </header>
 
-<style>
-.top-nav{border-bottom:1px solid var(--border-dark);background:rgba(10,14,30,.95);position:sticky;top:0;z-index:100}
-body.light .top-nav{background:#fff;border-color:var(--border-light)}
-.nav-inner{max-width:1100px;margin:auto;padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
-.brand-name{font-weight:600;font-size:1.05rem}
-.nav-links a{margin-left:18px;text-decoration:none;color:var(--muted-dark);font-size:.95rem}
-.nav-links a:hover{color:var(--accent)}
-body.light .nav-links a{color:var(--muted-light)}
-.nav-actions{display:flex;gap:12px}
-.theme-btn,.menu-btn{background:none;border:none;cursor:pointer;color:inherit}
-.menu-btn{display:none;font-size:1.5rem}
-.mobile-menu{display:none;flex-direction:column;border-top:1px solid var(--border-dark)}
-.mobile-menu a{padding:14px 16px;text-decoration:none;color:inherit;border-bottom:1px solid var(--border-dark)}
-@media(max-width:768px){
-.desktop-menu{display:none}
-.menu-btn{display:block}
-}
-</style>
-
 <script>
 const t=document.getElementById("themeToggle");
 if(localStorage.theme==="light"){document.body.classList.add("light");t.textContent="☀️"}
@@ -153,72 +136,51 @@ t.onclick=()=>{document.body.classList.toggle("light");localStorage.theme=docume
 document.getElementById("menuToggle").onclick=()=>{const m=document.getElementById("mobileMenu");m.style.display=m.style.display==="flex"?"none":"flex"}
 </script>
 
-<!-- ===============================
-     MAIN CONTENT
-================================ -->
 <main class="container">
 
 <h1>TikTok Video Downloader</h1>
 <p>
-Process publicly accessible TikTok videos from individual video links or
-public profile pages. This tool works directly in your browser and does not
-require account registration or software installation.
+Process publicly accessible TikTok videos using public video or profile links.
+Preview video details before downloading for offline reference or research.
 </p>
 
 <div class="card">
-  <form id="tiktokForm">
-    <input id="videoUrl" type="text" placeholder="Paste public TikTok profile or video link" required>
-    <button type="submit">Process TikTok Link</button>
-  </form>
+<form id="tiktokForm">
+<input id="videoUrl" type="text" placeholder="Paste public TikTok video or profile link" required>
+<button type="submit">Fetch Video Details</button>
+</form>
 
-  <div id="status" class="status"></div>
-  <div id="results" class="result-list"></div>
+<div id="status" class="status"></div>
+<div id="preview"></div>
+<div id="results"></div>
 </div>
 
 <div class="ad-slot">Advertisement</div>
 
 <div class="card">
-<h2>How This Tool Works</h2>
-<ol>
-<li>Copy a publicly accessible TikTok video or profile link.</li>
-<li>Paste the link into the input field above.</li>
-<li>The tool processes public video information.</li>
-<li>You choose which videos to download.</li>
-</ol>
-<p>
-Private accounts, restricted content, and paid material are not supported.
-</p>
-</div>
-
-<div class="card">
 <h2>Responsible Use</h2>
 <p>
-This TikTok downloader is intended for personal, educational, and offline
-reference purposes only. Users are responsible for complying with TikTok’s
-terms of service and applicable local laws.
-</p>
-<p>
-This website does not host or store any TikTok content.
+This tool works only with publicly accessible TikTok content. It is intended
+for personal, educational, and offline reference use. Users are responsible
+for complying with TikTok’s terms of service and applicable laws.
 </p>
 </div>
 
 </main>
 
-<!-- ===============================
-     FUNCTIONAL JS (MATCHES BACKEND)
-================================ -->
 <script>
 const API="https://tiktok-downloader-backend-production-ce2b.up.railway.app";
-
 const form=document.getElementById("tiktokForm");
 const input=document.getElementById("videoUrl");
 const statusBox=document.getElementById("status");
+const previewBox=document.getElementById("preview");
 const results=document.getElementById("results");
 
 form.addEventListener("submit",async(e)=>{
 e.preventDefault();
-results.innerHTML="";
 statusBox.textContent="Processing...";
+previewBox.innerHTML="";
+results.innerHTML="";
 
 const url=input.value.trim();
 if(!url)return;
@@ -229,28 +191,41 @@ try{
 if(isProfile){
 const res=await fetch(`${API}/profile?profile_url=${encodeURIComponent(url)}`);
 const data=await res.json();
-
 statusBox.textContent=`Found ${data.total} public videos`;
 
-data.videos.forEach((v,i)=>{
+data.videos.forEach(v=>{
 const btn=document.createElement("button");
-btn.textContent=`Download Video ${i+1}`;
+btn.textContent=`Download ${v.title || "Video"}`;
 btn.onclick=()=>{
-window.location.href=`${API}/download?url=${encodeURIComponent(v)}&index=${i+1}&profile=${data.profile}`;
+window.location.href=`${API}/download?url=${encodeURIComponent(v.url)}&index=${v.index}&profile=${data.profile}`;
 };
 results.appendChild(btn);
 });
 }else{
-statusBox.textContent="Ready to download";
+const p=await fetch(`${API}/preview?url=${encodeURIComponent(url)}`);
+const info=await p.json();
+
+previewBox.innerHTML=`
+<div class="preview">
+<img src="${info.thumbnail}" alt="TikTok thumbnail">
+<div class="preview-info">
+<strong>${info.title}</strong><br>
+Uploader: ${info.uploader || "Unknown"}<br>
+Duration: ${info.duration || "N/A"} sec
+</div>
+</div>`;
+
 const btn=document.createElement("button");
 btn.textContent="Download Video";
 btn.onclick=()=>{
 window.location.href=`${API}/download?url=${encodeURIComponent(url)}&index=1&profile=tiktok`;
 };
 results.appendChild(btn);
+
+statusBox.textContent="Preview loaded";
 }
 }catch{
-statusBox.textContent="Unable to process this link. Please ensure it is public.";
+statusBox.textContent="Unable to process this link. Ensure it is public.";
 }
 });
 </script>
