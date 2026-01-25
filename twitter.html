@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Twitter Video Downloader – Download X Videos Online</title>
+  <title>Twitter (X) Video Downloader – Download Public Tweet Videos</title>
 
   <meta name="description"
-        content="Free Twitter (X) video downloader to download videos from tweets online. Works on mobile and desktop browsers without installation." />
+        content="Free Twitter (X) video downloader. Download videos from public tweets online without software or login. Works on mobile and desktop." />
 
   <meta name="keywords"
-        content="twitter video downloader, x video downloader, download twitter videos, save x videos online" />
+        content="twitter video downloader, x video downloader, download twitter videos, save tweet videos online" />
 
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://zainmushtaq9.github.io/tiktok-downloader-ui/twitter.html" />
@@ -23,7 +23,7 @@
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": "Twitter Video Downloader",
-    "description": "Download videos from Twitter (X) using an online browser-based tool",
+    "description": "Download videos from Twitter (X) using a browser-based tool",
     "url": "https://zainmushtaq9.github.io/tiktok-downloader-ui/twitter.html"
   }
   </script>
@@ -31,12 +31,9 @@
 
 <body>
 
-<!-- =========================
-     TOP NAVIGATION
-========================= -->
+<!-- ================= NAV ================= -->
 <nav class="top-nav">
   <div class="nav-left">
-    <img src="logo.png" alt="Video Downloader Tools Logo" style="height:22px;vertical-align:middle;">
     <span class="nav-logo">Video Downloader Tools</span>
   </div>
 
@@ -45,210 +42,129 @@
     <a href="tiktok.html">TikTok</a>
     <a href="youtube.html">YouTube</a>
     <a href="instagram.html">Instagram</a>
-    <a href="twitter.html">Twitter</a>
+    <a href="twitter.html" class="active">Twitter</a>
     <a href="facebook.html">Facebook</a>
+    <a href="likee.html">Likee</a>
   </div>
 </nav>
 
-<!-- =========================
-     TOP AD SLOT
-========================= -->
-<div class="ad-slot ad-top">
-  Advertisement
-</div>
+<!-- ================= TOP AD ================= -->
+<div class="ad-slot ad-top">Advertisement</div>
 
-<div class="container">
+<main class="container">
 
-<!-- =========================
-     PAGE HEADER
-========================= -->
-<h1 class="logo">
-  Twitter Video Downloader
-</h1>
-
-<p class="subtitle">
-  Download videos from Twitter (X) online – fast and secure.
-</p>
-
-<!-- =========================
-     TOOL PLACEHOLDER
-========================= -->
-<div class="card">
-
-  <p style="font-size:14px;color:#cbd3ff;line-height:1.7;">
-    The Twitter Video Downloader tool is currently under development.
-    This page explains how the downloader will work and provides useful
-    information for users.
+<!-- ================= HEADER ================= -->
+<header class="page-header">
+  <h1 class="logo">Twitter (X) Video Downloader</h1>
+  <p class="subtitle">
+    Download videos from public tweets directly to your device.
+    No login, no software installation.
   </p>
+</header>
 
-</div>
+<!-- ================= TOOL ================= -->
+<section class="tool-section">
 
-<!-- =========================
-     SEO CONTENT START
-========================= -->
-<div class="card">
+  <label for="twitterUrl" class="input-label">
+    Paste Twitter (X) Video Link
+  </label>
 
-  <h2>What is a Twitter Video Downloader?</h2>
+  <input
+    type="url"
+    id="twitterUrl"
+    placeholder="https://twitter.com/username/status/..."
+    autocomplete="off"
+  />
 
-  <p>
-    A Twitter video downloader is an online tool that allows users to save
-    videos from public tweets directly to their device. These tools work
-    through a web browser and do not require additional applications.
-  </p>
+  <button id="downloadTwitterBtn" class="primary-btn">
+    ⬇ Download Twitter Video
+  </button>
 
-  <p>
-    Video Downloader Tools plans to offer a simple method to process Twitter
-    (X) video links once the feature becomes available.
-  </p>
+  <div id="status" class="status-text"></div>
 
-</div>
+</section>
 
-<div class="card">
-
-  <h2>Download Videos from Twitter (X)</h2>
-
-  <p>
-    Twitter, now known as X, is widely used for sharing news, discussions,
-    and media content. Many users search for ways to download videos from
-    tweets for offline access or reference.
-  </p>
-
-  <p>
-    Browser-based Twitter video downloaders allow users to save publicly
-    shared videos without installing additional software.
-  </p>
-
-  </div>
-
-
-<div class="card">
-
-  <h2>How the Twitter Video Downloader Will Work</h2>
-
-  <p>
-    Once available, the Twitter (X) Video Downloader will allow users to paste
-    a public tweet link into the tool and generate a downloadable video file
-    directly in the browser. The process is designed to be simple and fast.
-  </p>
-
-  <ol style="line-height:1.8;">
-    <li>Copy the public tweet link containing a video</li>
-    <li>Paste the link into the downloader input field</li>
-    <li>Process the tweet using the online tool</li>
-    <li>Download the video to your device</li>
+<!-- ================= INFO ================= -->
+<section class="info-section">
+  <h2>How to Download Twitter (X) Videos</h2>
+  <ol>
+    <li>Copy the link of a public tweet containing a video</li>
+    <li>Paste the link into the input field above</li>
+    <li>Click the download button</li>
+    <li>Your browser will save the video file</li>
   </ol>
 
-  <p>
-    The downloader will operate without registration or installation and
-    will support both mobile and desktop environments.
+  <p class="note">
+    Only <strong>public tweets</strong> are supported.
+    Private accounts and restricted content cannot be downloaded.
   </p>
+</section>
 
-</div>
-
-<div class="card">
-
-  <h2>Is It Legal to Download Twitter (X) Videos?</h2>
-
+<!-- ================= LEGAL ================= -->
+<section class="disclaimer-section">
+  <h2>Legal & Responsible Use</h2>
   <p>
-    Downloading videos from Twitter (X) may be subject to platform terms of
-    service and local copyright laws. This tool is intended for personal,
-    educational, and offline viewing purposes only.
+    This website does not host or store Twitter (X) content.
+    Videos are downloaded directly from publicly available sources.
+    Users are responsible for respecting copyright laws and Twitter’s terms of service.
   </p>
+</section>
 
-  <p>
-    Users are responsible for ensuring that their use of downloaded content
-    complies with applicable laws. Video Downloader Tools does not host or
-    distribute copyrighted media.
-  </p>
+<!-- ================= INLINE AD ================= -->
+<div class="ad-slot ad-inline">Advertisement</div>
 
-</div>
+</main>
 
-<div class="card">
-
-  <h2>Supported Devices and Browsers</h2>
-
-  <p>
-    The Twitter Video Downloader is designed to work across modern devices
-    and browsers, including:
-  </p>
-
-  <ul style="line-height:1.8;">
-    <li>Android smartphones and tablets</li>
-    <li>iPhone and iPad (iOS)</li>
-    <li>Windows and macOS computers</li>
-    <li>Linux-based systems</li>
-    <li>Chrome, Firefox, Edge, and Safari browsers</li>
-  </ul>
-
-</div>
-
-<div class="card">
-
-  <h2>Frequently Asked Questions</h2>
-
-  <h3>Is the Twitter video downloader free?</h3>
-  <p>
-    Yes, the tool will be available for free without registration.
-  </p>
-
-  <h3>Do I need to install any app?</h3>
-  <p>
-    No installation is required. The downloader will work directly in your browser.
-  </p>
-
-  <h3>Can I download videos from X on mobile?</h3>
-  <p>
-    Yes, the tool is planned to support mobile and tablet devices.
-  </p>
-
-</div>
-
-<!-- =========================
-     INLINE AD SLOT
-========================= -->
-<div class="ad-slot ad-inline">
-  Advertisement
-</div>
-
-<!-- =========================
-     FOOTER
-========================= -->
+<!-- ================= FOOTER ================= -->
 <footer class="site-footer">
   <p>
-    <a href="index.html">Home</a> |
-    <a href="tiktok.html">TikTok</a> |
-    <a href="youtube.html">YouTube</a> |
-    <a href="instagram.html">Instagram</a> |
-    <a href="twitter.html">Twitter</a> |
-    <a href="facebook.html">Facebook</a> |
-    <a href="likee.html">Likee</a> |
-    <a href="about.html">About</a> |
     <a href="privacy.html">Privacy Policy</a> |
     <a href="terms.html">Terms</a> |
-    <a href="disclaimer.html">Disclaimer</a> |
-    <a href="contact.html">Contact</a>
+    <a href="disclaimer.html">Disclaimer</a>
   </p>
-
   <p class="footer-note">
     © 2026 Video Downloader Tools. All rights reserved.
   </p>
 </footer>
 
-</div> <!-- END CONTAINER -->
-
-<!-- =========================
-     COOKIE CONSENT
-========================= -->
+<!-- ================= COOKIE ================= -->
 <div id="cookieBanner" class="cookie-banner">
   <p>
     This website uses cookies to improve user experience and display ads.
-    By using this site, you agree to our <a href="privacy.html">Privacy Policy</a>.
+    By continuing, you agree to our <a href="privacy.html">Privacy Policy</a>.
   </p>
   <button id="acceptCookies">Accept</button>
 </div>
 
 <script src="app.js"></script>
 
+<!-- ================= PAGE SCRIPT ================= -->
+<script>
+document.getElementById("downloadTwitterBtn")?.addEventListener("click", () => {
+  const url = document.getElementById("twitterUrl").value.trim();
+  const status = document.getElementById("status");
+
+  if (!url) {
+    status.textContent = "Please paste a Twitter (X) video link.";
+    return;
+  }
+
+  status.textContent = "Your browser may ask permission to download the file.";
+
+  const downloadUrl =
+    `${BACKEND_URL}/download` +
+    `?url=${encodeURIComponent(url)}` +
+    `&filename=twitter_video` +
+    `&quality=best`;
+
+  const a = document.createElement("a");
+  a.href = downloadUrl;
+  a.download = "";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+});
+</script>
+
 </body>
 </html>
-  
