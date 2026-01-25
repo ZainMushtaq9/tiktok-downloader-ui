@@ -6,14 +6,13 @@
 
 <title>TikTok Video Downloader – Download Public TikTok Videos</title>
 
-<meta name="description" content="Download publicly accessible TikTok videos from profile pages or individual video links. Browser-based TikTok downloader for personal and educational use.">
+<meta name="description"
+content="Download publicly accessible TikTok videos from profiles or individual video links. Browser-based TikTok downloader for offline viewing and research.">
 
 <meta name="robots" content="index, follow">
 
 <style>
-/* ===============================
-   CORE DESIGN SYSTEM (FROM INDEX)
-================================ */
+/* ===== CORE SYSTEM (MATCHES index.html) ===== */
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
@@ -27,7 +26,7 @@
 --border-dark:#1e2440;
 --border-light:#ddd;
 --card-dark:rgba(255,255,255,0.04);
---card-light:#ffffff;
+--card-light:#fff;
 }
 
 body{
@@ -43,89 +42,7 @@ background:var(--bg-light);
 color:var(--text-light);
 }
 
-/* ===============================
-   NAVIGATION (SAME AS INDEX)
-================================ */
-.top-nav{
-position:sticky;
-top:0;
-z-index:100;
-background:rgba(10,14,30,.95);
-border-bottom:1px solid var(--border-dark);
-}
-
-body.light .top-nav{
-background:#fff;
-border-color:var(--border-light);
-}
-
-.nav-inner{
-max-width:1100px;
-margin:auto;
-padding:14px 16px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.brand-name{
-font-weight:600;
-font-size:1.05rem;
-}
-
-.nav-links a{
-margin-left:18px;
-text-decoration:none;
-color:var(--muted-dark);
-font-size:.95rem;
-}
-
-.nav-links a:hover{color:var(--accent)}
-
-body.light .nav-links a{color:var(--muted-light)}
-
-.nav-actions{
-display:flex;
-gap:12px;
-align-items:center;
-}
-
-.theme-btn,
-.menu-btn{
-background:none;
-border:none;
-font-size:1.4rem;
-cursor:pointer;
-color:inherit;
-}
-
-.menu-btn{display:none}
-
-.mobile-menu{
-display:none;
-flex-direction:column;
-border-top:1px solid var(--border-dark);
-}
-
-.mobile-menu a{
-padding:14px 16px;
-text-decoration:none;
-color:inherit;
-border-bottom:1px solid var(--border-dark);
-}
-
-body.light .mobile-menu{
-border-color:var(--border-light);
-}
-
-@media(max-width:768px){
-.desktop-menu{display:none}
-.menu-btn{display:block}
-}
-
-/* ===============================
-   MAIN LAYOUT
-================================ */
+/* ===== LAYOUT ===== */
 .container{
 max-width:1100px;
 margin:auto;
@@ -145,46 +62,36 @@ background:var(--card-light);
 border-color:var(--border-light);
 }
 
-h1{
-font-size:clamp(1.8rem,3vw,2.4rem);
-margin-bottom:12px;
-}
+/* ===== TYPO ===== */
+h1{font-size:2rem;margin-bottom:12px}
+h2{font-size:1.35rem;margin-bottom:10px}
+p,li{font-size:.95rem;color:var(--muted-dark)}
+body.light p,body.light li{color:var(--muted-light)}
 
-h2{
-font-size:1.4rem;
-margin-bottom:10px;
-}
+/* ===== FORM ===== */
+.form-row{margin-bottom:14px}
 
-p,li{
+.radio-group{
+display:flex;
+gap:18px;
+margin-bottom:14px;
 font-size:.95rem;
-color:var(--muted-dark);
 }
 
-body.light p,
-body.light li{
-color:var(--muted-light);
-}
-
-/* ===============================
-   FORM
-================================ */
-input,select{
+input[type="text"],select{
 width:100%;
 padding:14px;
 border-radius:12px;
 border:1px solid var(--border-dark);
 background:transparent;
 color:inherit;
-margin-top:12px;
 }
 
-body.light input,
-body.light select{
+body.light input,body.light select{
 border-color:var(--border-light);
 }
 
-button.primary{
-margin-top:16px;
+button{
 width:100%;
 background:var(--accent);
 border:none;
@@ -195,126 +102,138 @@ font-size:.95rem;
 cursor:pointer;
 }
 
-button.primary:hover{opacity:.9}
+button:disabled{
+opacity:.6;
+cursor:not-allowed;
+}
 
-/* ===============================
-   FOOTER
-================================ */
-.site-footer{
-margin-top:60px;
-text-align:center;
+/* ===== PROGRESS BAR ===== */
+.progress-wrap{
+display:none;
+margin-top:16px;
+}
+
+.progress-bar{
+height:10px;
+border-radius:10px;
+background:rgba(255,255,255,.08);
+overflow:hidden;
+}
+
+.progress-fill{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#ff2d55,#ff6a88);
+transition:width .4s ease;
+}
+
+.status-text{
 font-size:.85rem;
+margin-top:8px;
 color:var(--muted-dark);
 }
 
-.site-footer a{
-color:var(--accent);
-text-decoration:none;
-margin:0 4px;
+/* ===== FOOTER ===== */
+.site-footer{
+text-align:center;
+font-size:.8rem;
+color:var(--muted-dark);
+margin-top:40px;
 }
-
 </style>
 </head>
 
-<body>
 
-<!-- ===============================
-     HEADER
-================================ -->
+   <body>
+
 <header class="top-nav">
-<div class="nav-inner">
+  <div class="nav-inner">
+    <span class="brand-name">Video Downloader Tools</span>
 
-<span class="brand-name">Video Downloader Tools</span>
+    <nav class="nav-links desktop-menu">
+      <a href="index.html">Home</a>
+      <a href="tiktok.html">TikTok</a>
+      <a href="youtube.html">YouTube</a>
+      <a href="instagram.html">Instagram</a>
+      <a href="facebook.html">Facebook</a>
+      <a href="likee.html">Likee</a>
+      <a href="about.html">About</a>
+    </nav>
 
-<nav class="nav-links desktop-menu">
-<a href="index.html">Home</a>
-<a href="tiktok.html">TikTok</a>
-<a href="youtube.html">YouTube</a>
-<a href="instagram.html">Instagram</a>
-<a href="facebook.html">Facebook</a>
-<a href="likee.html">Likee</a>
-<a href="about.html">About</a>
-</nav>
+    <div class="nav-actions">
+      <button id="themeToggle">🌙</button>
+      <button id="menuToggle">☰</button>
+    </div>
+  </div>
 
-<div class="nav-actions">
-<button id="themeToggle" class="theme-btn">🌙</button>
-<button id="menuToggle" class="menu-btn">☰</button>
-</div>
-
-</div>
-
-<nav id="mobileMenu" class="mobile-menu">
-<a href="index.html">Home</a>
-<a href="tiktok.html">TikTok</a>
-<a href="youtube.html">YouTube</a>
-<a href="instagram.html">Instagram</a>
-<a href="facebook.html">Facebook</a>
-<a href="likee.html">Likee</a>
-<a href="about.html">About</a>
-</nav>
+  <nav id="mobileMenu" class="mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="tiktok.html">TikTok</a>
+    <a href="youtube.html">YouTube</a>
+    <a href="instagram.html">Instagram</a>
+    <a href="facebook.html">Facebook</a>
+    <a href="likee.html">Likee</a>
+    <a href="about.html">About</a>
+  </nav>
 </header>
 
-<!-- ===============================
-     MAIN
-================================ -->
 <main class="container">
 
 <h1>TikTok Video Downloader</h1>
 <p>
 Download publicly accessible TikTok videos from profile pages or individual video links.
-Works directly in your browser without software installation.
+Works directly in your browser without installation.
 </p>
 
-<!-- TOOL CARD -->
 <div class="card">
 
-<label>
-<input type="radio" name="mode" value="profile" checked>
- Profile Downloader
-</label>
-
-<label style="margin-left:18px">
-<input type="radio" name="mode" value="single">
- Single Video
-</label>
-
-<input type="text" id="tiktokUrl" placeholder="Paste public TikTok profile or video link">
-
-<select id="limit">
-<option value="all">All videos</option>
-<option value="5">First 5 videos</option>
-<option value="10">First 10 videos</option>
-<option value="20">First 20 videos</option>
-</select>
-
-<button class="primary" id="processBtn">
-Process TikTok Link
-</button>
-
-<p id="status"></p>
+<div class="radio-group">
+  <label><input type="radio" name="mode" value="profile" checked> Profile Downloader</label>
+  <label><input type="radio" name="mode" value="single"> Single Video</label>
 </div>
 
-<!-- HOW IT WORKS -->
-<div class="card">
+<div class="form-row">
+<input id="tiktokUrl" type="text"
+placeholder="Paste public TikTok profile or video link">
+</div>
+
+<div class="form-row">
+<select id="limit">
+  <option value="all">All videos</option>
+  <option value="5">First 5</option>
+  <option value="10">First 10</option>
+  <option value="20">First 20</option>
+</select>
+</div>
+
+<button id="processBtn">Process TikTok Link</button>
+
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="status-text" id="statusText">Initializing...</div>
+</div>
+
+</div>
+
+
+   <div class="card">
 <h2>How to Download TikTok Videos</h2>
 <ol>
 <li>Copy a public TikTok profile or video link.</li>
-<li>Paste the link into the field above.</li>
+<li>Paste the link into the input field above.</li>
 <li>Select profile or single video mode.</li>
-<li>Your browser processes the publicly available video data.</li>
+<li>Process and download videos via your browser.</li>
 </ol>
-<p>
-Only publicly accessible TikTok content is supported.
-Private or restricted accounts cannot be processed.
-</p>
+<p>Only publicly accessible TikTok content is supported.</p>
 </div>
 
-<!-- RESPONSIBLE USE -->
 <div class="card">
 <h2>Responsible Use</h2>
 <p>
-This TikTok downloader is intended for personal, educational, and offline reference purposes only.
-Users are responsible for complying with TikTok’s terms of service and applicable local laws.
+This tool is intended for personal, educational, and offline reference purposes only.
+Users must comply with TikTok’s terms of service and local laws.
 </p>
 </div>
 
@@ -324,46 +243,63 @@ Users are responsible for complying with TikTok’s terms of service and applica
 <a href="terms.html">Terms</a> |
 <a href="disclaimer.html">Disclaimer</a>
 </p>
-<p>
-This website does not host TikTok content.
-All videos belong to their respective owners.
-</p>
+<p>This website does not host TikTok content. All media belongs to its owners.</p>
 </footer>
 
 </main>
 
 <script>
-/* ===============================
-   THEME
-================================ */
-const themeBtn=document.getElementById("themeToggle");
+/* THEME */
+const t=document.getElementById("themeToggle");
 if(localStorage.theme==="light"){
 document.body.classList.add("light");
-themeBtn.textContent="☀️";
+t.textContent="☀️";
 }
-themeBtn.onclick=()=>{
+t.onclick=()=>{
 document.body.classList.toggle("light");
-const isLight=document.body.classList.contains("light");
-localStorage.theme=isLight?"light":"dark";
-themeBtn.textContent=isLight?"☀️":"🌙";
-}
+localStorage.theme=document.body.classList.contains("light")?"light":"dark";
+t.textContent=document.body.classList.contains("light")?"☀️":"🌙";
+};
 
-/* ===============================
-   MOBILE MENU
-================================ */
+/* MOBILE MENU */
 document.getElementById("menuToggle").onclick=()=>{
 const m=document.getElementById("mobileMenu");
 m.style.display=m.style.display==="flex"?"none":"flex";
-}
+};
 
-/* ===============================
-   TOOL PLACEHOLDER (BACKEND READY)
-================================ */
+/* PROGRESS SIMULATION (BACKEND READY) */
 document.getElementById("processBtn").onclick=()=>{
-document.getElementById("status").textContent=
-"Processing public TikTok data. Please wait…";
-}
+const url=document.getElementById("tiktokUrl").value.trim();
+if(!url){alert("Please paste a TikTok link");return;}
+
+const wrap=document.getElementById("progressWrap");
+const bar=document.getElementById("progressFill");
+const text=document.getElementById("statusText");
+
+wrap.style.display="block";
+bar.style.width="0%";
+text.textContent="Validating link...";
+
+let p=0;
+const steps=[
+"Fetching public metadata...",
+"Processing video links...",
+"Preparing download...",
+"Completed"
+];
+
+const timer=setInterval(()=>{
+p+=25;
+bar.style.width=p+"%";
+text.textContent=steps[p/25-1]||"Processing...";
+if(p>=100)clearInterval(timer);
+},700);
+};
 </script>
 
 </body>
 </html>
+
+
+
+      
