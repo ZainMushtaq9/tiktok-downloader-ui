@@ -2,14 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Instagram Video Downloader – Download Public Instagram Videos</title>
 
-  <meta
-    name="description"
-    content="Free Instagram video downloader. Download publicly available Instagram videos online without login or software installation."
-  />
+  <meta name="description"
+        content="Download public Instagram videos online. Free browser-based tool for personal and educational use. No login required." />
 
   <meta name="robots" content="index, follow" />
 
@@ -18,10 +16,9 @@
 
 <body>
 
-<!-- ================= NAVIGATION ================= -->
 <nav class="top-nav">
   <div class="nav-left">
-    <span class="nav-logo">Downloader Tools</span>
+    <span class="nav-logo">Video Downloader Tools</span>
   </div>
 
   <div class="nav-right">
@@ -33,89 +30,100 @@
     <a href="likee.html">Likee</a>
     <a href="about.html">About</a>
   </div>
-
-  <!-- Theme Toggle -->
-  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-    ☀️ / 🌙
-  </button>
 </nav>
 
-<!-- ================= MAIN ================= -->
-<main class="container">
+<div class="container">
 
-  <header class="page-header">
-    <h1 class="logo">Instagram Video Downloader</h1>
-    <p class="subtitle">
-      Download publicly available Instagram videos directly to your device.
-      Works on mobile, tablet, and desktop browsers.
-    </p>
-  </header>
 
-  <!-- ================= TOOL ================= -->
-  <section class="tool-section">
+  <h1 class="logo">Instagram Video Downloader</h1>
 
-    <label for="instagramUrl" class="input-label">
-      Paste Instagram Video URL
-    </label>
+<p class="subtitle">
+  Download publicly available Instagram videos directly to your device.
+  This tool supports single video links only.
+</p>
 
-    <input
-      type="url"
-      id="instagramUrl"
-      placeholder="https://www.instagram.com/p/..."
-      autocomplete="off"
-    />
+<div class="card">
 
-    <button id="downloadInstagramBtn" class="primary-btn">
-      ⬇ Download Instagram Video
-    </button>
+  <input
+    type="text"
+    id="instagramUrl"
+    placeholder="Paste public Instagram video link"
+  />
 
-    <div id="status" class="status-text"></div>
+  <button id="instagramDownloadBtn">
+    Download Video
+  </button>
 
-  </section>
+  <div id="instagramStatus"></div>
 
-  <!-- ================= INFO ================= -->
-  <section class="info-section">
-    <h2>How to Download Instagram Videos</h2>
-    <ol>
-      <li>Copy the link of a public Instagram video or reel.</li>
-      <li>Paste the link into the input field above.</li>
-      <li>Click the download button and allow your browser to save the file.</li>
-    </ol>
+</div>
 
-    <p class="note">
-      Only <strong>public Instagram videos</strong> are supported.
-      Stories, private posts, and restricted content cannot be downloaded.
-    </p>
-  </section>
 
-  <!-- ================= RESPONSIBLE USE ================= -->
-  <section class="disclaimer-section">
-    <h2>Responsible Use</h2>
-    <p>
-      This website does not host or store any Instagram content.
-      Videos are downloaded directly from Instagram’s public servers.
-      Users are responsible for complying with Instagram’s terms of service
-      and applicable copyright laws.
-    </p>
-  </section>
 
-</main>
 
-<!-- ================= FOOTER ================= -->
-<footer class="site-footer">
+
+
+  <div class="card">
+
+  <h2>How to Download Instagram Videos</h2>
+
+  <ol>
+    <li>Copy the link of a public Instagram video.</li>
+    <li>Paste the link into the input field above.</li>
+    <li>Click the download button.</li>
+    <li>Your browser will save the video file.</li>
+  </ol>
+
   <p>
-    <a href="privacy.html">Privacy Policy</a> |
-    <a href="terms.html">Terms of Service</a> |
-    <a href="disclaimer.html">Disclaimer</a>
+    This tool works only with publicly accessible Instagram videos.
+    Private posts, stories, and restricted content are not supported.
   </p>
 
+</div>
+
+<div class="card">
+
+  <h2>Responsible Use of Instagram Content</h2>
+
+  <p>
+    This Instagram video downloader is intended for personal,
+    educational, and offline reference purposes only.
+    Users must respect Instagram’s terms of service and
+    applicable copyright laws.
+  </p>
+
+</div>
+
+<div class="card">
+
+  <h2>Supported Devices</h2>
+
+  <ul>
+    <li>Android smartphones and tablets</li>
+    <li>iPhone and iPad (iOS)</li>
+    <li>Windows and macOS computers</li>
+    <li>Modern browsers such as Chrome, Firefox, Edge, and Safari</li>
+  </ul>
+
+</div>
+
+
+  <footer class="site-footer">
+  <p>
+    <a href="privacy.html">Privacy</a> |
+    <a href="terms.html">Terms</a> |
+    <a href="disclaimer.html">Disclaimer</a>
+  </p>
   <p class="footer-note">
-    Downloader Tools provides browser-based utilities
-    for accessing publicly available content only.
+    This website does not host Instagram content.
+    All videos belong to their respective owners.
   </p>
 </footer>
 
-<!-- ================= SCRIPT ================= -->
+</div>
+
 <script src="app.js"></script>
 </body>
 </html>
+
+
