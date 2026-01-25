@@ -4,10 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>Facebook Video Downloader | Download Public Facebook Videos</title>
+  <title>Facebook Video Downloader – Download Public Facebook Videos</title>
 
-  <meta name="description"
-        content="Download public Facebook videos online for offline viewing and reference. Free tool, no login required." />
+  <meta
+    name="description"
+    content="Free Facebook video downloader. Download publicly available Facebook videos online without login or software installation."
+  />
 
   <meta name="robots" content="index, follow" />
 
@@ -16,66 +18,105 @@
 
 <body>
 
+<!-- ================= NAVIGATION ================= -->
 <nav class="top-nav">
   <div class="nav-left">
     <span class="nav-logo">Downloader Tools</span>
   </div>
+
   <div class="nav-right">
     <a href="index.html">Home</a>
     <a href="tiktok.html">TikTok</a>
     <a href="youtube.html">YouTube</a>
+    <a href="instagram.html">Instagram</a>
     <a href="facebook.html" class="active">Facebook</a>
+    <a href="likee.html">Likee</a>
     <a href="about.html">About</a>
   </div>
+
+  <!-- Light / Dark Toggle -->
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+    ☀️ / 🌙
+  </button>
 </nav>
 
-<div class="container">
+<!-- ================= MAIN ================= -->
+<main class="container">
 
-  <h1 class="logo">Facebook Video Downloader</h1>
+  <header class="page-header">
+    <h1 class="logo">Facebook Video Downloader</h1>
+    <p class="subtitle">
+      Download publicly available Facebook videos directly to your device.
+      Supports mobile, tablet, and desktop browsers.
+    </p>
+  </header>
 
-  <p class="subtitle">
-    Download publicly available Facebook videos for offline viewing,
-    educational reference, or personal use.
-  </p>
+  <!-- ================= TOOL ================= -->
+  <section class="tool-section">
 
-  <div class="card">
+    <label for="facebookUrl" class="input-label">
+      Paste Facebook Video URL
+    </label>
+
     <input
-      type="text"
+      type="url"
       id="facebookUrl"
-      placeholder="Paste public Facebook video link"
+      placeholder="https://www.facebook.com/..."
+      autocomplete="off"
     />
 
-    <button id="downloadFacebookBtn">
-      Download Video
+    <button id="downloadFacebookBtn" class="primary-btn">
+      ⬇ Download Facebook Video
     </button>
 
-    <div id="status"></div>
-  </div>
+    <div id="status" class="status-text"></div>
 
-  <div class="card">
-    <h2>How This Tool Works</h2>
+  </section>
+
+  <!-- ================= INFO ================= -->
+  <section class="info-section">
+    <h2>How to Download Facebook Videos</h2>
+    <ol>
+      <li>Copy the link of a public Facebook video.</li>
+      <li>Paste the link into the input field above.</li>
+      <li>Click the download button and allow your browser to save the file.</li>
+    </ol>
+
+    <p class="note">
+      Only <strong>public Facebook videos</strong> are supported.
+      Videos from private profiles, closed groups, or restricted pages
+      cannot be downloaded.
+    </p>
+  </section>
+
+  <!-- ================= RESPONSIBLE USE ================= -->
+  <section class="disclaimer-section">
+    <h2>Responsible Use</h2>
     <p>
-      Paste a public Facebook video link into the input box and click the
-      download button. The video will be downloaded directly using your browser.
+      This website does not host, store, or redistribute any video content.
+      All videos are downloaded directly from Facebook’s servers.
+      Users are responsible for ensuring compliance with Facebook’s
+      terms of service and applicable copyright laws.
     </p>
-    <p>
-      Private videos, closed groups, and restricted content are not supported.
-    </p>
-  </div>
+  </section>
 
-  <footer class="site-footer">
-    <p>
-      <a href="privacy.html">Privacy</a> |
-      <a href="terms.html">Terms</a> |
-      <a href="disclaimer.html">Disclaimer</a>
-    </p>
-    <p class="footer-note">
-      This tool works with publicly available Facebook content only.
-    </p>
-  </footer>
+</main>
 
-</div>
+<!-- ================= FOOTER ================= -->
+<footer class="site-footer">
+  <p>
+    <a href="privacy.html">Privacy Policy</a> |
+    <a href="terms.html">Terms of Service</a> |
+    <a href="disclaimer.html">Disclaimer</a>
+  </p>
 
+  <p class="footer-note">
+    Downloader Tools provides browser-based utilities
+    for accessing publicly available content only.
+  </p>
+</footer>
+
+<!-- ================= SCRIPT ================= -->
 <script src="app.js"></script>
 </body>
 </html>
