@@ -4,132 +4,127 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TikTok Video Downloader – Process Public TikTok Videos</title>
+<title>TikTok Video Downloader – Download Public TikTok Videos</title>
 
-<meta name="description"
-content="Process publicly accessible TikTok videos by pasting a public video link. Preview video details and download for offline reference.">
+<meta name="description" content="Download publicly accessible TikTok videos from individual video links or public profiles. Browser-based tool for personal and educational use.">
 
 <meta name="robots" content="index, follow">
 
 <!-- ===============================
-   BASE STYLES (MATCH INDEX)
+   BASE STYLES (SAME SYSTEM)
 ================================ -->
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+* { margin:0; padding:0; box-sizing:border-box; }
 
-:root{
---bg-dark:#0b0f1a;
---bg-light:#f7f9fc;
---text-dark:#eaeaf0;
---text-light:#1a1a1a;
---muted-dark:#9aa4c7;
---muted-light:#555;
---accent:#ff2d55;
---border-dark:#1e2440;
---border-light:#ddd;
---card-dark:rgba(255,255,255,0.04);
---card-light:#fff;
+:root {
+  --bg-dark:#0b0f1a;
+  --bg-light:#f7f9fc;
+  --text-dark:#eaeaf0;
+  --text-light:#1a1a1a;
+  --muted-dark:#9aa4c7;
+  --muted-light:#555;
+  --accent:#ff2d55;
+  --border-dark:#1e2440;
+  --border-light:#ddd;
+  --card-dark:rgba(255,255,255,0.04);
+  --card-light:#fff;
 }
 
-body{
-font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-background:var(--bg-dark);
-color:var(--text-dark);
-line-height:1.7;
-transition:.3s;
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-dark);
+  line-height: 1.7;
 }
 
-body.light{
-background:var(--bg-light);
-color:var(--text-light);
+body.light {
+  background: var(--bg-light);
+  color: var(--text-light);
 }
 
-.container{
-max-width:1100px;
-margin:auto;
-padding:40px 16px 70px;
+.container {
+  max-width:1100px;
+  margin:auto;
+  padding:40px 16px 60px;
 }
 
-.card{
-background:var(--card-dark);
-border:1px solid var(--border-dark);
-border-radius:14px;
-padding:22px;
-margin-bottom:28px;
+h1 {
+  font-size:2.2rem;
+  margin-bottom:12px;
 }
 
-body.light .card{
-background:var(--card-light);
-border-color:var(--border-light);
+p {
+  color:var(--muted-dark);
+  margin-bottom:14px;
 }
 
-h1{font-size:2rem;margin-bottom:12px}
-h2{font-size:1.4rem;margin-bottom:10px}
+body.light p { color:var(--muted-light); }
 
-p{font-size:.95rem;color:var(--muted-dark)}
-body.light p{color:var(--muted-light)}
-
-input{
-width:100%;
-padding:14px;
-border-radius:10px;
-border:1px solid var(--border-dark);
-background:transparent;
-color:inherit;
-margin-bottom:14px;
+.card {
+  background:var(--card-dark);
+  border:1px solid var(--border-dark);
+  border-radius:14px;
+  padding:22px;
+  margin-bottom:28px;
 }
 
-body.light input{border-color:var(--border-light)}
-
-button{
-background:var(--accent);
-border:none;
-color:#fff;
-padding:14px;
-border-radius:12px;
-font-size:.95rem;
-cursor:pointer;
-width:100%;
+body.light .card {
+  background:var(--card-light);
+  border-color:var(--border-light);
 }
 
-button:hover{opacity:.9}
-
-/* PREVIEW */
-.preview{
-display:flex;
-gap:16px;
-align-items:flex-start;
+input {
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid var(--border-dark);
+  background:transparent;
+  color:inherit;
+  margin-bottom:14px;
 }
 
-.preview img{
-width:140px;
-border-radius:10px;
-border:1px solid var(--border-dark);
+body.light input {
+  border-color:var(--border-light);
 }
 
-.meta p{
-margin-bottom:6px;
-font-size:.85rem;
+button {
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  background:var(--accent);
+  color:#fff;
+  font-size:1rem;
+  cursor:pointer;
 }
 
-/* PROGRESS */
-.progress{
-display:none;
-margin-top:14px;
+button:hover { opacity:.9; }
+
+.status {
+  margin-top:12px;
+  font-size:.9rem;
+  color:var(--muted-dark);
 }
 
-.bar{
-height:8px;
-background:rgba(255,255,255,.1);
-border-radius:6px;
-overflow:hidden;
+.results button,
+.results a {
+  display:block;
+  margin-top:10px;
+  text-align:center;
+  padding:12px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--border-dark);
+  color:var(--text-dark);
+  text-decoration:none;
+  cursor:pointer;
 }
 
-.fill{
-height:100%;
-width:0%;
-background:var(--accent);
-transition:.3s;
+.results button:hover,
+.results a:hover {
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent);
 }
 </style>
 </head>
@@ -137,17 +132,18 @@ transition:.3s;
 <body>
 
 <!-- ===============================
-     NAVBAR (IDENTICAL LOGIC)
+     TOP NAVIGATION (COPIED EXACTLY)
 ================================ -->
 <header class="top-nav">
   <div class="nav-inner">
+
     <div class="nav-brand">
-      <strong>Video Downloader Tools</strong>
+      <span class="brand-name">Video Downloader Tools</span>
     </div>
 
     <nav class="nav-links desktop-menu">
       <a href="index.html">Home</a>
-      <a href="tiktok.html" aria-current="page">TikTok</a>
+      <a href="tiktok.html">TikTok</a>
       <a href="youtube.html">YouTube</a>
       <a href="instagram.html">Instagram</a>
       <a href="facebook.html">Facebook</a>
@@ -156,9 +152,10 @@ transition:.3s;
     </nav>
 
     <div class="nav-actions">
-      <button id="themeToggle">🌙</button>
-      <button id="menuToggle">☰</button>
+      <button id="themeToggle" class="theme-btn">🌙</button>
+      <button id="menuToggle" class="menu-btn">☰</button>
     </div>
+
   </div>
 
   <nav id="mobileMenu" class="mobile-menu">
@@ -172,127 +169,115 @@ transition:.3s;
   </nav>
 </header>
 
+<!-- ===============================
+     MAIN CONTENT
+================================ -->
 <main class="container">
 
 <h1>TikTok Video Downloader</h1>
-<p>Paste a public TikTok video link to preview details and download the video.</p>
 
-<!-- INPUT -->
-<div class="card">
-  <input id="url" placeholder="Paste public TikTok video link">
-  <button id="fetch">Fetch Video Details</button>
-
-  <div class="progress" id="progress">
-    <p style="font-size:.8rem;margin-bottom:6px">Processing…</p>
-    <div class="bar"><div class="fill" id="fill"></div></div>
-  </div>
-
-  <p id="status"></p>
-</div>
-
-<!-- PREVIEW -->
-<div class="card" id="previewCard" style="display:none">
-  <h2>Video Preview</h2>
-  <div class="preview">
-    <img id="thumb">
-    <div class="meta">
-      <p><strong id="title"></strong></p>
-      <p id="uploader"></p>
-      <p id="duration"></p>
-      <button id="download">Download Video</button>
-    </div>
-  </div>
-</div>
-
-<!-- INFO -->
-<div class="card">
-<h2>Responsible Use</h2>
 <p>
-This tool works only with publicly accessible TikTok videos.  
-It is intended for personal, educational, and offline reference use.
-Users are responsible for complying with TikTok’s terms of service and local laws.
+Paste a public TikTok video link or public profile URL to download videos
+directly in your browser. Private or restricted content is not supported.
 </p>
+
+<div class="card">
+  <form id="tiktokForm">
+    <input
+      id="videoUrl"
+      type="text"
+      placeholder="Paste public TikTok video or profile link"
+      required
+    >
+    <button type="submit">Process TikTok Link</button>
+  </form>
+
+  <div id="status" class="status"></div>
+  <div id="results" class="results"></div>
 </div>
 
-<footer class="site-footer">
-<p>
-<a href="privacy.html">Privacy</a> |
-<a href="terms.html">Terms</a> |
-<a href="disclaimer.html">Disclaimer</a>
-</p>
-<p style="font-size:.8rem;color:#9aa4c7">
-This website does not host any media files.
-</p>
-</footer>
+<div class="card">
+  <h2>Responsible Use</h2>
+  <p>
+    This tool works only with publicly accessible TikTok content and is intended
+    for personal, educational, and offline reference use. Users are responsible
+    for complying with TikTok’s terms of service and local laws.
+  </p>
+</div>
 
 </main>
 
 <!-- ===============================
-     JAVASCRIPT
+     NAV SCRIPT (UNCHANGED)
 ================================ -->
 <script>
-const API="https://tiktok-downloader-backend-production-ce2b.up.railway.app";
-
-const urlInput=document.getElementById("url");
-const fetchBtn=document.getElementById("fetch");
-const status=document.getElementById("status");
-const progress=document.getElementById("progress");
-const fill=document.getElementById("fill");
-
-const preview=document.getElementById("previewCard");
-const thumb=document.getElementById("thumb");
-const title=document.getElementById("title");
-const uploader=document.getElementById("uploader");
-const duration=document.getElementById("duration");
-const download=document.getElementById("download");
-
-fetchBtn.onclick=async()=>{
-const url=urlInput.value.trim();
-if(!url){status.textContent="Please paste a TikTok video URL.";return;}
-
-progress.style.display="block";
-fill.style.width="30%";
-status.textContent="";
-
-try{
-const r=await fetch(`${API}/tiktok/preview?url=${encodeURIComponent(url)}`);
-if(!r.ok) throw "error";
-const d=await r.json();
-
-fill.style.width="70%";
-
-thumb.src=d.thumbnail;
-title.textContent=d.title || "TikTok Video";
-uploader.textContent="Creator: "+(d.uploader||"Unknown");
-duration.textContent="Duration: "+(d.duration||"-")+" sec";
-
-preview.style.display="block";
-fill.style.width="100%";
-progress.style.display="none";
-
-download.onclick=()=>{
-window.location.href=`${API}/tiktok/single?url=${encodeURIComponent(url)}`;
+const themeToggle = document.getElementById("themeToggle");
+if (localStorage.theme === "light") {
+  document.body.classList.add("light");
+  themeToggle.textContent = "☀️";
+}
+themeToggle.onclick = () => {
+  document.body.classList.toggle("light");
+  localStorage.theme = document.body.classList.contains("light") ? "light" : "dark";
+  themeToggle.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
 };
 
-}catch{
-status.textContent="Unable to fetch video details.";
-progress.style.display="none";
-}
+document.getElementById("menuToggle").onclick = () => {
+  const m = document.getElementById("mobileMenu");
+  m.style.display = m.style.display === "flex" ? "none" : "flex";
 };
+</script>
 
-/* THEME */
-const t=document.getElementById("themeToggle");
-if(localStorage.theme==="light"){document.body.classList.add("light");t.textContent="☀️"}
-t.onclick=()=>{
-document.body.classList.toggle("light");
-localStorage.theme=document.body.classList.contains("light")?"light":"dark";
-t.textContent=document.body.classList.contains("light")?"☀️":"🌙";
-}
+<!-- ===============================
+     TIKTOK LOGIC (MATCHES BACKEND)
+================================ -->
+<script>
+const API_BASE = "https://YOUR-RAILWAY-APP.up.railway.app";
 
-/* MOBILE MENU */
-menuToggle.onclick=()=>{
-mobileMenu.style.display=mobileMenu.style.display==="flex"?"none":"flex";
-}
+const form = document.getElementById("tiktokForm");
+const input = document.getElementById("videoUrl");
+const statusBox = document.getElementById("status");
+const results = document.getElementById("results");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  results.innerHTML = "";
+  statusBox.textContent = "Processing...";
+
+  const url = input.value.trim();
+  const isProfile = url.includes("/@") && !url.includes("/video/");
+
+  try {
+    if (isProfile) {
+      const res = await fetch(`${API_BASE}/profile?profile_url=${encodeURIComponent(url)}`);
+      const data = await res.json();
+
+      statusBox.textContent = `Found ${data.total} videos`;
+
+      data.videos.forEach((v, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = `Download Video ${i + 1}`;
+        btn.onclick = () => {
+          window.location.href =
+            `${API_BASE}/download?url=${encodeURIComponent(v)}&index=${i + 1}&profile=${data.profile}`;
+        };
+        results.appendChild(btn);
+      });
+
+    } else {
+      statusBox.textContent = "Ready to download";
+      const link = document.createElement("a");
+      link.href =
+        `${API_BASE}/download?url=${encodeURIComponent(url)}&index=1&profile=tiktok`;
+      link.textContent = "Download Video";
+      results.appendChild(link);
+    }
+
+  } catch {
+    statusBox.textContent =
+      "Unable to process this link. Please ensure it is public and valid.";
+  }
+});
 </script>
 
 </body>
