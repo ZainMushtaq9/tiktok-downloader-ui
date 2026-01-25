@@ -1,40 +1,28 @@
+</body>
+</html>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>TikTok Video Downloader – Process Public TikTok Videos Online</title>
+  <title>TikTok Video Downloader – Download Public TikTok Videos</title>
 
   <meta name="description"
-        content="Process publicly available TikTok videos and profiles for offline reference and educational use. Browser-based TikTok downloader tool." />
+        content="Download videos from public TikTok profiles or individual video links. Browser-based tool for personal and educational use." />
 
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://yourdomain.com/tiktok.html" />
 
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "TikTok Video Downloader",
-    "description": "Browser-based tool to process publicly accessible TikTok videos and profiles for offline reference.",
-    "url": "https://yourdomain.com/tiktok.html"
-  }
-  </script>
 </head>
 
 <body>
 
-<!-- =========================
-     TOP NAVIGATION
-========================= -->
 <nav class="top-nav">
   <div class="nav-left">
     <span class="nav-logo">Video Downloader Tools</span>
   </div>
+
   <div class="nav-right">
     <a href="index.html">Home</a>
     <a href="tiktok.html" class="active">TikTok</a>
@@ -46,182 +34,102 @@
   </div>
 </nav>
 
-<!-- =========================
-     TOP AD SLOT
-========================= -->
-<div class="ad-slot ad-top">
-  Advertisement
-</div>
-
 <div class="container">
 
-<!-- =========================
-     PAGE HEADER
-========================= -->
-<h1 class="logo">
-  TikTok Video Downloader
-</h1>
+  <h1 class="logo">TikTok Video Downloader</h1>
 
 <p class="subtitle">
-  Process publicly accessible TikTok videos and profiles directly in your browser.
-  Designed for offline reference, research, and personal organization.
+  Download publicly available TikTok videos from profiles or single video links.
+  Works directly in your browser without installation.
 </p>
 
-<!-- =========================
-     MODE SELECT
-========================= -->
-<div class="mode-select">
-  <label>
-    <input type="radio" name="mode" value="profile" checked />
-    Public Profile Videos
-  </label>
-  <label>
-    <input type="radio" name="mode" value="single" />
-    Single Video Link
-  </label>
-</div>
+<div class="card">
 
-<!-- =========================
-     PROFILE MODE
-========================= -->
-<div id="profileMode" class="card">
-
-  <input
-    type="text"
-    id="profileUrl"
-    placeholder="Paste public TikTok profile link (https://www.tiktok.com/@username)"
-  />
-
-  <button id="fetchProfileBtn">
-    Analyze Profile
-  </button>
-
-  <div id="status"></div>
-
-  <div id="progressWrapper" class="hidden">
-    <div class="progress-bar">
-      <div id="progressFill" class="progress-fill">0%</div>
-    </div>
+  <div class="mode-select">
+    <label>
+      <input type="radio" name="tiktokMode" value="profile" checked />
+      Profile Downloader
+    </label>
+    <label>
+      <input type="radio" name="tiktokMode" value="single" />
+      Single Video
+    </label>
   </div>
 
-  <button id="downloadAllBtn" class="download-all hidden">
-    ⬇ Download Selected Videos
-  </button>
-</div>
-
-<!-- =========================
-     SINGLE VIDEO MODE
-========================= -->
-<div id="singleMode" class="card hidden">
-
   <input
     type="text"
-    id="singleVideoUrl"
-    placeholder="Paste public TikTok video link"
+    id="tiktokUrl"
+    placeholder="Paste public TikTok profile or video link"
   />
 
-  <button id="downloadSingleBtn">
-    Download Video
+  <select id="tiktokLimit">
+    <option value="all">All videos</option>
+    <option value="5">First 5 videos</option>
+    <option value="10">First 10 videos</option>
+    <option value="20">First 20 videos</option>
+  </select>
+
+  <button id="tiktokActionBtn">
+    Process TikTok Link
   </button>
 
-</div>
-
-<!-- =========================
-     VIDEO LIST
-========================= -->
-<div id="videoList"></div>
-
-<!-- =========================
-     SEO CONTENT
-========================= -->
-<div class="content-block">
-
-  <h2>What Is a TikTok Video Downloader?</h2>
-
-  <p>
-    A TikTok video downloader is a browser-based utility that processes
-    publicly available TikTok videos and profile feeds. These tools allow
-    users to save videos for offline reference or educational purposes.
-  </p>
-
-  <p>
-    This tool works only with content that is publicly accessible on TikTok.
-    Private accounts, restricted videos, or paid content are not supported.
-  </p>
+  <div id="tiktokStatus"></div>
 
 </div>
 
-<div class="content-block">
+<div id="tiktokResults"></div>
 
-  <h2>How This TikTok Tool Works</h2>
+  <div class="card">
+
+  <h2>How to Download TikTok Videos</h2>
 
   <ol>
-    <li>Copy a public TikTok profile or video link</li>
-    <li>Paste the link into the appropriate input field</li>
-    <li>The tool analyzes the public video information</li>
-    <li>Your browser handles the download process</li>
+    <li>Copy the link of a public TikTok profile or video.</li>
+    <li>Paste the link into the input field above.</li>
+    <li>Select profile or single video mode.</li>
+    <li>Process and download videos through your browser.</li>
   </ol>
 
   <p>
-    No TikTok content is hosted or stored on this website.
+    This tool supports only publicly accessible TikTok content.
+    Private or restricted accounts cannot be processed.
   </p>
 
 </div>
 
-<div class="content-block">
+<div class="card">
 
   <h2>Responsible Use</h2>
 
   <p>
-    Downloading TikTok videos may be subject to platform terms and local
-    copyright regulations. This tool is intended for personal, educational,
-    and offline reference use only.
-  </p>
-
-  <p>
-    Users are responsible for ensuring that their use complies with applicable
-    laws and TikTok’s terms of service.
+    This TikTok downloader is intended for personal, educational,
+    and offline reference purposes only. Users are responsible for
+    complying with TikTok’s terms of service and local copyright laws.
   </p>
 
 </div>
 
-<!-- =========================
-     INLINE AD SLOT
-========================= -->
-<div class="ad-slot ad-inline">
-  Advertisement
-</div>
 
-<!-- =========================
-     FOOTER
-========================= -->
+
 <footer class="site-footer">
   <p>
-    <a href="privacy.html">Privacy Policy</a> |
+    <a href="privacy.html">Privacy</a> |
     <a href="terms.html">Terms</a> |
-    <a href="disclaimer.html">Disclaimer</a> |
-    <a href="contact.html">Contact</a>
+    <a href="disclaimer.html">Disclaimer</a>
   </p>
-
   <p class="footer-note">
-    This website does not host any media files. All TikTok content belongs to
-    its respective owners.
+    This website does not host TikTok content.
+    All videos belong to their respective owners.
   </p>
 </footer>
 
 </div>
 
-<!-- =========================
-     COOKIE CONSENT
-========================= -->
-<div id="cookieBanner" class="cookie-banner">
-  <p>
-    This website uses cookies to improve user experience and display ads.
-    By continuing, you agree to our <a href="privacy.html">Privacy Policy</a>.
-  </p>
-  <button id="acceptCookies">Accept</button>
-</div>
-
 <script src="app.js"></script>
 </body>
 </html>
+
+
+
+
+  
