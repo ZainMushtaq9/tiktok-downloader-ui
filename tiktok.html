@@ -181,7 +181,96 @@ color:var(--muted-light);
      NAVBAR + MENU (LOCKED)
      PASTE EXACT CODE FROM index.html HERE
 =================================================== -->
+<body>
 
+<!-- ===================================================
+     NAVBAR + MENU (LOCKED)
+=================================================== -->
+
+<header class="top-nav">
+  <div class="nav-inner">
+
+    <div class="nav-brand">
+      <span class="brand-name">Video Downloader Tools</span>
+    </div>
+
+    <nav class="nav-links desktop-menu">
+      <a href="index.html">Home</a>
+      <a href="tiktok.html">TikTok</a>
+      <a href="youtube.html">YouTube</a>
+      <a href="instagram.html">Instagram</a>
+      <a href="facebook.html">Facebook</a>
+      <a href="likee.html">Likee</a>
+      <a href="about.html">About</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button id="themeToggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
+      <button id="menuToggle" class="menu-btn" aria-label="Open menu">☰</button>
+    </div>
+
+  </div>
+
+  <nav id="mobileMenu" class="mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="tiktok.html">TikTok</a>
+    <a href="youtube.html">YouTube</a>
+    <a href="instagram.html">Instagram</a>
+    <a href="facebook.html">Facebook</a>
+    <a href="likee.html">Likee</a>
+    <a href="about.html">About</a>
+  </nav>
+</header>
+
+<style>
+/* ===============================
+   NAVIGATION STYLES
+================================ */
+.top-nav {
+  border-bottom: 1px solid var(--border-dark);
+  background: rgba(10,14,30,0.95);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* rest EXACTLY same as index.html */
+</style>
+
+
+
+<script>
+/* ===============================
+   THEME TOGGLE
+================================ */
+const themeToggle = document.getElementById("themeToggle");
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme === "light") {
+  document.body.classList.add("light");
+  themeToggle.textContent = "☀️";
+}
+
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("light");
+  const isLight = document.body.classList.contains("light");
+  themeToggle.textContent = isLight ? "☀️" : "🌙";
+  localStorage.setItem("theme", isLight ? "light" : "dark");
+});
+
+/* MOBILE MENU */
+const menuBtn = document.getElementById("menuToggle");
+const mobileMenu = document.getElementById("mobileMenu");
+
+menuBtn.addEventListener("click", () => {
+  mobileMenu.style.display =
+    mobileMenu.style.display === "flex" ? "none" : "flex";
+});
+</script>
+
+   
+
+   
 
 <main class="main-container">
 
