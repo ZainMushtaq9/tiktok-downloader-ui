@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TikTok Video Downloader – Preview & Download Public Videos</title>
+<title>TikTok Video Downloader – Preview & Download Public TikTok Videos</title>
 
-<meta name="description" content="Preview and process publicly accessible TikTok videos from individual links or public profiles. Download for offline reference or research.">
+<meta name="description" content="Preview and download publicly accessible TikTok videos using single video links or public profiles. No login required. Educational and offline reference use only.">
 
 <meta name="robots" content="index, follow">
 
 <style>
-/* ===== BASE ===== */
 *{margin:0;padding:0;box-sizing:border-box}
+
 :root{
 --bg-dark:#0b0f1a;
 --bg-light:#f7f9fc;
@@ -26,13 +26,14 @@
 --card-dark:rgba(255,255,255,0.04);
 --card-light:#fff;
 }
+
 body{
-font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 background:var(--bg-dark);
 color:var(--text-dark);
 line-height:1.7;
-transition:.3s;
 }
+
 body.light{background:var(--bg-light);color:var(--text-light)}
 
 .main-container{
@@ -41,13 +42,13 @@ margin:auto;
 padding:40px 16px 60px;
 }
 
-/* ===== HERO ===== */
+/* HERO */
 .hero{text-align:center;margin-bottom:36px}
 .hero h1{font-size:2.2rem;margin-bottom:12px}
 .hero p{max-width:720px;margin:auto;color:var(--muted-dark)}
 body.light .hero p{color:var(--muted-light)}
 
-/* ===== CARD ===== */
+/* CARD */
 .card{
 background:var(--card-dark);
 border:1px solid var(--border-dark);
@@ -55,12 +56,9 @@ border-radius:16px;
 padding:22px;
 margin-bottom:28px;
 }
-body.light .card{
-background:var(--card-light);
-border-color:var(--border-light);
-}
+body.light .card{background:var(--card-light);border-color:var(--border-light)}
 
-/* ===== FORM ===== */
+/* FORM */
 input{
 width:100%;
 padding:14px;
@@ -85,20 +83,21 @@ button:hover{opacity:.9}
 
 .status{margin-top:10px;font-size:.9rem}
 
-/* ===== PROGRESS ===== */
+/* PROGRESS */
 #progressWrap{display:none;margin-top:14px}
 #progressOuter{height:6px;background:#222;border-radius:6px;overflow:hidden}
 #progressBar{height:100%;width:0%;background:var(--accent)}
 #progressText{font-size:.85rem;margin-top:6px}
 
-/* ===== SINGLE PREVIEW ===== */
+/* SINGLE PREVIEW */
 .single-preview{
 display:flex;
 gap:16px;
 margin-top:22px;
+align-items:flex-start;
 }
 .single-preview img{
-width:150px;
+width:160px;
 aspect-ratio:9/16;
 object-fit:cover;
 border-radius:12px;
@@ -106,7 +105,7 @@ background:#000;
 }
 .single-info{font-size:.95rem}
 
-/* ===== PROFILE GRID ===== */
+/* PROFILE GRID */
 .profile-grid{
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
@@ -119,10 +118,7 @@ border:1px solid var(--border-dark);
 border-radius:14px;
 padding:10px;
 }
-body.light .profile-item{
-background:var(--card-light);
-border-color:var(--border-light);
-}
+body.light .profile-item{background:var(--card-light);border-color:var(--border-light)}
 .profile-item img{
 width:100%;
 aspect-ratio:9/16;
@@ -132,7 +128,7 @@ background:#000;
 }
 .profile-item button{width:100%;margin-top:8px}
 
-/* ===== ADS ===== */
+/* ADS */
 .ad-box{
 margin:36px 0;
 height:120px;
@@ -145,11 +141,7 @@ justify-content:center;
 color:var(--muted-dark);
 font-size:.9rem;
 }
-body.light .ad-box{
-background:var(--card-light);
-border-color:var(--border-light);
-color:var(--muted-light);
-}
+body.light .ad-box{background:var(--card-light);border-color:var(--border-light);color:var(--muted-light)}
 </style>
 </head>
 
@@ -159,43 +151,45 @@ color:var(--muted-light);
      NAVBAR + MENU (LOCKED)
      PASTE EXACT CODE FROM index.html HERE
 =================================================== -->
+<!-- DO NOT MODIFY THIS BLOCK -->
+<!-- (your index.html navbar/menu goes here exactly) -->
 
 <main class="main-container">
 
 <section class="hero">
-  <h1>TikTok Video Downloader</h1>
-  <p>
-    Preview publicly accessible TikTok videos from single links or public
-    profiles before downloading for offline reference or research.
-  </p>
+<h1>TikTok Video Downloader</h1>
+<p>
+Preview and download publicly accessible TikTok videos from single links or
+public profiles. For educational and offline reference use only.
+</p>
 </section>
 
 <section class="card">
-  <form id="tiktokForm">
-    <input id="videoUrl" type="text" placeholder="Paste public TikTok video or profile link" required>
-    <button type="submit">Fetch Video Details</button>
-  </form>
+<form id="tiktokForm">
+<input id="videoUrl" type="text" placeholder="Paste public TikTok video or profile link" required>
+<button type="submit">Fetch Video Details</button>
+</form>
 
-  <div id="status" class="status"></div>
+<div id="status" class="status"></div>
 
-  <div id="progressWrap">
-    <div id="progressOuter"><div id="progressBar"></div></div>
-    <div id="progressText">0%</div>
-  </div>
+<div id="progressWrap">
+<div id="progressOuter"><div id="progressBar"></div></div>
+<div id="progressText">0%</div>
+</div>
 
-  <div id="singlePreview"></div>
-  <div id="profileGrid" class="profile-grid"></div>
+<div id="singlePreview"></div>
+<div id="profileGrid" class="profile-grid"></div>
 </section>
 
 <section class="ad-box">Advertisement</section>
 
 <section class="card">
-  <h2>Responsible Use</h2>
-  <p>
-    This tool works only with publicly accessible TikTok content and is intended
-    for personal, educational, and offline reference use. Users are responsible
-    for complying with TikTok’s terms of service and local laws.
-  </p>
+<h2>Responsible Use</h2>
+<p>
+This tool works only with publicly accessible TikTok content. Users are
+responsible for complying with TikTok’s terms of service and local laws.
+This website does not host or store any media files.
+</p>
 </section>
 
 </main>
@@ -210,18 +204,17 @@ const singlePreview=document.getElementById("singlePreview");
 const profileGrid=document.getElementById("profileGrid");
 
 function startProgress(){
-  const wrap=document.getElementById("progressWrap");
-  const bar=document.getElementById("progressBar");
-  const text=document.getElementById("progressText");
-  wrap.style.display="block";
-  let p=0;
-  const t=setInterval(()=>{
-    p+=6;
-    if(p>90)p=90;
-    bar.style.width=p+"%";
-    text.textContent=p+"%";
-  },400);
-  return t;
+const wrap=document.getElementById("progressWrap");
+const bar=document.getElementById("progressBar");
+const text=document.getElementById("progressText");
+wrap.style.display="block";
+let p=0;
+return setInterval(()=>{
+p+=Math.random()*8;
+if(p>95)p=95;
+bar.style.width=p+"%";
+text.textContent=Math.floor(p)+"%";
+},400);
 }
 
 form.addEventListener("submit",async(e)=>{
@@ -236,55 +229,64 @@ const isProfile=url.includes("/@") && !url.includes("/video/");
 
 try{
 if(isProfile){
-  const res=await fetch(`${API}/profile?profile_url=${encodeURIComponent(url)}&page=1&limit=24`);
-  const data=await res.json();
-  statusBox.textContent=`Found ${data.total} public videos`;
+const res=await fetch(`${API}/profile?profile_url=${encodeURIComponent(url)}&page=1&limit=24`);
+const data=await res.json();
 
-  data.videos.forEach(v=>{
-    const item=document.createElement("div");
-    item.className="profile-item";
-    item.innerHTML=`
-      <img src="${v.thumbnail || 'placeholder.jpg'}" onerror="this.src='placeholder.jpg'">
-      <button onclick="downloadVideo('${v.url}','${data.profile}',${v.index})">
-        Download Video ${v.index}
-      </button>
-    `;
-    profileGrid.appendChild(item);
-  });
+if(!res.ok){
+statusBox.textContent=data.detail.message;
+return;
+}
+
+statusBox.textContent=`Found ${data.total} public videos`;
+
+data.videos.forEach(v=>{
+const item=document.createElement("div");
+item.className="profile-item";
+item.innerHTML=`
+<img src="${v.thumbnail || ''}" loading="lazy" referrerpolicy="no-referrer">
+<button onclick="downloadVideo('${v.url}','${data.profile}',${v.index})">
+Download Video ${v.index}
+</button>`;
+profileGrid.appendChild(item);
+});
+
 }else{
-  const res=await fetch(`${API}/preview?url=${encodeURIComponent(url)}`);
-  const data=await res.json();
+const res=await fetch(`${API}/preview?url=${encodeURIComponent(url)}`);
+const data=await res.json();
 
-  singlePreview.innerHTML=`
-    <div class="single-preview">
-      <img src="${data.thumbnail || 'placeholder.jpg'}" onerror="this.src='placeholder.jpg'">
-      <div class="single-info">
-        <strong>${data.title}</strong><br>
-        Uploader: ${data.uploader}<br><br>
-        <button onclick="downloadVideo('${url}','${data.uploader}',1)">
-          Download Video
-        </button>
-      </div>
-    </div>
-  `;
-  statusBox.textContent="Preview loaded";
+if(!res.ok){
+statusBox.textContent=data.detail.message;
+return;
+}
+
+singlePreview.innerHTML=`
+<div class="single-preview">
+<img src="${data.thumbnail || ''}" loading="lazy" referrerpolicy="no-referrer">
+<div class="single-info">
+<strong>${data.title}</strong><br>
+Uploader: ${data.uploader}<br>
+Duration: ${data.duration || 'N/A'} sec<br><br>
+<button onclick="downloadVideo('${url}','${data.uploader}',1)">
+Download Video
+</button>
+</div>
+</div>`;
+statusBox.textContent="Preview loaded";
 }
 }catch{
-statusBox.textContent="Unable to process this link.";
+statusBox.textContent="This content cannot be processed.";
 }
 });
 
 function downloadVideo(url,profile,index){
-  const t=startProgress();
-  setTimeout(()=>{
-    window.location.href=
-      `${API}/download?url=${encodeURIComponent(url)}&index=${index}&profile=${profile}`;
-    clearInterval(t);
-  },1200);
+const timer=startProgress();
+setTimeout(()=>{
+window.location.href=
+`${API}/download?url=${encodeURIComponent(url)}&index=${index}&profile=${encodeURIComponent(profile)}`;
+clearInterval(timer);
+},1200);
 }
 </script>
 
 </body>
 </html>
-
-
