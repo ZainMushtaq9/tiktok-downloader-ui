@@ -83,12 +83,6 @@ button:hover{opacity:.9}
 
 .status{margin-top:10px;font-size:.9rem}
 
-/* PROGRESS */
-#progressWrap{display:none;margin-top:14px}
-#progressOuter{height:6px;background:#222;border-radius:6px;overflow:hidden}
-#progressBar{height:100%;width:0%;background:var(--accent)}
-#progressText{font-size:.85rem;margin-top:6px}
-
 /* SINGLE PREVIEW */
 .single-preview{
 display:flex;
@@ -103,7 +97,6 @@ object-fit:cover;
 border-radius:12px;
 background:#000;
 }
-.single-info{font-size:.95rem}
 
 /* PROFILE GRID */
 .profile-grid{
@@ -126,7 +119,12 @@ object-fit:cover;
 border-radius:10px;
 background:#000;
 }
-.profile-item button{width:100%;margin-top:8px}
+.profile-item .title{
+font-size:.85rem;
+margin:6px 0;
+color:var(--muted-dark);
+}
+.profile-item button{width:100%;margin-top:6px}
 
 /* ADS */
 .ad-box{
@@ -141,7 +139,11 @@ justify-content:center;
 color:var(--muted-dark);
 font-size:.9rem;
 }
-body.light .ad-box{background:var(--card-light);border-color:var(--border-light);color:var(--muted-light)}
+body.light .ad-box{
+background:var(--card-light);
+border-color:var(--border-light);
+color:var(--muted-light);
+}
 </style>
 </head>
 
@@ -152,15 +154,15 @@ body.light .ad-box{background:var(--card-light);border-color:var(--border-light)
      PASTE EXACT CODE FROM index.html HERE
 =================================================== -->
 <!-- DO NOT MODIFY THIS BLOCK -->
-<!-- (your index.html navbar/menu goes here exactly) -->
+
 
 <main class="main-container">
 
 <section class="hero">
 <h1>TikTok Video Downloader</h1>
 <p>
-Preview and download publicly accessible TikTok videos from single links or
-public profiles. For educational and offline reference use only.
+Preview and download publicly accessible TikTok videos from single links
+or public profiles. Educational and offline reference use only.
 </p>
 </section>
 
@@ -171,12 +173,6 @@ public profiles. For educational and offline reference use only.
 </form>
 
 <div id="status" class="status"></div>
-
-<div id="progressWrap">
-<div id="progressOuter"><div id="progressBar"></div></div>
-<div id="progressText">0%</div>
-</div>
-
 <div id="singlePreview"></div>
 <div id="profileGrid" class="profile-grid"></div>
 </section>
@@ -186,8 +182,7 @@ public profiles. For educational and offline reference use only.
 <section class="card">
 <h2>Responsible Use</h2>
 <p>
-This tool works only with publicly accessible TikTok content. Users are
-responsible for complying with TikTok’s terms of service and local laws.
+This tool works only with publicly accessible TikTok content.
 This website does not host or store any media files.
 </p>
 </section>
@@ -203,26 +198,12 @@ const statusBox=document.getElementById("status");
 const singlePreview=document.getElementById("singlePreview");
 const profileGrid=document.getElementById("profileGrid");
 
-function startProgress(){
-const wrap=document.getElementById("progressWrap");
-const bar=document.getElementById("progressBar");
-const text=document.getElementById("progressText");
-wrap.style.display="block";
-let p=0;
-return setInterval(()=>{
-p+=Math.random()*8;
-if(p>95)p=95;
-bar.style.width=p+"%";
-text.textContent=Math.floor(p)+"%";
-},400);
-}
-
 form.addEventListener("submit",async(e)=>{
 e.preventDefault();
+
 statusBox.textContent="Fetching details...";
 singlePreview.innerHTML="";
 profileGrid.innerHTML="";
-document.getElementById("progressWrap").style.display="none";
 
 const url=input.value.trim();
 const isProfile=url.includes("/@") && !url.includes("/video/");
@@ -244,9 +225,11 @@ const item=document.createElement("div");
 item.className="profile-item";
 item.innerHTML=`
 <img src="${v.thumbnail || ''}" loading="lazy" referrerpolicy="no-referrer">
+<div class="title">${v.title || 'Public TikTok Video'}</div>
 <button onclick="downloadVideo('${v.url}','${data.profile}',${v.index})">
 Download Video ${v.index}
-</button>`;
+</button>
+`;
 profileGrid.appendChild(item);
 });
 
@@ -262,7 +245,7 @@ return;
 singlePreview.innerHTML=`
 <div class="single-preview">
 <img src="${data.thumbnail || ''}" loading="lazy" referrerpolicy="no-referrer">
-<div class="single-info">
+<div>
 <strong>${data.title}</strong><br>
 Uploader: ${data.uploader}<br>
 Duration: ${data.duration || 'N/A'} sec<br><br>
@@ -270,7 +253,8 @@ Duration: ${data.duration || 'N/A'} sec<br><br>
 Download Video
 </button>
 </div>
-</div>`;
+</div>
+`;
 statusBox.textContent="Preview loaded";
 }
 }catch{
@@ -279,12 +263,8 @@ statusBox.textContent="This content cannot be processed.";
 });
 
 function downloadVideo(url,profile,index){
-const timer=startProgress();
-setTimeout(()=>{
 window.location.href=
 `${API}/download?url=${encodeURIComponent(url)}&index=${index}&profile=${encodeURIComponent(profile)}`;
-clearInterval(timer);
-},1200);
 }
 </script>
 
