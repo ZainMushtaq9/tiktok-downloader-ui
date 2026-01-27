@@ -5,36 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>TikTok Video Downloader – Preview & Download Public Videos</title>
-
-<meta name="description" content="Preview and download publicly accessible TikTok videos using single video links or public profiles. Educational and offline reference use only.">
-
+<meta name="description" content="Preview and download publicly accessible TikTok videos from single links or public profiles. Educational and offline reference use only.">
 <meta name="robots" content="index, follow">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
---bg-dark:#0b0f1a;
---bg-light:#f7f9fc;
---text-dark:#eaeaf0;
---text-light:#1a1a1a;
---muted-dark:#9aa4c7;
---muted-light:#555;
+--bg:#0b0f1a;
+--card:rgba(255,255,255,0.04);
+--border:#1e2440;
+--text:#eaeaf0;
+--muted:#9aa4c7;
 --accent:#ff2d55;
---border-dark:#1e2440;
---border-light:#ddd;
---card-dark:rgba(255,255,255,0.04);
---card-light:#fff;
 }
 
 body{
-font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-background:var(--bg-dark);
-color:var(--text-dark);
+font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;
+background:var(--bg);
+color:var(--text);
 line-height:1.7;
 }
-
-body.light{background:var(--bg-light);color:var(--text-light)}
 
 .main-container{
 max-width:1100px;
@@ -42,59 +33,53 @@ margin:auto;
 padding:40px 16px 60px;
 }
 
-/* HERO */
 .hero{text-align:center;margin-bottom:36px}
 .hero h1{font-size:2.2rem;margin-bottom:12px}
-.hero p{max-width:720px;margin:auto;color:var(--muted-dark)}
-body.light .hero p{color:var(--muted-light)}
+.hero p{max-width:720px;margin:auto;color:var(--muted)}
 
-/* CARD */
 .card{
-background:var(--card-dark);
-border:1px solid var(--border-dark);
+background:var(--card);
+border:1px solid var(--border);
 border-radius:16px;
 padding:22px;
 margin-bottom:28px;
 }
-body.light .card{background:var(--card-light);border-color:var(--border-light)}
 
-/* FORM */
 input{
 width:100%;
 padding:14px;
 border-radius:10px;
-border:1px solid var(--border-dark);
+border:1px solid var(--border);
 background:transparent;
 color:inherit;
 margin-bottom:14px;
 }
-body.light input{border-color:var(--border-light)}
 
 button{
 background:var(--accent);
 border:none;
 color:#fff;
-padding:14px 18px;
+padding:12px 16px;
 border-radius:10px;
-font-size:.95rem;
 cursor:pointer;
 }
-button:hover{opacity:.9}
 
 .status{margin-top:10px;font-size:.9rem}
 
-/* PROGRESS */
+/* Progress */
 #progressWrap{display:none;margin-top:14px}
 #progressOuter{height:6px;background:#222;border-radius:6px;overflow:hidden}
 #progressBar{height:100%;width:0%;background:var(--accent)}
 #progressText{font-size:.85rem;margin-top:6px}
 
-/* SINGLE PREVIEW */
+/* Bulk */
+#bulkActions{display:none;margin:14px 0;gap:10px}
+
+/* Single */
 .single-preview{
 display:flex;
 gap:16px;
 margin-top:22px;
-align-items:flex-start;
 }
 .single-preview img{
 width:160px;
@@ -104,7 +89,7 @@ border-radius:12px;
 background:#000;
 }
 
-/* PROFILE GRID */
+/* Profile */
 .profile-grid{
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
@@ -112,12 +97,11 @@ gap:14px;
 margin-top:26px;
 }
 .profile-item{
-background:var(--card-dark);
-border:1px solid var(--border-dark);
+background:var(--card);
+border:1px solid var(--border);
 border-radius:14px;
 padding:10px;
 }
-body.light .profile-item{background:var(--card-light);border-color:var(--border-light)}
 .profile-item img{
 width:100%;
 aspect-ratio:9/16;
@@ -128,24 +112,19 @@ background:#000;
 .profile-item .title{
 font-size:.85rem;
 margin:6px 0;
-color:var(--muted-dark);
+color:var(--muted);
 }
-.profile-item button{width:100%;margin-top:6px}
 
-/* ADS */
 .ad-box{
 margin:36px 0;
 height:120px;
 border-radius:14px;
-background:var(--card-dark);
-border:1px dashed var(--border-dark);
+border:1px dashed var(--border);
 display:flex;
 align-items:center;
 justify-content:center;
-color:var(--muted-dark);
-font-size:.9rem;
+color:var(--muted);
 }
-body.light .ad-box{background:var(--card-light);border-color:var(--border-light);color:var(--muted-light)}
 </style>
 </head>
 
@@ -155,7 +134,7 @@ body.light .ad-box{background:var(--card-light);border-color:var(--border-light)
      NAVBAR + MENU (LOCKED)
      PASTE EXACT CODE FROM index.html HERE
 =================================================== -->
-<!-- DO NOT MODIFY THIS BLOCK -->
+<!-- DO NOT MODIFY -->
 
 <main class="main-container">
 
@@ -180,6 +159,12 @@ or public profiles. Educational and offline reference use only.
 <div id="progressText">0%</div>
 </div>
 
+<div id="bulkActions">
+<button onclick="selectAll()">Select All</button>
+<button onclick="deselectAll()">Deselect All</button>
+<button onclick="downloadSelected()">Download Selected</button>
+</div>
+
 <div id="singlePreview"></div>
 <div id="profileGrid" class="profile-grid"></div>
 </section>
@@ -194,8 +179,7 @@ This website does not host or store any media files.
 </p>
 </section>
 
-</maiin>
-
+</main>
 
 <script>
 const API="https://tiktok-downloader-backend-production-ce2b.up.railway.app";
@@ -205,208 +189,124 @@ const input=document.getElementById("videoUrl");
 const statusBox=document.getElementById("status");
 const singlePreview=document.getElementById("singlePreview");
 const profileGrid=document.getElementById("profileGrid");
+const bulkActions=document.getElementById("bulkActions");
 
-let selectedQueue = [];
+let videos=[];
+let selected=new Set();
 
-/* =============================
-   PROGRESS BAR
-============================= */
 function startProgress(){
-  const wrap=document.getElementById("progressWrap");
-  const bar=document.getElementById("progressBar");
-  const text=document.getElementById("progressText");
-  wrap.style.display="block";
-  let p=0;
-  return setInterval(()=>{
-    p+=Math.random()*6;
-    if(p>90)p=90;
-    bar.style.width=p+"%";
-    text.textContent=Math.floor(p)+"%";
-  },400);
+const wrap=document.getElementById("progressWrap");
+const bar=document.getElementById("progressBar");
+const text=document.getElementById("progressText");
+wrap.style.display="block";
+let p=0;
+return setInterval(()=>{
+p+=Math.random()*7;
+if(p>95)p=95;
+bar.style.width=p+"%";
+text.textContent=Math.floor(p)+"%";
+},400);
 }
 
-function stopProgress(timer){
-  clearInterval(timer);
-  document.getElementById("progressBar").style.width="100%";
-  document.getElementById("progressText").textContent="100%";
-}
-
-/* =============================
-   FORM SUBMIT
-============================= */
-form.addEventListener("submit",async(e)=>{
+form.addEventListener("submit",async e=>{
 e.preventDefault();
-
-statusBox.textContent="Fetching details...";
+statusBox.textContent="Fetching...";
 singlePreview.innerHTML="";
 profileGrid.innerHTML="";
-selectedQueue=[];
-
-document.getElementById("progressWrap").style.display="none";
+bulkActions.style.display="none";
+selected.clear();
 
 const url=input.value.trim();
 const isProfile=url.includes("/@") && !url.includes("/video/");
-let timer=startProgress();
+const timer=startProgress();
 
 try{
-
-/* ========== PROFILE MODE ========== */
 if(isProfile){
-  const res=await fetch(`${API}/profile?profile_url=${encodeURIComponent(url)}&page=1&limit=50`);
-  const data=await res.json();
-  stopProgress(timer);
+const res=await fetch(`${API}/profile?profile_url=${encodeURIComponent(url)}&page=1&limit=24`);
+const data=await res.json();
+clearInterval(timer);
 
-  if(!res.ok){
-    statusBox.textContent=data.detail.message;
-    return;
-  }
-
-  statusBox.textContent=`Found ${data.total} public videos`;
-
-  /* Controls */
-  const controls=document.createElement("div");
-  controls.style.display="flex";
-  controls.style.gap="10px";
-  controls.style.margin="10px 0";
-
-  controls.innerHTML=`
-    <button type="button" onclick="selectAll()">Select All</button>
-    <button type="button" onclick="deselectAll()">Deselect All</button>
-    <button type="button" onclick="startQueueDownload()">Download Selected</button>
-  `;
-  profileGrid.appendChild(controls);
-
-  data.videos.forEach(v=>{
-    const item=document.createElement("div");
-    item.className="profile-item";
-    item.innerHTML=`
-      <img src="${v.thumbnail || ''}" loading="lazy" referrerpolicy="no-referrer">
-      <div class="title">${v.title}</div>
-
-      <label style="font-size:.8rem;display:flex;gap:6px;align-items:center;">
-        <input type="checkbox" class="video-check"
-          data-url="${v.url}"
-          data-profile="${data.profile}"
-          data-index="${v.index}">
-        Select
-      </label>
-
-      <button onclick="downloadSingle('${v.url}','${data.profile}',${v.index})">
-        Download Now
-      </button>
-    `;
-    profileGrid.appendChild(item);
-  });
-
+if(!res.ok){
+statusBox.textContent=data.detail.message;
+return;
 }
 
-/* ========== SINGLE MODE ========== */
-else{
-  const res=await fetch(`${API}/preview?url=${encodeURIComponent(url)}`);
-  const data=await res.json();
-  stopProgress(timer);
+videos=data.videos;
+statusBox.textContent=`Found ${data.total} videos`;
+bulkActions.style.display="flex";
+renderGrid();
 
-  if(!res.ok){
-    statusBox.textContent=data.detail.message;
-    return;
-  }
+}else{
+const res=await fetch(`${API}/preview?url=${encodeURIComponent(url)}`);
+const data=await res.json();
+clearInterval(timer);
 
-  singlePreview.innerHTML=`
-    <div class="single-preview">
-      <img src="${data.thumbnail || ''}" loading="lazy" referrerpolicy="no-referrer">
-      <div>
-        <strong>${data.title}</strong><br>
-        Uploader: ${data.uploader}<br>
-        Duration: ${data.duration || 'N/A'} sec<br><br>
-
-        <button onclick="downloadSingle('${url}','${data.uploader}',1)">
-          Download Video
-        </button>
-      </div>
-    </div>
-  `;
-  statusBox.textContent="Preview loaded";
+if(!res.ok){
+statusBox.textContent=data.detail.message;
+return;
 }
 
+singlePreview.innerHTML=`
+<div class="single-preview">
+<img src="${data.thumbnail}">
+<div>
+<strong>${data.title}</strong><br>
+Uploader: ${data.uploader}<br>
+Duration: ${data.duration || 'N/A'} sec<br><br>
+<button onclick="download('${url}',1)">Download Video</button>
+</div>
+</div>`;
+statusBox.textContent="Preview loaded";
+}
 }catch{
-  stopProgress(timer);
-  statusBox.textContent="This content cannot be processed.";
+clearInterval(timer);
+statusBox.textContent="Unable to process this link.";
 }
-
 });
 
-/* =============================
-   SELECT CONTROLS
-============================= */
+function renderGrid(){
+profileGrid.innerHTML="";
+videos.forEach(v=>{
+const div=document.createElement("div");
+div.className="profile-item";
+div.innerHTML=`
+<input type="checkbox" ${selected.has(v.index)?"checked":""}
+ onchange="toggle(${v.index})">
+<img src="${v.thumbnail || 'https://placehold.co/300x500'}">
+<div class="title">${v.title || 'TikTok Video'}</div>
+<button onclick="download('${v.url}',${v.index})">Download</button>`;
+profileGrid.appendChild(div);
+});
+}
+
+function toggle(i){
+selected.has(i)?selected.delete(i):selected.add(i);
+}
+
 function selectAll(){
-  document.querySelectorAll(".video-check").forEach(cb=>{
-    cb.checked=true;
-  });
+videos.forEach(v=>selected.add(v.index));
+renderGrid();
 }
 
 function deselectAll(){
-  document.querySelectorAll(".video-check").forEach(cb=>{
-    cb.checked=false;
-  });
+selected.clear();
+renderGrid();
 }
 
-/* =============================
-   QUEUE SYSTEM
-============================= */
-function startQueueDownload(){
-  selectedQueue=[];
-  document.querySelectorAll(".video-check:checked").forEach(cb=>{
-    selectedQueue.push({
-      url: cb.dataset.url,
-      profile: cb.dataset.profile,
-      index: cb.dataset.index
-    });
-  });
-
-  if(selectedQueue.length===0){
-    alert("No videos selected");
-    return;
-  }
-
-  statusBox.textContent=`Downloading ${selectedQueue.length} videos...`;
-  runQueue();
+async function downloadSelected(){
+for(const v of videos){
+if(selected.has(v.index)){
+download(v.url,v.index);
+await new Promise(r=>setTimeout(r,2500));
+}
+}
 }
 
-function runQueue(){
-  if(selectedQueue.length===0){
-    statusBox.textContent="Download queue complete.";
-    return;
-  }
-
-  const v = selectedQueue.shift();
-  const link = `${API}/download?url=${encodeURIComponent(v.url)}&index=${v.index}&profile=${encodeURIComponent(v.profile)}`;
-
-  /* Trigger download */
-  const a = document.createElement("a");
-  a.href = link;
-  a.download = "";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-
-  /* delay between downloads (safe mode) */
-  setTimeout(runQueue, 2500);
+function download(url,index){
+window.location.href=
+`${API}/download?url=${encodeURIComponent(url)}&index=${index}&profile=profile`;
 }
-
-/* =============================
-   SINGLE DOWNLOAD
-============================= */
-function downloadSingle(url,profile,index){
-  window.location.href=
-  `${API}/download?url=${encodeURIComponent(url)}&index=${index}&profile=${encodeURIComponent(profile)}`;
-}
-       </script>
-
-
-
-
-
-
+</script>
 
 </body>
 </html>
