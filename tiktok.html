@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TikTok Video Downloader – Preview & Download Public TikTok Videos</title>
+<title>TikTok Video Downloader – Preview & Download Public Videos</title>
 
-<meta name="description" content="Preview and download publicly accessible TikTok videos using single video links or public profiles. No login required. Educational and offline reference use only.">
+<meta name="description" content="Preview and download publicly accessible TikTok videos using single video links or public profiles. Educational and offline reference use only.">
 
 <meta name="robots" content="index, follow">
 
@@ -83,6 +83,12 @@ button:hover{opacity:.9}
 
 .status{margin-top:10px;font-size:.9rem}
 
+/* PROGRESS */
+#progressWrap{display:none;margin-top:14px}
+#progressOuter{height:6px;background:#222;border-radius:6px;overflow:hidden}
+#progressBar{height:100%;width:0%;background:var(--accent)}
+#progressText{font-size:.85rem;margin-top:6px}
+
 /* SINGLE PREVIEW */
 .single-preview{
 display:flex;
@@ -139,11 +145,7 @@ justify-content:center;
 color:var(--muted-dark);
 font-size:.9rem;
 }
-body.light .ad-box{
-background:var(--card-light);
-border-color:var(--border-light);
-color:var(--muted-light);
-}
+body.light .ad-box{background:var(--card-light);border-color:var(--border-light);color:var(--muted-light)}
 </style>
 </head>
 
@@ -154,7 +156,6 @@ color:var(--muted-light);
      PASTE EXACT CODE FROM index.html HERE
 =================================================== -->
 <!-- DO NOT MODIFY THIS BLOCK -->
-
 
 <main class="main-container">
 
@@ -173,6 +174,12 @@ or public profiles. Educational and offline reference use only.
 </form>
 
 <div id="status" class="status"></div>
+
+<div id="progressWrap">
+<div id="progressOuter"><div id="progressBar"></div></div>
+<div id="progressText">0%</div>
+</div>
+
 <div id="singlePreview"></div>
 <div id="profileGrid" class="profile-grid"></div>
 </section>
@@ -198,20 +205,37 @@ const statusBox=document.getElementById("status");
 const singlePreview=document.getElementById("singlePreview");
 const profileGrid=document.getElementById("profileGrid");
 
+function startProgress(){
+const wrap=document.getElementById("progressWrap");
+const bar=document.getElementById("progressBar");
+const text=document.getElementById("progressText");
+wrap.style.display="block";
+let p=0;
+return setInterval(()=>{
+p+=Math.random()*7;
+if(p>92)p=92;
+bar.style.width=p+"%";
+text.textContent=Math.floor(p)+"%";
+},400);
+}
+
 form.addEventListener("submit",async(e)=>{
 e.preventDefault();
 
 statusBox.textContent="Fetching details...";
 singlePreview.innerHTML="";
 profileGrid.innerHTML="";
+document.getElementById("progressWrap").style.display="none";
 
 const url=input.value.trim();
 const isProfile=url.includes("/@") && !url.includes("/video/");
+let timer=startProgress();
 
 try{
 if(isProfile){
 const res=await fetch(`${API}/profile?profile_url=${encodeURIComponent(url)}&page=1&limit=24`);
 const data=await res.json();
+clearInterval(timer);
 
 if(!res.ok){
 statusBox.textContent=data.detail.message;
@@ -225,17 +249,17 @@ const item=document.createElement("div");
 item.className="profile-item";
 item.innerHTML=`
 <img src="${v.thumbnail || ''}" loading="lazy" referrerpolicy="no-referrer">
-<div class="title">${v.title || 'Public TikTok Video'}</div>
+<div class="title">${v.title}</div>
 <button onclick="downloadVideo('${v.url}','${data.profile}',${v.index})">
-Download Video ${v.index}
-</button>
-`;
+Download Video
+</button>`;
 profileGrid.appendChild(item);
 });
 
 }else{
 const res=await fetch(`${API}/preview?url=${encodeURIComponent(url)}`);
 const data=await res.json();
+clearInterval(timer);
 
 if(!res.ok){
 statusBox.textContent=data.detail.message;
@@ -253,11 +277,11 @@ Duration: ${data.duration || 'N/A'} sec<br><br>
 Download Video
 </button>
 </div>
-</div>
-`;
+</div>`;
 statusBox.textContent="Preview loaded";
 }
 }catch{
+clearInterval(timer);
 statusBox.textContent="This content cannot be processed.";
 }
 });
