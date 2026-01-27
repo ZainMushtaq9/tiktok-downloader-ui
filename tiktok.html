@@ -194,7 +194,8 @@ This website does not host or store any media files.
 </p>
 </section>
 
-</main>
+</maiin>
+
 
 <script>
 const API="https://tiktok-downloader-backend-production-ce2b.up.railway.app";
@@ -205,26 +206,42 @@ const statusBox=document.getElementById("status");
 const singlePreview=document.getElementById("singlePreview");
 const profileGrid=document.getElementById("profileGrid");
 
+let selectedQueue = [];
+
+/* =============================
+   PROGRESS BAR
+============================= */
 function startProgress(){
-const wrap=document.getElementById("progressWrap");
-const bar=document.getElementById("progressBar");
-const text=document.getElementById("progressText");
-wrap.style.display="block";
-let p=0;
-return setInterval(()=>{
-p+=Math.random()*7;
-if(p>92)p=92;
-bar.style.width=p+"%";
-text.textContent=Math.floor(p)+"%";
-},400);
+  const wrap=document.getElementById("progressWrap");
+  const bar=document.getElementById("progressBar");
+  const text=document.getElementById("progressText");
+  wrap.style.display="block";
+  let p=0;
+  return setInterval(()=>{
+    p+=Math.random()*6;
+    if(p>90)p=90;
+    bar.style.width=p+"%";
+    text.textContent=Math.floor(p)+"%";
+  },400);
 }
 
+function stopProgress(timer){
+  clearInterval(timer);
+  document.getElementById("progressBar").style.width="100%";
+  document.getElementById("progressText").textContent="100%";
+}
+
+/* =============================
+   FORM SUBMIT
+============================= */
 form.addEventListener("submit",async(e)=>{
 e.preventDefault();
 
 statusBox.textContent="Fetching details...";
 singlePreview.innerHTML="";
 profileGrid.innerHTML="";
+selectedQueue=[];
+
 document.getElementById("progressWrap").style.display="none";
 
 const url=input.value.trim();
@@ -232,65 +249,164 @@ const isProfile=url.includes("/@") && !url.includes("/video/");
 let timer=startProgress();
 
 try{
+
+/* ========== PROFILE MODE ========== */
 if(isProfile){
-const res=await fetch(`${API}/profile?profile_url=${encodeURIComponent(url)}&page=1&limit=24`);
-const data=await res.json();
-clearInterval(timer);
+  const res=await fetch(`${API}/profile?profile_url=${encodeURIComponent(url)}&page=1&limit=50`);
+  const data=await res.json();
+  stopProgress(timer);
 
-if(!res.ok){
-statusBox.textContent=data.detail.message;
-return;
+  if(!res.ok){
+    statusBox.textContent=data.detail.message;
+    return;
+  }
+
+  statusBox.textContent=`Found ${data.total} public videos`;
+
+  /* Controls */
+  const controls=document.createElement("div");
+  controls.style.display="flex";
+  controls.style.gap="10px";
+  controls.style.margin="10px 0";
+
+  controls.innerHTML=`
+    <button type="button" onclick="selectAll()">Select All</button>
+    <button type="button" onclick="deselectAll()">Deselect All</button>
+    <button type="button" onclick="startQueueDownload()">Download Selected</button>
+  `;
+  profileGrid.appendChild(controls);
+
+  data.videos.forEach(v=>{
+    const item=document.createElement("div");
+    item.className="profile-item";
+    item.innerHTML=`
+      <img src="${v.thumbnail || ''}" loading="lazy" referrerpolicy="no-referrer">
+      <div class="title">${v.title}</div>
+
+      <label style="font-size:.8rem;display:flex;gap:6px;align-items:center;">
+        <input type="checkbox" class="video-check"
+          data-url="${v.url}"
+          data-profile="${data.profile}"
+          data-index="${v.index}">
+        Select
+      </label>
+
+      <button onclick="downloadSingle('${v.url}','${data.profile}',${v.index})">
+        Download Now
+      </button>
+    `;
+    profileGrid.appendChild(item);
+  });
+
 }
 
-statusBox.textContent=`Found ${data.total} public videos`;
+/* ========== SINGLE MODE ========== */
+else{
+  const res=await fetch(`${API}/preview?url=${encodeURIComponent(url)}`);
+  const data=await res.json();
+  stopProgress(timer);
 
-data.videos.forEach(v=>{
-const item=document.createElement("div");
-item.className="profile-item";
-item.innerHTML=`
-<img src="${v.thumbnail || ''}" loading="lazy" referrerpolicy="no-referrer">
-<div class="title">${v.title}</div>
-<button onclick="downloadVideo('${v.url}','${data.profile}',${v.index})">
-Download Video
-</button>`;
-profileGrid.appendChild(item);
-});
+  if(!res.ok){
+    statusBox.textContent=data.detail.message;
+    return;
+  }
 
-}else{
-const res=await fetch(`${API}/preview?url=${encodeURIComponent(url)}`);
-const data=await res.json();
-clearInterval(timer);
+  singlePreview.innerHTML=`
+    <div class="single-preview">
+      <img src="${data.thumbnail || ''}" loading="lazy" referrerpolicy="no-referrer">
+      <div>
+        <strong>${data.title}</strong><br>
+        Uploader: ${data.uploader}<br>
+        Duration: ${data.duration || 'N/A'} sec<br><br>
 
-if(!res.ok){
-statusBox.textContent=data.detail.message;
-return;
+        <button onclick="downloadSingle('${url}','${data.uploader}',1)">
+          Download Video
+        </button>
+      </div>
+    </div>
+  `;
+  statusBox.textContent="Preview loaded";
 }
 
-singlePreview.innerHTML=`
-<div class="single-preview">
-<img src="${data.thumbnail || ''}" loading="lazy" referrerpolicy="no-referrer">
-<div>
-<strong>${data.title}</strong><br>
-Uploader: ${data.uploader}<br>
-Duration: ${data.duration || 'N/A'} sec<br><br>
-<button onclick="downloadVideo('${url}','${data.uploader}',1)">
-Download Video
-</button>
-</div>
-</div>`;
-statusBox.textContent="Preview loaded";
-}
 }catch{
-clearInterval(timer);
-statusBox.textContent="This content cannot be processed.";
+  stopProgress(timer);
+  statusBox.textContent="This content cannot be processed.";
 }
+
 });
 
-function downloadVideo(url,profile,index){
-window.location.href=
-`${API}/download?url=${encodeURIComponent(url)}&index=${index}&profile=${encodeURIComponent(profile)}`;
+/* =============================
+   SELECT CONTROLS
+============================= */
+function selectAll(){
+  document.querySelectorAll(".video-check").forEach(cb=>{
+    cb.checked=true;
+  });
 }
-</script>
+
+function deselectAll(){
+  document.querySelectorAll(".video-check").forEach(cb=>{
+    cb.checked=false;
+  });
+}
+
+/* =============================
+   QUEUE SYSTEM
+============================= */
+function startQueueDownload(){
+  selectedQueue=[];
+  document.querySelectorAll(".video-check:checked").forEach(cb=>{
+    selectedQueue.push({
+      url: cb.dataset.url,
+      profile: cb.dataset.profile,
+      index: cb.dataset.index
+    });
+  });
+
+  if(selectedQueue.length===0){
+    alert("No videos selected");
+    return;
+  }
+
+  statusBox.textContent=`Downloading ${selectedQueue.length} videos...`;
+  runQueue();
+}
+
+function runQueue(){
+  if(selectedQueue.length===0){
+    statusBox.textContent="Download queue complete.";
+    return;
+  }
+
+  const v = selectedQueue.shift();
+  const link = `${API}/download?url=${encodeURIComponent(v.url)}&index=${v.index}&profile=${encodeURIComponent(v.profile)}`;
+
+  /* Trigger download */
+  const a = document.createElement("a");
+  a.href = link;
+  a.download = "";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  /* delay between downloads (safe mode) */
+  setTimeout(runQueue, 2500);
+}
+
+/* =============================
+   SINGLE DOWNLOAD
+============================= */
+function downloadSingle(url,profile,index){
+  window.location.href=
+  `${API}/download?url=${encodeURIComponent(url)}&index=${index}&profile=${encodeURIComponent(profile)}`;
+}
+       </script>
+
+
+
+
+
+
 
 </body>
 </html>
