@@ -1,13 +1,12 @@
-</html>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TikTok Video Downloader – Public Video Title & Download Tool</title>
+<title>TikTok Video Downloader – Public Video Tool</title>
 
-<meta name="description" content="Preview TikTok video titles and download publicly accessible TikTok videos from public links or profiles for educational and offline reference use.">
+<meta name="description" content="Free TikTok video downloader to preview and download publicly available TikTok videos from single links or public profiles. No login required. Educational and offline reference use only.">
 
 <meta name="robots" content="index, follow">
 
@@ -37,16 +36,16 @@ margin:auto;
 padding:40px 16px 60px;
 }
 
-.hero{text-align:center;margin-bottom:30px}
+.hero{text-align:center;margin-bottom:28px}
 .hero h1{font-size:2rem;margin-bottom:8px}
-.hero p{max-width:720px;margin:auto;color:var(--muted)}
+.hero p{color:var(--muted);max-width:720px;margin:auto}
 
 .card{
 background:var(--card);
 border:1px solid var(--border);
 border-radius:16px;
 padding:22px;
-margin-bottom:28px;
+margin-bottom:26px;
 }
 
 input{
@@ -57,7 +56,9 @@ border:1px solid var(--border);
 background:transparent;
 color:inherit;
 margin-bottom:14px;
+outline:none;
 }
+input:focus{border-color:var(--accent)}
 
 button{
 background:var(--accent);
@@ -67,18 +68,23 @@ padding:12px 16px;
 border-radius:10px;
 cursor:pointer;
 font-size:.95rem;
+transition:.2s;
 }
 button:hover{background:var(--accent-hover)}
+button:disabled{opacity:.5}
 
-.status{margin-top:8px;font-size:.9rem;color:var(--muted)}
+.status{margin-top:6px;color:var(--muted);font-size:.9rem}
 
-#bulkActions{
-display:none;
-margin:16px 0;
-gap:10px;
-flex-wrap:wrap;
-}
+/* Progress */
+#progressWrap{display:none;margin-top:14px}
+#progressOuter{height:6px;background:#222;border-radius:6px;overflow:hidden}
+#progressBar{height:100%;width:0%;background:var(--accent)}
+#progressText{font-size:.85rem;margin-top:6px;color:var(--muted)}
 
+/* Bulk */
+#bulkActions{display:none;margin:14px 0;gap:10px;flex-wrap:wrap}
+
+/* Single */
 .single-preview{
 margin-top:18px;
 padding:14px;
@@ -87,42 +93,37 @@ border-radius:12px;
 background:var(--card);
 }
 
+/* Profile */
 .profile-grid{
 display:grid;
-grid-template-columns:1fr;
-gap:10px;
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+gap:14px;
 margin-top:22px;
 }
-
 .profile-item{
 background:var(--card);
 border:1px solid var(--border);
-border-radius:12px;
-padding:10px;
+border-radius:14px;
+padding:12px;
 display:flex;
-justify-content:space-between;
-align-items:center;
+flex-direction:column;
 gap:8px;
 }
-
-.title{
+.profile-item .title{
 font-size:.9rem;
 color:var(--muted);
-flex:1;
-overflow:hidden;
-white-space:nowrap;
-text-overflow:ellipsis;
 }
 
 .ad-box{
-margin:36px 0;
-height:120px;
+margin:34px 0;
+height:110px;
 border-radius:14px;
 border:1px dashed var(--border);
 display:flex;
 align-items:center;
 justify-content:center;
 color:var(--muted);
+font-size:.9rem;
 }
 </style>
 </head>
@@ -133,16 +134,24 @@ color:var(--muted);
 
 <section class="hero">
 <h1>TikTok Video Downloader</h1>
-<p>Preview original TikTok video titles and download publicly accessible videos for offline reference.</p>
+<p>
+Preview and download publicly accessible TikTok videos from single links or public profiles.
+Designed for educational and offline reference use only.
+</p>
 </section>
 
 <section class="card">
 <form id="tiktokForm">
 <input id="videoUrl" type="text" placeholder="Paste TikTok video or profile link" required>
-<button type="submit">Fetch Details</button>
+<button id="submitBtn" type="submit">Fetch Video Details</button>
 </form>
 
 <div id="status" class="status"></div>
+
+<div id="progressWrap">
+<div id="progressOuter"><div id="progressBar"></div></div>
+<div id="progressText">0%</div>
+</div>
 
 <div id="bulkActions">
 <button onclick="selectAll()">Select All</button>
@@ -159,7 +168,10 @@ color:var(--muted);
 <section class="card">
 <h2>About This Tool</h2>
 <p>
-This TikTok video utility allows users to preview public video titles and download videos for educational and offline reference use only. No media files are stored on this website.
+This browser-based TikTok video downloader allows users to preview publicly shared TikTok videos
+and obtain offline copies for personal research or educational study.
+No login is required and no media is stored on servers.
+Users are responsible for respecting platform policies and local regulations.
 </p>
 </section>
 
@@ -171,6 +183,7 @@ const API="https://tiktok-downloader-backend-production-ce2b.up.railway.app";
 const form=document.getElementById("tiktokForm");
 const input=document.getElementById("videoUrl");
 const statusBox=document.getElementById("status");
+const submitBtn=document.getElementById("submitBtn");
 const singlePreview=document.getElementById("singlePreview");
 const profileGrid=document.getElementById("profileGrid");
 const bulkActions=document.getElementById("bulkActions");
@@ -178,9 +191,25 @@ const bulkActions=document.getElementById("bulkActions");
 let videos=[];
 let selected=new Set();
 
+function startProgress(){
+const wrap=document.getElementById("progressWrap");
+const bar=document.getElementById("progressBar");
+const text=document.getElementById("progressText");
+wrap.style.display="block";
+let p=0;
+return setInterval(()=>{
+p+=Math.random()*8;
+if(p>92)p=92;
+bar.style.width=p+"%";
+text.textContent=Math.floor(p)+"%";
+},350);
+}
+
 form.addEventListener("submit",async e=>{
 e.preventDefault();
-statusBox.textContent="Fetching...";
+submitBtn.disabled=true;
+
+statusBox.textContent="Fetching details...";
 singlePreview.innerHTML="";
 profileGrid.innerHTML="";
 bulkActions.style.display="none";
@@ -188,30 +217,41 @@ selected.clear();
 
 const url=input.value.trim();
 const isProfile=url.includes("/@") && !url.includes("/video/");
+const timer=startProgress();
 
 try{
 if(isProfile){
 const res=await fetch(`${API}/profile?profile_url=${encodeURIComponent(url)}`);
 const data=await res.json();
+clearInterval(timer);
+
+if(!res.ok){statusBox.textContent=data.detail;return;}
 
 videos=data.videos;
+statusBox.textContent=`Found ${data.total} public videos`;
 bulkActions.style.display="flex";
 renderGrid();
 
 }else{
 const res=await fetch(`${API}/preview?url=${encodeURIComponent(url)}`);
 const data=await res.json();
+clearInterval(timer);
+
+if(!res.ok){statusBox.textContent=data.detail;return;}
 
 singlePreview.innerHTML=`
 <div class="single-preview">
 <strong>${data.title}</strong><br>
-Uploader: ${data.uploader}<br><br>
+Uploader: ${data.uploader}<br>
+Duration: ${data.duration || 'N/A'} sec<br><br>
 <button onclick="download('${url}',1)">Download Video</button>
 </div>`;
+statusBox.textContent="Preview loaded";
 }
-statusBox.textContent="Loaded successfully";
 }catch{
 statusBox.textContent="Unable to process link.";
+}finally{
+submitBtn.disabled=false;
 }
 });
 
@@ -221,8 +261,12 @@ videos.forEach(v=>{
 const div=document.createElement("div");
 div.className="profile-item";
 div.innerHTML=`
-<input type="checkbox" onchange="toggle(${v.index})">
-<div class="title">${v.title || 'TikTok Video'}</div>
+<label>
+<input type="checkbox" ${selected.has(v.index)?"checked":""}
+ onchange="toggle(${v.index})">
+ Select
+</label>
+<div class="title">${v.title}</div>
 <button onclick="download('${v.url}',${v.index})">Download</button>`;
 profileGrid.appendChild(div);
 });
