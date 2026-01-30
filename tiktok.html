@@ -4,9 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TikTok Video Downloader – Preview & Download Public Videos</title>
-<meta name="description" content="Preview and download publicly accessible TikTok videos from single links or public profiles. Educational and offline reference use only.">
-<meta name="robots" content="index, follow">
+<title>TikTok Video Downloader</title>
+<meta name="description" content="Preview and download publicly accessible TikTok videos from single links or public profiles.">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -18,9 +17,6 @@
 --text:#eaeaf0;
 --muted:#9aa4c7;
 --accent:#ff2d55;
---accent-hover:#ff4a6e;
---success:#4caf50;
---error:#ff5252;
 }
 
 body{
@@ -31,26 +27,23 @@ line-height:1.6;
 }
 
 .main-container{
-max-width:1100px;
+max-width:1000px;
 margin:auto;
 padding:40px 16px 60px;
 }
 
-/* HERO */
-.hero{text-align:center;margin-bottom:32px}
-.hero h1{font-size:2.1rem;margin-bottom:10px}
-.hero p{max-width:720px;margin:auto;color:var(--muted)}
+.hero{text-align:center;margin-bottom:30px}
+.hero h1{font-size:2rem;margin-bottom:10px}
+.hero p{color:var(--muted)}
 
-/* CARD */
 .card{
 background:var(--card);
 border:1px solid var(--border);
 border-radius:16px;
 padding:22px;
-margin-bottom:28px;
+margin-bottom:24px;
 }
 
-/* INPUT */
 input{
 width:100%;
 padding:14px;
@@ -59,13 +52,8 @@ border:1px solid var(--border);
 background:transparent;
 color:inherit;
 margin-bottom:14px;
-outline:none;
-}
-input:focus{
-border-color:var(--accent);
 }
 
-/* BUTTON */
 button{
 background:var(--accent);
 border:none;
@@ -74,37 +62,20 @@ padding:12px 16px;
 border-radius:10px;
 cursor:pointer;
 font-size:.95rem;
-transition:.2s;
 }
-button:hover{background:var(--accent-hover)}
-button:disabled{opacity:.5;cursor:not-allowed}
 
-/* STATUS */
-.status{margin-top:8px;font-size:.9rem;color:var(--muted)}
+.status{margin-top:8px;color:var(--muted)}
 
-/* PROGRESS */
 #progressWrap{display:none;margin-top:14px}
 #progressOuter{height:6px;background:#222;border-radius:6px;overflow:hidden}
-#progressBar{height:100%;width:0%;background:var(--accent);transition:.3s}
-#progressText{font-size:.85rem;margin-top:6px;color:var(--muted)}
+#progressBar{height:100%;width:0%;background:var(--accent)}
 
-/* BULK ACTIONS */
-#bulkActions{
-display:none;
-margin:16px 0;
-gap:10px;
-flex-wrap:wrap;
-}
-#bulkActions button{
-flex:1;
-min-width:120px;
-}
+#bulkActions{display:none;margin:16px 0;gap:10px;flex-wrap:wrap}
 
-/* SINGLE */
 .single-preview{
 display:flex;
 gap:16px;
-margin-top:22px;
+margin-top:20px;
 flex-wrap:wrap;
 }
 .single-preview img{
@@ -114,17 +85,13 @@ object-fit:cover;
 border-radius:12px;
 background:#000;
 }
-.single-preview div{
-flex:1;
-min-width:220px;
-}
 
 /* PROFILE GRID */
 .profile-grid{
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
 gap:16px;
-margin-top:26px;
+margin-top:24px;
 }
 .profile-item{
 background:var(--card);
@@ -138,55 +105,37 @@ gap:6px;
 .profile-item img{
 width:100%;
 aspect-ratio:9/16;
-object-fit:cover;
 border-radius:10px;
-background:#000;
+background:#111;
+object-fit:cover;
 }
 .profile-item .title{
 font-size:.85rem;
 color:var(--muted);
-height:32px;
-overflow:hidden;
-}
-.profile-item input{margin-bottom:4px}
-
-/* ADS */
-.ad-box{
-margin:36px 0;
-height:120px;
-border-radius:14px;
-border:1px dashed var(--border);
-display:flex;
-align-items:center;
-justify-content:center;
-color:var(--muted);
-font-size:.9rem;
+text-align:center;
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAVBAR LOCKED -->
-
 <main class="main-container">
 
 <section class="hero">
 <h1>TikTok Video Downloader</h1>
-<p>Preview and download publicly accessible TikTok videos from single links or public profiles.</p>
+<p>Preview single videos or bulk download public profiles.</p>
 </section>
 
 <section class="card">
 <form id="tiktokForm">
 <input id="videoUrl" type="text" placeholder="Paste TikTok video or profile link" required>
-<button id="submitBtn" type="submit">Fetch Video Details</button>
+<button type="submit">Fetch</button>
 </form>
 
 <div id="status" class="status"></div>
 
 <div id="progressWrap">
 <div id="progressOuter"><div id="progressBar"></div></div>
-<div id="progressText">0%</div>
 </div>
 
 <div id="bulkActions">
@@ -199,13 +148,6 @@ font-size:.9rem;
 <div id="profileGrid" class="profile-grid"></div>
 </section>
 
-<section class="ad-box">Advertisement</section>
-
-<section class="card">
-<h2>Responsible Use</h2>
-<p>This tool works only with publicly accessible TikTok content. No media is stored.</p>
-</section>
-
 </main>
 
 <script>
@@ -214,7 +156,6 @@ const API="https://tiktok-downloader-backend-production-ce2b.up.railway.app";
 const form=document.getElementById("tiktokForm");
 const input=document.getElementById("videoUrl");
 const statusBox=document.getElementById("status");
-const submitBtn=document.getElementById("submitBtn");
 const singlePreview=document.getElementById("singlePreview");
 const profileGrid=document.getElementById("profileGrid");
 const bulkActions=document.getElementById("bulkActions");
@@ -225,22 +166,18 @@ let selected=new Set();
 function startProgress(){
 const wrap=document.getElementById("progressWrap");
 const bar=document.getElementById("progressBar");
-const text=document.getElementById("progressText");
 wrap.style.display="block";
 let p=0;
 return setInterval(()=>{
-p+=Math.random()*8;
-if(p>92)p=92;
+p+=8;
+if(p>90)p=90;
 bar.style.width=p+"%";
-text.textContent=Math.floor(p)+"%";
-},350);
+},300);
 }
 
 form.addEventListener("submit",async e=>{
 e.preventDefault();
-submitBtn.disabled=true;
-
-statusBox.textContent="Fetching...";
+statusBox.textContent="Loading...";
 singlePreview.innerHTML="";
 profileGrid.innerHTML="";
 bulkActions.style.display="none";
@@ -256,7 +193,7 @@ const res=await fetch(`${API}/profile?profile_url=${encodeURIComponent(url)}`);
 const data=await res.json();
 clearInterval(timer);
 
-if(!res.ok){statusBox.textContent=data.detail.message;return;}
+if(!res.ok){statusBox.textContent="Profile blocked";return;}
 
 videos=data.videos;
 statusBox.textContent=`Found ${data.total} videos`;
@@ -268,24 +205,19 @@ const res=await fetch(`${API}/preview?url=${encodeURIComponent(url)}`);
 const data=await res.json();
 clearInterval(timer);
 
-if(!res.ok){statusBox.textContent=data.detail.message;return;}
-
 singlePreview.innerHTML=`
 <div class="single-preview">
-<img src="${data.thumbnail || 'https://placehold.co/300x500'}">
+<img src="${data.thumbnail}">
 <div>
 <strong>${data.title}</strong><br>
-Uploader: ${data.uploader}<br>
-Duration: ${data.duration || 'N/A'} sec<br><br>
-<button onclick="download('${url}',1)">Download Video</button>
+Uploader: ${data.uploader}<br><br>
+<button onclick="download('${url}',1)">Download</button>
 </div>
 </div>`;
 statusBox.textContent="Preview loaded";
 }
 }catch{
-statusBox.textContent="Unable to process link.";
-}finally{
-submitBtn.disabled=false;
+statusBox.textContent="Error loading.";
 }
 });
 
@@ -297,8 +229,8 @@ div.className="profile-item";
 div.innerHTML=`
 <input type="checkbox" ${selected.has(v.index)?"checked":""}
  onchange="toggle(${v.index})">
-<img src="${v.thumbnail || 'https://placehold.co/300x500'}">
-<div class="title">${v.title || 'TikTok Video'}</div>
+<img src="https://placehold.co/300x500?text=Video">
+<div class="title">Video #${v.index}</div>
 <button onclick="download('${v.url}',${v.index})">Download</button>`;
 profileGrid.appendChild(div);
 });
