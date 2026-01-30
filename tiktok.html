@@ -18,13 +18,16 @@
 --text:#eaeaf0;
 --muted:#9aa4c7;
 --accent:#ff2d55;
+--accent-hover:#ff4a6e;
+--success:#4caf50;
+--error:#ff5252;
 }
 
 body{
 font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;
 background:var(--bg);
 color:var(--text);
-line-height:1.7;
+line-height:1.6;
 }
 
 .main-container{
@@ -33,10 +36,12 @@ margin:auto;
 padding:40px 16px 60px;
 }
 
-.hero{text-align:center;margin-bottom:36px}
-.hero h1{font-size:2.2rem;margin-bottom:12px}
+/* HERO */
+.hero{text-align:center;margin-bottom:32px}
+.hero h1{font-size:2.1rem;margin-bottom:10px}
 .hero p{max-width:720px;margin:auto;color:var(--muted)}
 
+/* CARD */
 .card{
 background:var(--card);
 border:1px solid var(--border);
@@ -45,6 +50,7 @@ padding:22px;
 margin-bottom:28px;
 }
 
+/* INPUT */
 input{
 width:100%;
 padding:14px;
@@ -53,8 +59,13 @@ border:1px solid var(--border);
 background:transparent;
 color:inherit;
 margin-bottom:14px;
+outline:none;
+}
+input:focus{
+border-color:var(--accent);
 }
 
+/* BUTTON */
 button{
 background:var(--accent);
 border:none;
@@ -62,24 +73,39 @@ color:#fff;
 padding:12px 16px;
 border-radius:10px;
 cursor:pointer;
+font-size:.95rem;
+transition:.2s;
 }
+button:hover{background:var(--accent-hover)}
+button:disabled{opacity:.5;cursor:not-allowed}
 
-.status{margin-top:10px;font-size:.9rem}
+/* STATUS */
+.status{margin-top:8px;font-size:.9rem;color:var(--muted)}
 
-/* Progress */
+/* PROGRESS */
 #progressWrap{display:none;margin-top:14px}
 #progressOuter{height:6px;background:#222;border-radius:6px;overflow:hidden}
-#progressBar{height:100%;width:0%;background:var(--accent)}
-#progressText{font-size:.85rem;margin-top:6px}
+#progressBar{height:100%;width:0%;background:var(--accent);transition:.3s}
+#progressText{font-size:.85rem;margin-top:6px;color:var(--muted)}
 
-/* Bulk */
-#bulkActions{display:none;margin:14px 0;gap:10px}
+/* BULK ACTIONS */
+#bulkActions{
+display:none;
+margin:16px 0;
+gap:10px;
+flex-wrap:wrap;
+}
+#bulkActions button{
+flex:1;
+min-width:120px;
+}
 
-/* Single */
+/* SINGLE */
 .single-preview{
 display:flex;
 gap:16px;
 margin-top:22px;
+flex-wrap:wrap;
 }
 .single-preview img{
 width:160px;
@@ -88,12 +114,16 @@ object-fit:cover;
 border-radius:12px;
 background:#000;
 }
+.single-preview div{
+flex:1;
+min-width:220px;
+}
 
-/* Profile */
+/* PROFILE GRID */
 .profile-grid{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-gap:14px;
+grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
+gap:16px;
 margin-top:26px;
 }
 .profile-item{
@@ -101,6 +131,9 @@ background:var(--card);
 border:1px solid var(--border);
 border-radius:14px;
 padding:10px;
+display:flex;
+flex-direction:column;
+gap:6px;
 }
 .profile-item img{
 width:100%;
@@ -111,10 +144,13 @@ background:#000;
 }
 .profile-item .title{
 font-size:.85rem;
-margin:6px 0;
 color:var(--muted);
+height:32px;
+overflow:hidden;
 }
+.profile-item input{margin-bottom:4px}
 
+/* ADS */
 .ad-box{
 margin:36px 0;
 height:120px;
@@ -124,32 +160,26 @@ display:flex;
 align-items:center;
 justify-content:center;
 color:var(--muted);
+font-size:.9rem;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ===================================================
-     NAVBAR + MENU (LOCKED)
-     PASTE EXACT CODE FROM index.html HERE
-=================================================== -->
-<!-- DO NOT MODIFY -->
+<!-- NAVBAR LOCKED -->
 
 <main class="main-container">
 
 <section class="hero">
 <h1>TikTok Video Downloader</h1>
-<p>
-Preview and download publicly accessible TikTok videos from single links
-or public profiles. Educational and offline reference use only.
-</p>
+<p>Preview and download publicly accessible TikTok videos from single links or public profiles.</p>
 </section>
 
 <section class="card">
 <form id="tiktokForm">
-<input id="videoUrl" type="text" placeholder="Paste public TikTok video or profile link" required>
-<button type="submit">Fetch Video Details</button>
+<input id="videoUrl" type="text" placeholder="Paste TikTok video or profile link" required>
+<button id="submitBtn" type="submit">Fetch Video Details</button>
 </form>
 
 <div id="status" class="status"></div>
@@ -173,10 +203,7 @@ or public profiles. Educational and offline reference use only.
 
 <section class="card">
 <h2>Responsible Use</h2>
-<p>
-This tool works only with publicly accessible TikTok content.
-This website does not host or store any media files.
-</p>
+<p>This tool works only with publicly accessible TikTok content. No media is stored.</p>
 </section>
 
 </main>
@@ -187,6 +214,7 @@ const API="https://tiktok-downloader-backend-production-ce2b.up.railway.app";
 const form=document.getElementById("tiktokForm");
 const input=document.getElementById("videoUrl");
 const statusBox=document.getElementById("status");
+const submitBtn=document.getElementById("submitBtn");
 const singlePreview=document.getElementById("singlePreview");
 const profileGrid=document.getElementById("profileGrid");
 const bulkActions=document.getElementById("bulkActions");
@@ -201,15 +229,17 @@ const text=document.getElementById("progressText");
 wrap.style.display="block";
 let p=0;
 return setInterval(()=>{
-p+=Math.random()*7;
-if(p>95)p=95;
+p+=Math.random()*8;
+if(p>92)p=92;
 bar.style.width=p+"%";
 text.textContent=Math.floor(p)+"%";
-},400);
+},350);
 }
 
 form.addEventListener("submit",async e=>{
 e.preventDefault();
+submitBtn.disabled=true;
+
 statusBox.textContent="Fetching...";
 singlePreview.innerHTML="";
 profileGrid.innerHTML="";
@@ -222,14 +252,11 @@ const timer=startProgress();
 
 try{
 if(isProfile){
-const res=await fetch(`${API}/profile?profile_url=${encodeURIComponent(url)}&page=1&limit=24`);
+const res=await fetch(`${API}/profile?profile_url=${encodeURIComponent(url)}`);
 const data=await res.json();
 clearInterval(timer);
 
-if(!res.ok){
-statusBox.textContent=data.detail.message;
-return;
-}
+if(!res.ok){statusBox.textContent=data.detail.message;return;}
 
 videos=data.videos;
 statusBox.textContent=`Found ${data.total} videos`;
@@ -241,14 +268,11 @@ const res=await fetch(`${API}/preview?url=${encodeURIComponent(url)}`);
 const data=await res.json();
 clearInterval(timer);
 
-if(!res.ok){
-statusBox.textContent=data.detail.message;
-return;
-}
+if(!res.ok){statusBox.textContent=data.detail.message;return;}
 
 singlePreview.innerHTML=`
 <div class="single-preview">
-<img src="${data.thumbnail}">
+<img src="${data.thumbnail || 'https://placehold.co/300x500'}">
 <div>
 <strong>${data.title}</strong><br>
 Uploader: ${data.uploader}<br>
@@ -259,8 +283,9 @@ Duration: ${data.duration || 'N/A'} sec<br><br>
 statusBox.textContent="Preview loaded";
 }
 }catch{
-clearInterval(timer);
-statusBox.textContent="Unable to process this link.";
+statusBox.textContent="Unable to process link.";
+}finally{
+submitBtn.disabled=false;
 }
 });
 
@@ -283,21 +308,14 @@ function toggle(i){
 selected.has(i)?selected.delete(i):selected.add(i);
 }
 
-function selectAll(){
-videos.forEach(v=>selected.add(v.index));
-renderGrid();
-}
-
-function deselectAll(){
-selected.clear();
-renderGrid();
-}
+function selectAll(){videos.forEach(v=>selected.add(v.index));renderGrid();}
+function deselectAll(){selected.clear();renderGrid();}
 
 async function downloadSelected(){
 for(const v of videos){
 if(selected.has(v.index)){
 download(v.url,v.index);
-await new Promise(r=>setTimeout(r,2500));
+await new Promise(r=>setTimeout(r,2000));
 }
 }
 }
