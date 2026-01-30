@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>TikTok Video Downloader - Free Online Tool | Video Downloader Tools</title>
+    <meta name="description" content="Free TikTok video downloader to save public TikTok videos for offline viewing. Download from single links or profiles. No watermark, no login required. Educational use only.">
+    <meta name="keywords" content="TikTok downloader, download TikTok videos, TikTok video saver, save TikTok, TikTok without watermark">
+    <meta name="author" content="Video Downloader Tools">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="TikTok Video Downloader - Free Online Tool">
+    <meta property="og:description" content="Download public TikTok videos for educational and personal use">
+    <meta property="og:type" content="website">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://zainmushtaq9.github.io/tiktok-downloader-ui/tiktok.html">
+    
+    <style>
+        /* =====================================================
+           CSS VARIABLES - THEME SYSTEM
+           ===================================================== */
+        :root {
+            /* Dark Theme (Default) */
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #121826;
+            --bg-card: rgba(30, 36, 64, 0.5);
+            --bg-card-hover: rgba(30, 36, 64, 0.7);
+            --border-color: #1e2440;
+            --border-hover: #2a3458;
+            
+            --text-primary: #f0f1f7;
+            --text-secondary: #9ba3bf;
+            --text-muted: #6b7395;
+            
+            --accent-primary: #00f2ea;
+            --accent-secondary: #fe2c55;
+            --accent-gradient: linear-gradient(135deg, #00f2ea 0%, #fe2c55 100%);
+            
+            --success: #4ade80;
+            --error: #ef4444;
+            --warning: #fbbf24;
+            
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f1f3f5;
+            --border-color: #e1e4e8;
+            --border-hover: #cbd2d9;
+            
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+        
+        /* =====================================================
+           RESET & BASE STYLES
+           ===================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background-color 0.3s ease;
+        }
+        
+        /* =====================================================
+           NAVIGATION
+           ===================================================== */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+        
+        .navbar-menu {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-link {
+            padding: 0.5rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+        
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+        
+        .nav-link.active {
+            color: var(--accent-primary);
+            background: var(--bg-card);
+        }
+        
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        
+        .theme-toggle:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+        }
+        
+        /* =====================================================
+           MAIN CONTAINER
+           ===================================================== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        
+        /* =====================================================
+           HERO SECTION
+           ===================================================== */
+        .hero {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            animation: fadeInUp 0.6s ease;
+        }
+        
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-description {
+            font-size: clamp(1rem, 2vw, 1.125rem);
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.7;
+        }
+        
+        .platform-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0.25rem;
+        }
+        
+        /* =====================================================
+           CARDS
+           ===================================================== */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease;
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--border-hover);
+        }
+        
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        .card h3 {
+            font-size: 1.25rem;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--text-primary);
+        }
+        
+        .card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        
+        /* =====================================================
+           FORM ELEMENTS
+           ===================================================== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+        
+        .form-input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 242, 234, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        /* =====================================================
+           BUTTONS
+           ===================================================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            outline: none;
+        }
+        
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 242, 234, 0.3);
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 242, 234, 0.4);
+        }
+        
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .btn-secondary {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .btn-block {
+            width: 100%;
+        }
+        
+        /* =====================================================
+           STATUS & ALERTS
+           ===================================================== */
+        .status-message {
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        
+        .status-message.show {
+            display: block;
+        }
+        
+        .status-info {
+            background: rgba(0, 242, 234, 0.1);
+            border: 1px solid rgba(0, 242, 234, 0.3);
+            color: var(--accent-primary);
+        }
+        
+        .status-success {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            color: var(--success);
+        }
+        
+        .status-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--error);
+        }
+        
+        .status-warning {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: var(--warning);
+        }
+        
+        /* =====================================================
+           PROGRESS BAR
+           ===================================================== */
+        .progress-container {
+            display: none;
+            margin: 1.5rem 0;
+        }
+        
+        .progress-container.show {
+            display: block;
+        }
+        
+        .progress-bar-outer {
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .progress-bar-inner {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-gradient);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-bar-inner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            animation: shimmer 1.5s infinite;
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* =====================================================
+           BULK ACTIONS
+           ===================================================== */
+        .bulk-actions {
+            display: none;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .bulk-actions.show {
+            display: flex;
+        }
+        
+        /* =====================================================
+           VIDEO PREVIEW (SINGLE)
+           ===================================================== */
+        .video-preview {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .video-info {
+            margin-bottom: 1.5rem;
+        }
+        
+        .video-info-row {
+            display: flex;
+            margin-bottom: 0.75rem;
+            gap: 0.5rem;
+        }
+        
+        .video-info-label {
+            color: var(--text-muted);
+            min-width: 100px;
+            font-weight: 500;
+        }
+        
+        .video-info-value {
+            color: var(--text-primary);
+            flex: 1;
+        }
+        
+        /* =====================================================
+           VIDEO GRID (PROFILE)
+           ===================================================== */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .video-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.2s ease;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .video-item:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .video-item-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .video-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--accent-primary);
+        }
+        
+        .video-title {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .video-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        /* =====================================================
+           PAGINATION
+           ===================================================== */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .pagination-info {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        /* =====================================================
+           LISTS
+           ===================================================== */
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 0.75rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--text-secondary);
+        }
+        
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-primary);
+            font-weight: bold;
+        }
+        
+        /* =====================================================
+           AD PLACEHOLDER
+           ===================================================== */
+        .ad-container {
+            min-height: 250px;
+            margin: 3rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-card);
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        /* =====================================================
+           FOOTER
+           ===================================================== */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent-primary);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* =====================================================
+           ANIMATIONS
+           ===================================================== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+        
+        /* =====================================================
+           SPINNER
+           ===================================================== */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* =====================================================
+           RESPONSIVE DESIGN
+           ===================================================== */
+        @media (max-width: 768px) {
+            .navbar-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .navbar-menu {
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+            
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* =====================================================
+           ACCESSIBILITY
+           ===================================================== */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+        
+        :focus-visible {
+            outline: 2px solid var(--accent-primary);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">Video Downloader Tools</a>
+            <div class="navbar-menu">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/tiktok.html" class="nav-link active">TikTok</a>
+                <a href="/youtube.html" class="nav-link">YouTube</a>
+                <a href="/instagram.html" class="nav-link">Instagram</a>
+                <a href="/facebook.html" class="nav-link">Facebook</a>
+                <a href="/likee.html" class="nav-link">Likee</a>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <span id="themeIcon">🌙</span> Theme
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>TikTok Video Downloader</h1>
+            <p class="hero-description">
+                Download public TikTok videos for offline viewing and educational purposes. 
+                Works with single video links and profile pages. No login required, completely free.
+            </p>
+            <div>
+                <span class="platform-badge">✓ Single Videos</span>
+                <span class="platform-badge">✓ Profile Downloads</span>
+                <span class="platform-badge">✓ No Watermark</span>
+                <span class="platform-badge">✓ HD Quality</span>
+            </div>
+        </section>
+
+        <!-- Download Form -->
+        <section class="card">
+            <h2>Download TikTok Videos</h2>
+            <form id="downloadForm" novalidate>
+                <div class="form-group">
+                    <label for="videoUrl" class="form-label">
+                        TikTok Video or Profile URL
+                    </label>
+                    <input 
+                        type="url" 
+                        id="videoUrl" 
+                        class="form-input" 
+                        placeholder="https://www.tiktok.com/@username/video/..." 
+                        required
+                        aria-describedby="urlHelp"
+                    >
+                    <small id="urlHelp" style="color: var(--text-muted); font-size: 0.875rem;">
+                        Paste a TikTok video link or profile URL (e.g., https://www.tiktok.com/@username)
+                    </small>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block" id="submitBtn">
+                    <span id="btnText">Fetch Video Details</span>
+                    <span id="btnSpinner" class="spinner" style="display: none;"></span>
+                </button>
+            </form>
+
+            <!-- Status Messages -->
+            <div id="statusMessage" class="status-message" role="alert" aria-live="polite"></div>
+
+            <!-- Progress Bar -->
+            <div id="progressContainer" class="progress-container">
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                </div>
+                <div class="progress-text" id="progressText">Processing...</div>
+            </div>
+
+            <!-- Bulk Actions -->
+            <div id="bulkActions" class="bulk-actions">
+                <button class="btn btn-secondary btn-sm" onclick="selectAllVideos()">Select All</button>
+                <button class="btn btn-secondary btn-sm" onclick="deselectAllVideos()">Deselect All</button>
+                <button class="btn btn-primary btn-sm" onclick="downloadSelected()">
+                    Download Selected (<span id="selectedCount">0</span>)
+                </button>
+            </div>
+
+            <!-- Single Video Preview -->
+            <div id="singlePreview"></div>
+
+            <!-- Profile Video Grid -->
+            <div id="videoGrid" class="video-grid"></div>
+
+            <!-- Pagination -->
+            <div id="pagination" class="pagination" style="display: none;">
+                <button class="btn btn-secondary btn-sm" id="prevPage" onclick="changePage(-1)">Previous</button>
+                <span class="pagination-info" id="pageInfo">Page 1</span>
+                <button class="btn btn-secondary btn-sm" id="nextPage" onclick="changePage(1)">Next</button>
+            </div>
+        </section>
+
+        <!-- Ad Placeholder -->
+        <aside class="ad-container" aria-label="Advertisement">
+            <div>Advertisement Space</div>
+        </aside>
+
+        <!-- How It Works -->
+        <section class="card">
+            <h2>How to Download TikTok Videos</h2>
+            <h3>For Single Videos:</h3>
+            <ul class="feature-list">
+                <li>Open TikTok and find the video you want to download</li>
+                <li>Tap the Share button and copy the video link</li>
+                <li>Paste the link into the input field above</li>
+                <li>Click "Fetch Video Details" to preview the video information</li>
+                <li>Click the download button to save the video to your device</li>
+            </ul>
+
+            <h3>For Profile Downloads:</h3>
+            <ul class="feature-list">
+                <li>Copy a TikTok profile URL (e.g., https://www.tiktok.com/@username)</li>
+                <li>Paste it into the input field and click "Fetch Video Details"</li>
+                <li>Browse through the public videos from that profile</li>
+                <li>Select individual videos or use "Select All" for bulk download</li>
+                <li>Click "Download Selected" to save multiple videos sequentially</li>
+            </ul>
+        </section>
+
+        <!-- Features -->
+        <section class="card">
+            <h2>Features</h2>
+            <ul class="feature-list">
+                <li><strong>No Watermark:</strong> Download TikTok videos without watermarks in HD quality</li>
+                <li><strong>No Login Required:</strong> Access our service without creating an account</li>
+                <li><strong>Free Forever:</strong> Completely free to use with no hidden charges</li>
+                <li><strong>Profile Downloads:</strong> Download multiple videos from any public TikTok profile</li>
+                <li><strong>Fast Processing:</strong> Quick video extraction and download preparation</li>
+                <li><strong>Mobile Friendly:</strong> Works perfectly on smartphones, tablets, and desktops</li>
+                <li><strong>Privacy Focused:</strong> We don't store your videos or personal information</li>
+                <li><strong>Safe & Secure:</strong> No malware, no suspicious software, just clean downloads</li>
+            </ul>
+        </section>
+
+        <!-- Legal Notice -->
+        <section class="card">
+            <h2>Legal Notice & Disclaimer</h2>
+            <p>
+                <strong>This tool is provided for educational and personal use only.</strong> 
+                Users must respect TikTok's Terms of Service and all applicable copyright laws. 
+                This service does not store, host, or redistribute any downloaded content.
+            </p>
+            <p>
+                By using this service, you acknowledge that:
+            </p>
+            <ul class="feature-list">
+                <li>You will only download videos that you have the right to download</li>
+                <li>You will not use downloaded content for commercial purposes without permission</li>
+                <li>You respect the intellectual property rights of content creators</li>
+                <li>You are solely responsible for your use of downloaded videos</li>
+                <li>This service is for accessing public content for offline viewing and research</li>
+            </ul>
+            <p>
+                We encourage users to support content creators by viewing, liking, and sharing their videos 
+                on the official TikTok platform. If you enjoy a creator's content, consider following them 
+                and engaging with their posts.
+            </p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>Video Downloader Tools</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Free online tools to download videos from popular social media platforms.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Platforms</h4>
+                    <ul class="footer-links">
+                        <li><a href="/tiktok.html">TikTok Downloader</a></li>
+                        <li><a href="/youtube.html">YouTube Downloader</a></li>
+                        <li><a href="/instagram.html">Instagram Downloader</a></li>
+                        <li><a href="/facebook.html">Facebook Downloader</a></li>
+                        <li><a href="/likee.html">Likee Downloader</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul class="footer-links">
+                        <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="/terms-of-service.html">Terms of Service</a></li>
+                        <li><a href="/disclaimer.html">Disclaimer</a></li>
+                        <li><a href="/dmca.html">DMCA Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="/contact.html">Contact Us</a></li>
+                        <li><a href="/about.html">About Us</a></li>
+                        <li><a href="/faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Video Downloader Tools. All rights reserved.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem;">
+                    For educational and personal use only. We do not host or store any media files.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // =====================================================
+        // CONFIGURATION - UPDATE THIS WITH YOUR RAILWAY URL
+        // =====================================================
+        const API_BASE_URL = 'https://tiktok-downloader-backend-production-ce2b.up.railway.app';
+        
+        const CONFIG = {
+            DOWNLOAD_DELAY: 2000, // 2 seconds between downloads
+            MAX_RETRIES: 2,
+            RETRY_DELAY: 1000
+        };
+
+        // =====================================================
+        // STATE MANAGEMENT
+        // =====================================================
+        const state = {
+            videos: [],
+            selectedVideos: new Set(),
+            currentPage: 1,
+            totalVideos: 0,
+            hasNextPage: false,
+            profileName: '',
+            isLoading: false
+        };
+
+        // =====================================================
+        // DOM ELEMENTS
+        // =====================================================
+        const elements = {
+            form: document.getElementById('downloadForm'),
+            input: document.getElementById('videoUrl'),
+            submitBtn: document.getElementById('submitBtn'),
+            btnText: document.getElementById('btnText'),
+            btnSpinner: document.getElementById('btnSpinner'),
+            statusMessage: document.getElementById('statusMessage'),
+            progressContainer: document.getElementById('progressContainer'),
+            progressBar: document.getElementById('progressBar'),
+            progressText: document.getElementById('progressText'),
+            bulkActions: document.getElementById('bulkActions'),
+            singlePreview: document.getElementById('singlePreview'),
+            videoGrid: document.getElementById('videoGrid'),
+            pagination: document.getElementById('pagination'),
+            pageInfo: document.getElementById('pageInfo'),
+            prevPage: document.getElementById('prevPage'),
+            nextPage: document.getElementById('nextPage'),
+            selectedCount: document.getElementById('selectedCount')
+        };
+
+        // =====================================================
+        // THEME TOGGLE
+        // =====================================================
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+        
+        function updateThemeIcon(theme) {
+            themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        // =====================================================
+        // UTILITY FUNCTIONS
+        // =====================================================
+        function showStatus(message, type = 'info') {
+            elements.statusMessage.textContent = message;
+            elements.statusMessage.className = `status-message status-${type} show`;
+        }
+
+        function hideStatus() {
+            elements.statusMessage.classList.remove('show');
+        }
+
+        function showProgress() {
+            elements.progressContainer.classList.add('show');
+            elements.progressBar.style.width = '0%';
+        }
+
+        function updateProgress(percent) {
+            elements.progressBar.style.width = `${percent}%`;
+            elements.progressText.textContent = `${Math.round(percent)}%`;
+        }
+
+        function hideProgress() {
+            elements.progressContainer.classList.remove('show');
+        }
+
+        function setLoading(loading) {
+            state.isLoading = loading;
+            elements.submitBtn.disabled = loading;
+            elements.input.disabled = loading;
+            
+            if (loading) {
+                elements.btnText.textContent = 'Processing...';
+                elements.btnSpinner.style.display = 'inline-block';
+            } else {
+                elements.btnText.textContent = 'Fetch Video Details';
+                elements.btnSpinner.style.display = 'none';
+            }
+        }
+
+        function isProfileURL(url) {
+            return url.includes('/@') && !url.includes('/video/');
+        }
+
+        function updateSelectedCount() {
+            elements.selectedCount.textContent = state.selectedVideos.size;
+        }
+
+        // =====================================================
+        // API CALLS
+        // =====================================================
+        async function fetchWithRetry(url, retries = CONFIG.MAX_RETRIES) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.detail || 'Request failed');
+                    }
+                    return await response.json();
+                } catch (error) {
+                    if (i === retries - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY));
+                }
+            }
+        }
+
+        async function previewVideo(url) {
+            const encodedUrl = encodeURIComponent(url);
+            return await fetchWithRetry(`${API_BASE_URL}/preview?url=${encodedUrl}`);
+        }
+
+        async function fetchProfile(url, page = 1, limit = 24) {
+            const encodedUrl = encodeURIComponent(url);
+            return await fetchWithRetry(
+                `${API_BASE_URL}/profile?profile_url=${encodedUrl}&page=${page}&limit=${limit}`
+            );
+        }
+
+        function downloadVideo(url, index, profile) {
+            const encodedUrl = encodeURIComponent(url);
+            const downloadUrl = `${API_BASE_URL}/download?url=${encodedUrl}&index=${index}&profile=${profile}`;
+            
+            // Create temporary link and trigger download
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = '';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // =====================================================
+        // FORM SUBMISSION
+        // =====================================================
+        elements.form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const url = elements.input.value.trim();
+            
+            // Validation
+            if (!url) {
+                showStatus('Please enter a URL', 'error');
+                return;
+            }
+            
+            if (!url.includes('tiktok.com')) {
+                showStatus('Please enter a valid TikTok URL', 'error');
+                return;
+            }
+            
+            // Reset UI
+            hideStatus();
+            elements.singlePreview.innerHTML = '';
+            elements.videoGrid.innerHTML = '';
+            elements.bulkActions.classList.remove('show');
+            elements.pagination.style.display = 'none';
+            state.selectedVideos.clear();
+            updateSelectedCount();
+            
+            setLoading(true);
+            showProgress();
+            
+            try {
+                if (isProfileURL(url)) {
+                    // Profile mode
+                    updateProgress(30);
+                    const data = await fetchProfile(url, 1, 24);
+                    updateProgress(100);
+                    
+                    state.videos = data.videos;
+                    state.currentPage = data.page;
+                    state.totalVideos = data.total;
+                    state.hasNextPage = data.has_next;
+                    state.profileName = data.profile;
+                    
+                    if (state.videos.length === 0) {
+                        showStatus('No public videos found in this profile', 'warning');
+                    } else {
+                        showStatus(`Found ${data.total} public videos`, 'success');
+                        elements.bulkActions.classList.add('show');
+                        renderVideoGrid();
+                        updatePagination();
+                    }
+                } else {
+                    // Single video mode
+                    updateProgress(50);
+                    const data = await previewVideo(url);
+                    updateProgress(100);
+                    
+                    renderSingleVideo(data);
+                    showStatus('Video preview loaded', 'success');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus(error.message || 'Failed to process URL. Please try again.', 'error');
+            } finally {
+                setLoading(false);
+                setTimeout(hideProgress, 500);
+            }
+        });
+
+        // =====================================================
+        // RENDER FUNCTIONS
+        // =====================================================
+        function renderSingleVideo(data) {
+            const duration = data.duration ? `${Math.floor(data.duration / 60)}:${(data.duration % 60).toString().padStart(2, '0')}` : 'N/A';
+            
+            elements.singlePreview.innerHTML = `
+                <div class="video-preview">
+                    <div class="video-info">
+                        <div class="video-info-row">
+                            <span class="video-info-label">Platform:</span>
+                            <span class="video-info-value">${data.platform || 'TikTok'}</span>
+                        </div>
+                        <div class="video-info-row">
+                            <span class="video-info-label">Title:</span>
+                            <span class="video-info-value">${escapeHtml(data.title)}</span>
+                        </div>
+                        <div class="video-info-row">
+                            <span class="video-info-label">Creator:</span>
+                            <span class="video-info-value">${escapeHtml(data.uploader)}</span>
+                        </div>
+                        <div class="video-info-row">
+                            <span class="video-info-label">Duration:</span>
+                            <span class="video-info-value">${duration}</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="downloadSingleVideo('${escapeHtml(data.url)}')">
+                        Download Video
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderVideoGrid() {
+            elements.videoGrid.innerHTML = state.videos.map(video => {
+                const duration = video.duration ? `${Math.floor(video.duration / 60)}:${(video.duration % 60).toString().padStart(2, '0')}` : '';
+                const isSelected = state.selectedVideos.has(video.index);
+                
+                return `
+                    <div class="video-item">
+                        <div class="video-item-header">
+                            <input 
+                                type="checkbox" 
+                                class="video-checkbox"
+                                id="video-${video.index}"
+                                ${isSelected ? 'checked' : ''}
+                                onchange="toggleVideo(${video.index})"
+                                aria-label="Select video ${video.index}"
+                            >
+                            <label for="video-${video.index}" style="cursor: pointer; flex: 1;">
+                                <span class="sr-only">Select video</span>
+                            </label>
+                        </div>
+                        <div class="video-title">${escapeHtml(video.title)}</div>
+                        <div class="video-meta">
+                            ${duration ? `<span>⏱️ ${duration}</span>` : ''}
+                            ${video.view_count ? `<span>👁️ ${formatNumber(video.view_count)}</span>` : ''}
+                        </div>
+                        <button 
+                            class="btn btn-primary btn-sm btn-block" 
+                            onclick="downloadSingleVideo('${escapeHtml(video.url)}', ${video.index})"
+                        >
+                            Download
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updatePagination() {
+            if (state.totalVideos > 24) {
+                elements.pagination.style.display = 'flex';
+                elements.pageInfo.textContent = `Page ${state.currentPage}`;
+                elements.prevPage.disabled = state.currentPage === 1;
+                elements.nextPage.disabled = !state.hasNextPage;
+            } else {
+                elements.pagination.style.display = 'none';
+            }
+        }
+
+        // =====================================================
+        // VIDEO SELECTION
+        // =====================================================
+        function toggleVideo(index) {
+            if (state.selectedVideos.has(index)) {
+                state.selectedVideos.delete(index);
+            } else {
+                state.selectedVideos.add(index);
+            }
+            updateSelectedCount();
+        }
+
+        function selectAllVideos() {
+            state.videos.forEach(video => state.selectedVideos.add(video.index));
+            updateSelectedCount();
+            renderVideoGrid();
+        }
+
+        function deselectAllVideos() {
+            state.selectedVideos.clear();
+            updateSelectedCount();
+            renderVideoGrid();
+        }
+
+        // =====================================================
+        // DOWNLOAD FUNCTIONS
+        // =====================================================
+        function downloadSingleVideo(url, index = 1) {
+            downloadVideo(url, index, state.profileName || 'tiktok');
+            showStatus('Download started', 'success');
+        }
+
+        async function downloadSelected() {
+            if (state.selectedVideos.size === 0) {
+                showStatus('Please select at least one video', 'warning');
+                return;
+            }
+            
+            const selectedArray = Array.from(state.selectedVideos).sort((a, b) => a - b);
+            showStatus(`Downloading ${selectedArray.length} videos...`, 'info');
+            
+            for (let i = 0; i < selectedArray.length; i++) {
+                const index = selectedArray[i];
+                const video = state.videos.find(v => v.index === index);
+                
+                if (video) {
+                    downloadVideo(video.url, video.index, state.profileName);
+                    showStatus(`Downloading ${i + 1} of ${selectedArray.length}...`, 'info');
+                    
+                    // Delay between downloads
+                    if (i < selectedArray.length - 1) {
+                        await new Promise(resolve => setTimeout(resolve, CONFIG.DOWNLOAD_DELAY));
+                    }
+                }
+            }
+            
+            showStatus(`All ${selectedArray.length} downloads started!`, 'success');
+        }
+
+        // =====================================================
+        // PAGINATION
+        // =====================================================
+        async function changePage(direction) {
+            const newPage = state.currentPage + direction;
+            
+            if (newPage < 1 || (direction > 0 && !state.hasNextPage)) {
+                return;
+            }
+            
+            setLoading(true);
+            showProgress();
+            
+            try {
+                updateProgress(50);
+                const url = elements.input.value.trim();
+                const data = await fetchProfile(url, newPage, 24);
+                updateProgress(100);
+                
+                state.videos = data.videos;
+                state.currentPage = data.page;
+                state.hasNextPage = data.has_next;
+                state.selectedVideos.clear();
+                
+                renderVideoGrid();
+                updatePagination();
+                updateSelectedCount();
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (error) {
+                showStatus('Failed to load page', 'error');
+            } finally {
+                setLoading(false);
+                setTimeout(hideProgress, 500);
+            }
+        }
+
+        // =====================================================
+        // HELPER FUNCTIONS
+        // =====================================================
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            }
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // =====================================================
+        // INITIALIZATION
+        // =====================================================
+        console.log('TikTok Downloader initialized');
+        console.log('Backend API:', API_BASE_URL);
+    </script>
+</body>
+</html>
