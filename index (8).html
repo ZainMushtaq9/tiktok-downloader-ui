@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Video Downloader - TikTok, YouTube, Instagram, Facebook, Twitter & Likee</title>
+<meta name="description" content="Download videos from TikTok, YouTube, Instagram, Facebook, Twitter & Likee. HD quality, no watermark, 100% free. No registration required.">
+<meta name="keywords" content="video downloader, TikTok downloader, YouTube downloader, Instagram downloader, Facebook downloader, Twitter downloader, Likee downloader, free video download">
+<link rel="canonical" href="https://zainmushtaq9.github.io/tiktok-downloader-ui/">
+<link rel="manifest" href="manifest.json">
+
+<style>
+:root{--bg-dark:#0a0e1a;--bg-light:#fff;--card-dark:rgba(30,36,64,0.5);--card-light:#fff;--border-dark:#1e2440;--border-light:#e1e4e8;--text-dark:#f0f1f7;--text-light:#1a202c;--text-muted-dark:#9ba3bf;--text-muted-light:#4a5568;--accent:linear-gradient(135deg,#00f2ea 0%,#fe2c55 100%);--shadow:0 4px 16px rgba(0,0,0,0.3)}
+[data-theme=light]{--bg:var(--bg-light);--card:var(--card-light);--border:var(--border-light);--text:var(--text-light);--text-muted:var(--text-muted-light);--shadow:0 4px 16px rgba(0,0,0,0.08)}
+body{--bg:var(--bg-dark);--card:var(--card-dark);--border:var(--border-dark);--text:var(--text-dark);--text-muted:var(--text-muted-dark)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;transition:background .3s}
+.container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+.navbar{position:sticky;top:0;z-index:1000;background:var(--card);border-bottom:1px solid var(--border);padding:1rem 0;backdrop-filter:blur(10px);box-shadow:var(--shadow)}
+.nav-container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.nav-brand{font-size:1.5rem;font-weight:700;background:var(--accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.nav-menu{display:flex;gap:.5rem;flex-wrap:wrap}
+.nav-link{padding:.5rem 1rem;color:var(--text-muted);text-decoration:none;border-radius:8px;transition:.2s;font-size:.95rem}
+.nav-link:hover,.nav-link.active{color:var(--text);background:var(--card)}
+.nav-actions{display:flex;gap:.5rem}
+.theme-btn,.menu-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:.5rem 1rem;border-radius:8px;cursor:pointer;font-size:.9rem}
+.menu-btn{display:none;font-size:1.2rem}
+.mobile-menu{display:none;flex-direction:column;width:100%;padding:1rem 0;gap:.5rem;border-top:1px solid var(--border);margin-top:1rem}
+.mobile-menu.show{display:flex}
+.hero{text-align:center;padding:4rem 1.5rem;animation:fadeUp .8s}
+.hero-title{font-size:clamp(2.5rem,6vw,4rem);font-weight:900;margin-bottom:1.5rem;background:var(--accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2}
+.hero-subtitle{font-size:clamp(1.125rem,2.5vw,1.5rem);color:var(--text-muted);max-width:800px;margin:0 auto 3rem;line-height:1.7}
+.stats{display:flex;justify-content:center;gap:3rem;margin-bottom:3rem;flex-wrap:wrap}
+.stat-item{text-align:center}
+.stat-num{font-size:2.5rem;font-weight:800;background:var(--accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;margin-bottom:.5rem}
+.stat-label{font-size:.95rem;color:var(--text-muted)}
+.section{padding:2rem 1.5rem 4rem}
+.section-title{text-align:center;font-size:clamp(2rem,4vw,3rem);font-weight:800;margin-bottom:1rem;background:var(--accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.section-subtitle{text-align:center;font-size:1.125rem;color:var(--text-muted);margin:0 auto 3rem;max-width:700px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem;margin-bottom:4rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2.5rem;text-decoration:none;color:var(--text);transition:.3s;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;overflow:hidden;animation:fadeUp .6s both}
+.card:nth-child(1){animation-delay:.1s}.card:nth-child(2){animation-delay:.2s}.card:nth-child(3){animation-delay:.3s}
+.card:nth-child(4){animation-delay:.4s}.card:nth-child(5){animation-delay:.5s}.card:nth-child(6){animation-delay:.6s}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--accent);transform:scaleX(0);transition:.3s}
+.card:hover::before{transform:scaleX(1)}
+.card:hover{transform:translateY(-8px);box-shadow:var(--shadow);border-color:var(--border)}
+.card-icon{font-size:4rem;margin-bottom:1.5rem}
+.card-title{font-size:1.75rem;font-weight:700;margin-bottom:1rem}
+.card-desc{color:var(--text-muted);font-size:.95rem;line-height:1.6;margin-bottom:1.5rem}
+.card-features{list-style:none;padding:0;margin-bottom:1.5rem;width:100%}
+.card-features li{padding:.5rem 0;color:var(--text-muted);font-size:.9rem;display:flex;align-items:center;gap:.5rem}
+.card-features li::before{content:'✓';color:#00f2ea;font-weight:bold}
+.btn{background:var(--accent);color:#fff;padding:.875rem 2rem;border-radius:12px;font-weight:600;transition:.2s;display:inline-block;margin-top:auto}
+.btn:hover{transform:scale(1.05);box-shadow:0 6px 20px rgba(0,242,234,0.4)}
+.features{background:var(--card);border-radius:24px;padding:4rem 1.5rem}
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2.5rem;margin-top:3rem}
+.feature{text-align:center}
+.feature-icon{font-size:3rem;margin-bottom:1rem}
+.feature-title{font-size:1.25rem;font-weight:700;margin-bottom:.75rem}
+.feature-desc{color:var(--text-muted);font-size:.95rem;line-height:1.6}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;margin-top:3rem}
+.step{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;text-align:center;transition:.3s}
+.step:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+.step-num{width:60px;height:60px;border-radius:50%;background:var(--accent);color:#fff;font-size:1.75rem;font-weight:800;display:inline-flex;align-items:center;justify-content:center;margin-bottom:1.5rem}
+.step-title{font-size:1.25rem;font-weight:700;margin-bottom:.75rem}
+.step-desc{color:var(--text-muted);font-size:.95rem;line-height:1.6}
+.cta{padding:4rem 1.5rem;text-align:center;background:var(--card);border-radius:24px;border:1px solid var(--border)}
+.cta-title{font-size:clamp(2rem,4vw,3rem);font-weight:800;margin-bottom:1rem;background:var(--accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.cta-desc{font-size:1.125rem;color:var(--text-muted);margin-bottom:2rem;max-width:600px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--accent);color:#fff;padding:1rem 2.5rem;border-radius:12px;font-size:1.125rem;font-weight:600;text-decoration:none;transition:.2s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,242,234,0.4)}
+.btn-secondary{background:var(--card);color:var(--text);padding:1rem 2.5rem;border-radius:12px;font-size:1.125rem;font-weight:600;text-decoration:none;border:1px solid var(--border);transition:.2s}
+.btn-secondary:hover{border-color:var(--border);background:var(--card)}
+.ad{min-height:250px;display:flex;align-items:center;justify-content:center;background:var(--card);border:2px dashed var(--border);border-radius:12px;color:var(--text-muted);font-size:.95rem;margin:3rem 0}
+.footer{background:var(--card);border-top:1px solid var(--border);padding:3rem 0 2rem;margin-top:4rem}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;margin-bottom:2rem}
+.footer h4{margin-bottom:1rem;font-size:1.125rem}
+.footer ul{list-style:none}
+.footer li{margin-bottom:.5rem}
+.footer a{color:var(--text-muted);text-decoration:none;transition:.2s;font-size:.95rem}
+.footer a:hover{color:#00f2ea}
+.footer-bottom{text-align:center;padding-top:2rem;border-top:1px solid var(--border);color:var(--text-muted);font-size:.9rem}
+.cookie{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);max-width:900px;width:calc(100% - 32px);background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;display:none;align-items:center;gap:1.5rem;z-index:9999;box-shadow:var(--shadow);animation:slideUp .4s}
+.cookie.show{display:flex}
+.cookie-text{flex:1;font-size:.95rem;color:var(--text-muted);line-height:1.6}
+.cookie-text a{color:#00f2ea;text-decoration:none}
+.cookie-btn{background:var(--accent);color:#fff;padding:.75rem 1.5rem;border:none;border-radius:10px;font-weight:600;cursor:pointer;transition:.2s;white-space:nowrap}
+.cookie-btn:hover{transform:scale(1.05)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@media(max-width:768px){.nav-menu{display:none}.menu-btn{display:block}.stats{gap:2rem}.stat-num{font-size:2rem}.grid,.feature-grid,.steps{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr}.cookie{flex-direction:column;align-items:stretch}.cookie-btn{width:100%}.cta-btns{flex-direction:column;align-items:stretch}.btn-primary,.btn-secondary{width:100%}}
+</style>
+</head>
+
+<body>
+<nav class="navbar">
+<div class="container nav-container">
+<a href="index.html" class="nav-brand">Video Downloader Tools</a>
+<div class="nav-menu">
+<a href="index.html" class="nav-link active">Home</a>
+<a href="tiktok.html" class="nav-link">TikTok</a>
+<a href="youtube.html" class="nav-link">YouTube</a>
+<a href="instagram.html" class="nav-link">Instagram</a>
+<a href="facebook.html" class="nav-link">Facebook</a>
+<a href="twitter.html" class="nav-link">Twitter</a>
+<a href="likee.html" class="nav-link">Likee</a>
+<a href="about.html" class="nav-link">About</a>
+</div>
+<div class="nav-actions">
+<button class="theme-btn" id="theme"><span id="icon">🌙</span></button>
+<button class="menu-btn" id="menu">☰</button>
+</div>
+<div class="mobile-menu" id="mobile">
+<a href="index.html" class="nav-link active">Home</a>
+<a href="tiktok.html" class="nav-link">TikTok</a>
+<a href="youtube.html" class="nav-link">YouTube</a>
+<a href="instagram.html" class="nav-link">Instagram</a>
+<a href="facebook.html" class="nav-link">Facebook</a>
+<a href="twitter.html" class="nav-link">Twitter</a>
+<a href="likee.html" class="nav-link">Likee</a>
+<a href="about.html" class="nav-link">About</a>
+</div>
+</div>
+</nav>
+
+<section class="hero">
+<div class="container">
+<h1 class="hero-title">Download Videos from Any Platform</h1>
+<p class="hero-subtitle">Free, fast, and easy video downloader for TikTok, YouTube, Instagram, Facebook, Twitter, and Likee. Download HD videos without watermark. No registration required.</p>
+<div class="stats">
+<div class="stat-item"><span class="stat-num">6+</span><span class="stat-label">Platforms</span></div>
+<div class="stat-item"><span class="stat-num">100%</span><span class="stat-label">Free</span></div>
+<div class="stat-item"><span class="stat-num">HD</span><span class="stat-label">Quality</span></div>
+<div class="stat-item"><span class="stat-num">Fast</span><span class="stat-label">Downloads</span></div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="container">
+<h2 class="section-title">Choose Your Platform</h2>
+<p class="section-subtitle">Select the platform you want to download videos from. All tools are free and require no registration.</p>
+<div class="grid">
+
+<a href="tiktok.html" class="card">
+<span class="card-icon">📱</span>
+<h3 class="card-title">TikTok</h3>
+<p class="card-desc">Download TikTok videos without watermark in HD quality. Single videos or entire profiles.</p>
+<ul class="card-features">
+<li>No watermark</li>
+<li>Profile downloads</li>
+<li>HD quality</li>
+<li>Bulk download</li>
+</ul>
+<span class="btn">Download Now</span>
+</a>
+
+<a href="youtube.html" class="card">
+<span class="card-icon">▶️</span>
+<h3 class="card-title">YouTube</h3>
+<p class="card-desc">Download YouTube videos and playlists for offline viewing. Multiple quality options available.</p>
+<ul class="card-features">
+<li>Multiple formats</li>
+<li>Playlist support</li>
+<li>Fast downloads</li>
+<li>All resolutions</li>
+</ul>
+<span class="btn">Download Now</span>
+</a>
+
+<a href="instagram.html" class="card">
+<span class="card-icon">📷</span>
+<h3 class="card-title">Instagram</h3>
+<p class="card-desc">Save Instagram videos, reels, and stories easily. Download in original quality.</p>
+<ul class="card-features">
+<li>Videos & Reels</li>
+<li>Story downloads</li>
+<li>High quality</li>
+<li>IGTV support</li>
+</ul>
+<span class="btn">Download Now</span>
+</a>
+
+<a href="facebook.html" class="card">
+<span class="card-icon">👍</span>
+<h3 class="card-title">Facebook</h3>
+<p class="card-desc">Download Facebook videos from posts, pages, and groups. HD quality guaranteed.</p>
+<ul class="card-features">
+<li>Public videos</li>
+<li>HD downloads</li>
+<li>No login needed</li>
+<li>Watch support</li>
+</ul>
+<span class="btn">Download Now</span>
+</a>
+
+<a href="twitter.html" class="card">
+<span class="card-icon">🐦</span>
+<h3 class="card-title">Twitter</h3>
+<p class="card-desc">Download Twitter videos and GIFs. Save videos from tweets in high quality.</p>
+<ul class="card-features">
+<li>Video & GIF</li>
+<li>Best quality</li>
+<li>Fast processing</li>
+<li>MP4 format</li>
+</ul>
+<span class="btn">Download Now</span>
+</a>
+
+<a href="likee.html" class="card">
+<span class="card-icon">🎵</span>
+<h3 class="card-title">Likee</h3>
+<p class="card-desc">Download Likee videos without watermark. Save your favorite Likee content easily.</p>
+<ul class="card-features">
+<li>No watermark</li>
+<li>Fast processing</li>
+<li>All formats</li>
+<li>HD quality</li>
+</ul>
+<span class="btn">Download Now</span>
+</a>
+
+</div>
+</div>
+</section>
+
+<div class="container ad">Advertisement Space</div>
+
+<section class="section">
+<div class="container features">
+<h2 class="section-title">Why Choose Our Video Downloader?</h2>
+<p class="section-subtitle">We provide the best video downloading experience with powerful features and maximum privacy</p>
+<div class="feature-grid">
+<div class="feature">
+<span class="feature-icon">⚡</span>
+<h3 class="feature-title">Lightning Fast</h3>
+<p class="feature-desc">Download videos in seconds with our optimized processing technology</p>
+</div>
+<div class="feature">
+<span class="feature-icon">🔒</span>
+<h3 class="feature-title">100% Secure</h3>
+<p class="feature-desc">Your privacy is protected. We don't store any videos or personal data</p>
+</div>
+<div class="feature">
+<span class="feature-icon">🆓</span>
+<h3 class="feature-title">Completely Free</h3>
+<p class="feature-desc">No hidden costs, no subscriptions, no limits. Free forever</p>
+</div>
+<div class="feature">
+<span class="feature-icon">📱</span>
+<h3 class="feature-title">Mobile Friendly</h3>
+<p class="feature-desc">Works perfectly on smartphones, tablets, and desktop devices</p>
+</div>
+<div class="feature">
+<span class="feature-icon">🎬</span>
+<h3 class="feature-title">HD Quality</h3>
+<p class="feature-desc">Download videos in the highest quality available, up to 4K resolution</p>
+</div>
+<div class="feature">
+<span class="feature-icon">🚫</span>
+<h3 class="feature-title">No Watermark</h3>
+<p class="feature-desc">Download videos without watermarks for clean, professional results</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="container">
+<h2 class="section-title">How to Download Videos</h2>
+<p class="section-subtitle">Download videos from any platform in just 3 simple steps</p>
+<div class="steps">
+<div class="step">
+<div class="step-num">1</div>
+<h3 class="step-title">Copy Video Link</h3>
+<p class="step-desc">Find the video you want to download and copy its URL from the address bar or share button</p>
+</div>
+<div class="step">
+<div class="step-num">2</div>
+<h3 class="step-title">Paste & Process</h3>
+<p class="step-desc">Paste the link into our downloader tool and click the "Fetch Video Details" button</p>
+</div>
+<div class="step">
+<div class="step-num">3</div>
+<h3 class="step-title">Download Video</h3>
+<p class="step-desc">Click the download button and save the video to your device in HD quality</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="container cta">
+<h2 class="cta-title">Ready to Start Downloading?</h2>
+<p class="cta-desc">Choose your platform and start downloading videos in seconds. No registration, no fees, no limits.</p>
+<div class="cta-btns">
+<a href="tiktok.html" class="btn-primary">Start Downloading</a>
+<a href="about.html" class="btn-secondary">Learn More</a>
+</div>
+</div>
+</section>
+
+<footer class="footer">
+<div class="container">
+<div class="footer-grid">
+<div>
+<h4>Video Downloader Tools</h4>
+<p style="color:var(--text-muted);font-size:.9rem;line-height:1.6">The best free online video downloader for TikTok, YouTube, Instagram, Facebook, Twitter, and Likee.</p>
+</div>
+<div>
+<h4>Download Videos</h4>
+<ul>
+<li><a href="tiktok.html">TikTok Downloader</a></li>
+<li><a href="youtube.html">YouTube Downloader</a></li>
+<li><a href="instagram.html">Instagram Downloader</a></li>
+<li><a href="facebook.html">Facebook Downloader</a></li>
+<li><a href="twitter.html">Twitter Downloader</a></li>
+<li><a href="likee.html">Likee Downloader</a></li>
+</ul>
+</div>
+<div>
+<h4>Legal & Privacy</h4>
+<ul>
+<li><a href="privacy.html">Privacy Policy</a></li>
+<li><a href="terms.html">Terms of Service</a></li>
+<li><a href="disclaimer.html">Disclaimer</a></li>
+<li><a href="contact.html">Contact Us</a></li>
+</ul>
+</div>
+<div>
+<h4>Resources</h4>
+<ul>
+<li><a href="about.html">About Us</a></li>
+<li><a href="sitemap.xml">Sitemap</a></li>
+<li><a href="https://github.com/ZainMushtaq9/tiktok-downloader-ui" target="_blank">GitHub</a></li>
+</ul>
+</div>
+</div>
+<div class="footer-bottom">
+<p>&copy; 2026 Video Downloader Tools. All rights reserved.</p>
+<p style="margin-top:.5rem;font-size:.85rem">For educational and personal use only. Powered by <a href="https://tiktok-downloader-backend-production-ce2b.up.railway.app" target="_blank" style="color:#00f2ea">Railway</a></p>
+</div>
+</div>
+</footer>
+
+<div class="cookie" id="cookie">
+<div class="cookie-text">This website uses cookies to improve user experience. By continuing, you agree to our <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms</a>.</div>
+<button class="cookie-btn" id="accept">Accept</button>
+</div>
+
+<script>
+const theme=document.getElementById('theme'),icon=document.getElementById('icon'),menu=document.getElementById('menu'),mobile=document.getElementById('mobile'),cookie=document.getElementById('cookie'),accept=document.getElementById('accept');
+const saved=localStorage.getItem('theme')||'dark';
+document.documentElement.setAttribute('data-theme',saved);
+icon.textContent=saved==='dark'?'☀️':'🌙';
+theme.onclick=()=>{const t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',t);localStorage.setItem('theme',t);icon.textContent=t==='dark'?'☀️':'🌙'};
+menu.onclick=()=>mobile.classList.toggle('show');
+mobile.querySelectorAll('a').forEach(a=>a.onclick=()=>mobile.classList.remove('show'));
+if(!localStorage.getItem('cookies'))setTimeout(()=>cookie.classList.add('show'),1500);
+accept.onclick=()=>{localStorage.setItem('cookies','1');cookie.classList.remove('show')};
+console.log('Video Downloader Tools initialized');
+console.log('Backend: https://tiktok-downloader-backend-production-ce2b.up.railway.app');
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Video Downloader Tools","description":"Free online video downloader for TikTok, YouTube, Instagram, Facebook, Twitter, and Likee","url":"https://zainmushtaq9.github.io/tiktok-downloader-ui/","applicationCategory":"MultimediaApplication","operatingSystem":"Web Browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Download TikTok videos","Download YouTube videos","Download Instagram videos","Download Facebook videos","Download Twitter videos","Download Likee videos","No registration required","Free unlimited downloads","HD quality","Mobile friendly"]}
+</script>
+
+</body>
+</html>
