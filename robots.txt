@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://zainmushtaq9.github.io/tiktok-downloader-ui/sitemap.xml
